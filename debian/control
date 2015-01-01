@@ -1,0 +1,17 @@
+Source: dq
+Section: net
+Priority: optional
+Build-Depends: debhelper, build-essential, make, libnacl-dev [amd64] | libnacl-dev [i386]
+Maintainer: Jan Mojzis <jan.mojzis@gmail.com>
+
+Package: dq
+Section: net
+Depends: ${shlibs:Depends}
+Architecture: any
+Description: DNS/DNSCurve query tool
+
+#Package: dqcache
+#Section: net
+#Depends: ${shlibs:Depends}, daemontools-run, adduser
+#Architecture: any
+#Description: DNS/DNSCurve recursive server

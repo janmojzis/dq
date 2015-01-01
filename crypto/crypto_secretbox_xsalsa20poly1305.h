@@ -1,0 +1,20 @@
+#ifndef crypto_secretbox_xsalsa20poly1305_H
+#define crypto_secretbox_xsalsa20poly1305_H
+
+#define crypto_secretbox_xsalsa20poly1305_tinynacl_KEYBYTES 32
+#define crypto_secretbox_xsalsa20poly1305_tinynacl_NONCEBYTES 24
+#define crypto_secretbox_xsalsa20poly1305_tinynacl_ZEROBYTES 32
+#define crypto_secretbox_xsalsa20poly1305_tinynacl_BOXZEROBYTES 16
+extern int crypto_secretbox_xsalsa20poly1305_tinynacl(unsigned char *, const unsigned char *, unsigned long long, const unsigned char *, const unsigned char *);
+extern int crypto_secretbox_xsalsa20poly1305_tinynacl_open(unsigned char *, const unsigned char *, unsigned long long, const unsigned char *, const unsigned char *);
+
+#define crypto_secretbox_xsalsa20poly1305 crypto_secretbox_xsalsa20poly1305_tinynacl
+#define crypto_secretbox_xsalsa20poly1305_open crypto_secretbox_xsalsa20poly1305_tinynacl_open
+#define crypto_secretbox_xsalsa20poly1305_KEYBYTES crypto_secretbox_xsalsa20poly1305_tinynacl_KEYBYTES
+#define crypto_secretbox_xsalsa20poly1305_NONCEBYTES crypto_secretbox_xsalsa20poly1305_tinynacl_NONCEBYTES
+#define crypto_secretbox_xsalsa20poly1305_ZEROBYTES crypto_secretbox_xsalsa20poly1305_tinynacl_ZEROBYTES
+#define crypto_secretbox_xsalsa20poly1305_BOXZEROBYTES crypto_secretbox_xsalsa20poly1305_tinynacl_BOXZEROBYTES
+#define crypto_secretbox_xsalsa20poly1305_IMPLEMENTATION "tinynacl"
+#define crypto_secretbox_xsalsa20poly1305_VERSION "-"
+
+#endif

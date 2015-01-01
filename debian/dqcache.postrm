@@ -1,0 +1,9 @@
+#!/bin/sh
+
+if [ x"$1" != "xpurge" ]; then
+    exit 0
+fi
+
+rm -rf /var/log/dqcache /etc/dqcache/service /etc/dqcache/root/dump
+deluser --force dqcache || :
+deluser --force dqcachelog || :
