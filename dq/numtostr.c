@@ -1,33 +1,44 @@
 /*
-20130605
+20130604
 Jan Mojzis
 Public domain.
 */
 
 #include "numtostr.h"
 
-char *numtostr(char *strnum, long long n) {
+/*
+The 'numtostr(strbuf,n)' converts number 'n' into the 0-terminated string.
+The caller must allocate at least NUMTOSTR_LEN bytes for 'strbuf'.
+The 'numtostr' function is ready for 128-bit integer.
+*/
+char *numtostr(char *strbuf, long long n) {
 
-    int flagsign = 0;
-    unsigned long long num = n;
+    long long len = 0;
+    unsigned long long nn;
     static char staticbuf[NUMTOSTR_LEN];
+    int flagsign = 0;
 
-    if (!strnum) strnum = staticbuf; /* not thread-safe */
+    if (!strbuf) strbuf = staticbuf; /* not thread-safe */
 
     if (n < 0) {
+        n = -n;
         flagsign = 1;
-        num = -n;
     }
 
-    strnum += NUMTOSTR_LEN - 1;
-    *strnum = 0;
-
+    nn = n;
     do {
-        *--strnum = '0' + (num % 10);
-        num /= 10;
-    } while (num);
+        nn /= 10; ++len;
+    } while (nn);
+    if (flagsign) ++len;
+    strbuf += len;
 
-    if (flagsign) *--strnum = '-';
+    nn = n;
+    do {
+        *--strbuf = '0' + (nn % 10);
+        nn /= 10;
+    } while (nn);
+    if (flagsign) *--strbuf = '-';
 
-    return strnum;
+    while (len < NUMTOSTR_LEN) strbuf[len++] = 0;
+    return strbuf;
 }

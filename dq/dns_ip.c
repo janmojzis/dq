@@ -77,7 +77,7 @@ static int dns_dnscurvekey_parse(struct dns_data *r, const unsigned char *d) {
 }
 
 
-int ip_packet(struct dns_data *r, unsigned char *buf, long long len) {
+static int ip_packet(struct dns_data *r, unsigned char *buf, long long len) {
 
     crypto_uint16 numanswers;
     crypto_uint16 numauthority;
@@ -152,7 +152,7 @@ int ip_packet(struct dns_data *r, unsigned char *buf, long long len) {
 struct dns_transmit dns_resolve_tx0 = {0};
 struct dns_transmit dns_resolve_tx1 = {0};
 
-int resolve2(struct dns_data *d, const unsigned char *q, const unsigned char qtype0[2], const unsigned char qtype1[2]) {
+static int resolve2(struct dns_data *d, const unsigned char *q, const unsigned char qtype0[2], const unsigned char qtype1[2]) {
 
     long long deadline, stamp, timeout, max;
     unsigned char servers[256];

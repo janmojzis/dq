@@ -6,8 +6,6 @@ Public domain.
 
 #include "fe.h"
 
-typedef crypto_uint64 u64;
-
 /*
 o = 0
 */
@@ -74,23 +72,23 @@ o = a * b
 Implementation note: fe_mul_() is unrolled version of:
 void fe_mul_(fel o, const fe a, const fe b) {
 
-    u64 u;
+    crypto_uint64 u;
     long long i, j;
 
     for (i = 0; i < 16; ++i) o[i] = 0;
     for (i = 0; i <  8; ++i) for (j = 0; j < 8; ++j) {
-        u = (u64)a[i] * (u64)b[j];
+        u = (crypto_uint64)a[i] * (crypto_uint64)b[j];
         o[i + j    ] += u & 0xffffffff;
         o[i + j + 1] += u >> 32;
     }
 }
 */
-#define M(i, j) u = (u64)a[i] * (u64)b[j]; \
+#define M(i, j) u = (crypto_uint64)a[i] * (crypto_uint64)b[j]; \
                 o[i + j    ] += u & 0xffffffff; \
                 o[i + j + 1] += u >> 32;
 void fe_mul_(fel o, const fe a, const fe b) {
 
-    u64 u;
+    crypto_uint64 u;
     long long i;
 
     for (i = 0; i < 16; ++i) o[i] = 0;
@@ -112,31 +110,31 @@ o = x ^ 2
 Implementation note: fe_sq_() is unrolled version of:
 void fe_sq_(fel o, const fe a) {
 
-    u64 u;
+    crypto_uint64 u;
     long long i, j;
 
     for (i = 0; i < 16; ++i) o[i] = 0;
     for (i = 0; i <  8; ++i) for (j = i + 1; j < 8; ++j) {
-        u = (u64)a[i] * (u64)a[j];
+        u = (crypto_uint64)a[i] * (crypto_uint64)a[j];
         o[i + j    ] += 2 * (u & 0xffffffff);
         o[i + j + 1] += 2 * (u >> 32);
     }
     for (i = 0; i <  8; ++i) {
-        u = (u64)a[i] * (u64)a[i];
+        u = (crypto_uint64)a[i] * (crypto_uint64)a[i];
         o[2 * i    ] +=     (u & 0xffffffff);
         o[2 * i + 1] +=     (u >> 32);
     }
 }
 */
-#define M2(i, j) u = (u64)a[i] * (u64)a[j]; \
+#define M2(i, j) u = (crypto_uint64)a[i] * (crypto_uint64)a[j]; \
                  o[i + j    ] += 2 * (u & 0xffffffff); \
                  o[i + j + 1] += 2 * (u >> 32);
-#define SQ(i)    u = (u64)a[i] * (u64)a[i]; \
+#define SQ(i)    u = (crypto_uint64)a[i] * (crypto_uint64)a[i]; \
                  o[2 * i    ] +=     (u & 0xffffffff); \
                  o[2 * i + 1] +=     (u >> 32)
 void fe_sq_(fel o, const fe a) {
 
-    u64 u;
+    crypto_uint64 u;
     long long i;
 
     for (i = 0; i < 16; ++i) o[i] = 0;
@@ -154,16 +152,16 @@ void fe_sq_(fel o, const fe a) {
 /*
 if (p < r) r -= p
 */
-void fe_reducesmall(fe r, const fe p, const u64 carry) {
+void fe_reducesmall(fe r, const fe p, const crypto_uint64 carry) {
 
-    u64 pb = 0, b;
+    crypto_uint64 pb = 0, b;
     long long i;
     fe t;
 
     for (i = 0; i < 8; ++i) {
-        pb += (u64)p[i];
-        b = (u64)r[i] - pb; b >>= 63;
-        t[i] = (u64)r[i] - pb + (b << 32);
+        pb += (crypto_uint64)p[i];
+        b = (crypto_uint64)r[i] - pb; b >>= 63;
+        t[i] = (crypto_uint64)r[i] - pb + (b << 32);
         pb = b;
     }
     b = carry - pb; b >>= 63;
@@ -185,7 +183,7 @@ int fe_iszero3(const fe f, const fe g, const fe h) {
     for (i = 0; i < 8; ++i) x |= f[i];
     for (i = 0; i < 8; ++i) x |= g[i];
     for (i = 0; i < 8; ++i) x |= h[i];
-    return (4294967296ULL - (u64)x) >> 32;
+    return (4294967296ULL - (crypto_uint64)x) >> 32;
 }
 /*
 if (f == 0 && g == 0) return 1;
@@ -198,5 +196,5 @@ int fe_iszero2(const fe f, const fe g) {
 
     for (i = 0; i < 8; ++i) x |= f[i];
     for (i = 0; i < 8; ++i) x |= g[i];
-    return (4294967296ULL - (u64)x) >> 32;
+    return (4294967296ULL - (crypto_uint64)x) >> 32;
 }

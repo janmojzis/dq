@@ -6,8 +6,8 @@
 #include "byte.h"
 #include "uint16_pack_big.h"
 #include "uint16_unpack_big.h"
-#include "fastrandombytes.h"
-#include "fastrandommod.h"
+#include "randombytes.h"
+#include "randommod.h"
 #include "case.h"
 #include "str.h"
 #include "dns.h"
@@ -48,7 +48,7 @@ static void regularquery(struct dns_transmit *d) {
     d->querylen = len + 18;
 
     uint16_pack_big(d->query, d->querylen - 2);
-    fastrandombytes(d->id, 2);
+    randombytes(d->id, 2);
     basequery(d, d->query + 2);
 }
 
@@ -57,7 +57,7 @@ static void streamlinedquery(struct dns_transmit *d) {
     long long len;
     unsigned char nonce[24];
 
-    d->paddinglen = (2 + fastrandommod(2)) * 64 - (dns_domain_length(d->name) + 16) % 64;
+    d->paddinglen = (2 + randommod(2)) * 64 - (dns_domain_length(d->name) + 16) % 64;
 
     len = dns_domain_length(d->name) + d->paddinglen;
     d->querylen = len + 86;
@@ -69,7 +69,7 @@ static void streamlinedquery(struct dns_transmit *d) {
     dns_verbosity_writehex("DNSCurve nonce: ", nonce, 24);
 
     byte_zero(d->query + 38, 32);
-    fastrandombytes(d->id, 2);
+    randombytes(d->id, 2);
     basequery(d, d->query + 38 + 32);
     crypto_box_curve25519xsalsa20poly1305_afternm(d->query + 38, d->query + 38, len + 48, nonce, DNS_KEYPTR(d));
 
@@ -98,7 +98,7 @@ static void txtquery(struct dns_transmit *d) {
     dns_verbosity_writehex("DNSCurve nonce: ", nonce, 24);
 
     byte_zero(d->query, 32);
-    fastrandombytes(d->id, 2);
+    randombytes(d->id, 2);
     basequery(d, d->query + 32);
     crypto_box_curve25519xsalsa20poly1305_afternm(d->query, d->query, len + 48, nonce, DNS_KEYPTR(d));
 
@@ -106,7 +106,7 @@ static void txtquery(struct dns_transmit *d) {
     byte_copy(d->query + d->querylen - len - 44, 12, nonce);
 
     uint16_pack_big(d->query, d->querylen - 2);
-    fastrandombytes(d->query + 2, 2);
+    randombytes(d->query + 2, 2);
     byte_copy(d->query + 4, 10, "\0\0\0\1\0\0\0\0\0\0");
     dns_base32_encodebytes(d->query + 14,d->query + d->querylen - len - 44, len + 44);
     dns_base32_encodekey(d->query + 14 + m, d->pk);
@@ -270,7 +270,7 @@ static int randombind(struct dns_transmit *d) {
     if (d->s1type == XSOCKET_V6) pos = 16;
 
     for (j = 0;j < 10;++j) {
-        uint16_pack_big(port, fastrandommod(64510) + 1025);
+        uint16_pack_big(port, randommod(64510) + 1025);
         if (xsocket_bind(d->s1 - 1, d->s1type, d->localip + pos, port, d->scope_id) == 0) return 0;
     }
     byte_zero(port, 2);

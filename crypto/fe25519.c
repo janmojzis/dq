@@ -5,8 +5,6 @@
 #include "fe.h"
 #include "fe25519.h"
 
-typedef crypto_uint64 u64;
-
 /*
 p = 2^255 - 19
 */
@@ -18,7 +16,7 @@ static const fe p = {
 /*
 p3 = 3 * p
 */
-static const u64 p3[8] = { 
+static const crypto_uint64 p3[8] = { 
     0x2ffffffc7, 0x2fffffffd, 0x2fffffffd, 0x2fffffffd,
     0x2fffffffd, 0x2fffffffd, 0x2fffffffd, 0x17ffffffd
 };
@@ -28,7 +26,7 @@ reduction modulo p: 16 limbs -> 8 limbs
 */
 static void fe25519_reducebig(fe o, fel t) {
 
-    u64 u = 0;
+    crypto_uint64 u = 0;
     long long i;
 
     for (i = 0; i < 7; ++i) { u += t[i] + 38ULL * t[i + 8]; t[i] = u & 0xffffffff; u >>= 32; }
@@ -70,11 +68,11 @@ o = (121666 * f) % p;
 */
 void fe25519_mul121666(fe o, const fe f) {
 
-    u64 u = 0;
+    crypto_uint64 u = 0;
     long long i;
 
-    for (i = 0; i < 7; ++i) { u += (u64)121666 * (u64)f[i]; o[i] = u & 0xffffffff; u >>= 32; }
-    u += (u64)121666 * (u64)f[i]; o[i] = u & 0x7fffffff; u >>= 31;
+    for (i = 0; i < 7; ++i) { u += (crypto_uint64)121666 * (crypto_uint64)f[i]; o[i] = u & 0xffffffff; u >>= 32; }
+    u += (crypto_uint64)121666 * (crypto_uint64)f[i]; o[i] = u & 0x7fffffff; u >>= 31;
     u *= 19ULL;
     for (i = 0; i < 8; ++i) { u += o[i]; o[i] = u & 0xffffffff; u >>= 32; }
 }
@@ -84,11 +82,11 @@ o = (x + y) % p
 */
 void fe25519_add(fe o, const fe x, const fe y) {
 
-    u64 u = 0;
+    crypto_uint64 u = 0;
     long long i;
 
-    for (i = 0; i < 7; ++i) { u += (u64)x[i] + (u64)y[i]; o[i] = u & 0xffffffff; u >>= 32; }
-    u += (u64)x[i] + (u64)y[i]; o[i] = u & 0x7fffffff; u >>= 31;
+    for (i = 0; i < 7; ++i) { u += (crypto_uint64)x[i] + (crypto_uint64)y[i]; o[i] = u & 0xffffffff; u >>= 32; }
+    u += (crypto_uint64)x[i] + (crypto_uint64)y[i]; o[i] = u & 0x7fffffff; u >>= 31;
     u *= 19ULL;
     for (i = 0; i < 8; ++i) { u += o[i]; o[i] = u & 0xffffffff; u >>= 32; }
 }
@@ -98,11 +96,11 @@ o = (x - y) % p
 */
 void fe25519_sub(fe o, const fe x, const fe y) {
 
-    u64 u = 0;
+    crypto_uint64 u = 0;
     long long i;
 
-    for (i = 0; i < 7; ++i) { u += p3[i] - (u64)y[i] + (u64)x[i]; o[i] = u & 0xffffffff; u >>= 32; }
-    u += p3[i] - (u64)y[i] + (u64)x[i]; o[i] = u & 0x7fffffff; u >>= 31;
+    for (i = 0; i < 7; ++i) { u += p3[i] - (crypto_uint64)y[i] + (crypto_uint64)x[i]; o[i] = u & 0xffffffff; u >>= 32; }
+    u += p3[i] - (crypto_uint64)y[i] + (crypto_uint64)x[i]; o[i] = u & 0x7fffffff; u >>= 31;
     u *= 19ULL;
     for (i = 0; i < 8; ++i) { u += o[i]; o[i] = u & 0xffffffff; u >>= 32; }
 }

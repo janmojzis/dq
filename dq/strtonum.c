@@ -7,6 +7,9 @@ Public domain.
 #include "e.h"
 #include "strtonum.h"
 
+/*
+The 'strnum(r,buf)' converts 0-terminated string 'buf' into number 'r'.
+*/
 int strtonum(long long *r, const char *buf) {
 
     char *bufpos = (char *)buf;
@@ -16,7 +19,7 @@ int strtonum(long long *r, const char *buf) {
 
     if (!buf) goto failed;
 
-    switch(buf[0]) {
+    switch (buf[0]) {
         case 0:
             goto failed;
             break;
@@ -33,7 +36,7 @@ int strtonum(long long *r, const char *buf) {
 
     for(i = 0; bufpos[i]; ++i) {
         c = bufpos[i] - '0';
-        if (c < 0 || c > 9) break;
+        if (c > 9) break;
         c += 10 * (ret);
         if (ret > c)  goto failed; /* overflow */
         ret = c;

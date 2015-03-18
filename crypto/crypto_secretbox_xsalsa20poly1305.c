@@ -1,6 +1,7 @@
 #include "crypto_onetimeauth_poly1305.h"
 #include "crypto_stream_xsalsa20.h"
 #include "cleanup.h"
+#include "crypto_secretbox_xsalsa20poly1305.h"
 
 int crypto_secretbox_xsalsa20poly1305_tinynacl(unsigned char *c, const unsigned char *m, unsigned long long mlen, const unsigned char *n, const unsigned char *k) {
 

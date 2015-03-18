@@ -10,7 +10,7 @@
 #include "case.h"
 #include "die.h"
 #include "e.h"
-#include "fastrandombytes.h"
+#include "randombytes.h"
 #include "byte.h"
 #include "stralloc.h"
 #include "printpacket.h"
@@ -105,12 +105,12 @@ static struct global {
 } g = {0};
 
 static unsigned char *suffix = 0;
-static char *transport = "regular DNS";
+static const char *transport = "regular DNS";
 
-static char *portstr = "53";
+static const char *portstr = "53";
 static unsigned char port[2];
 static char *keystr = 0;
-static char *timeoutstr = "60";
+static const char *timeoutstr = "60";
 static long long maxtimeout;
 
 
@@ -122,7 +122,7 @@ static void die_usage(const char *s) {
 
 static void die_fatal(const char *trouble, const char *fn) {
 
-    fastrandombytes(&g, sizeof g);
+    randombytes((unsigned char *)&g, sizeof g);
 
     if (errno) {
         if (fn) die_7(111, FATAL, trouble, " ", fn, ": ", e_str(errno), "\n");
@@ -133,7 +133,7 @@ static void die_fatal(const char *trouble, const char *fn) {
 }
 
 
-int resolve(void) {
+static int resolve(void) {
 
     long long deadline, stamp, timeout, max;
     struct pollfd x[1];
@@ -193,7 +193,7 @@ static int ipget(const char *host) {
 
 }
 
-void oops(void) {
+static void oops(void) {
     die_fatal("unable to parse", 0);
 }
 
@@ -296,7 +296,7 @@ int main(int argc, char **argv) {
 
     if (writeall(1, g.out.s, g.out.len) == -1) die_fatal("unable to write output", 0);
 
-    fastrandombytes(&g, sizeof g);
+    randombytes((unsigned char *)&g, sizeof g);
     die_0(0);
     return 111;
 }

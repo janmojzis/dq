@@ -1,9 +1,7 @@
 #ifndef _PORTTOSTR_H____
 #define _PORTTOSTR_H____
 
-#include "numtostr.h"
-
-#define PORTTOSTR_LEN NUMTOSTR_LEN
+#define PORTTOSTR_LEN 6
 
 extern char *porttostr(char *, const unsigned char *);
 

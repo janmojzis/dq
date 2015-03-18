@@ -28,8 +28,7 @@ dns_verbosity.o
 droproot.o
 e.o
 env.o
-fastrandombytes.o
-fastrandommod.o
+randommod.o
 hexdecode.o
 hexparse.o
 inet_pton.o

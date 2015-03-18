@@ -8,7 +8,7 @@ Public domain.
 /* 5-12 byte - TEA encrypted counter */
 
 #include "nanoseconds.h"
-#include "fastrandombytes.h"
+#include "randombytes.h"
 #include "uint32_pack.h"
 #include "uint32_unpack.h"
 #include "crypto_uint64.h"
@@ -43,7 +43,7 @@ void dns_nonce_init(const char *ns, const unsigned char *nk) {
     }
 
     if (nk) byte_copy(noncekey, sizeof noncekey, nk);
-    else fastrandombytes(noncekey, sizeof noncekey);
+    else randombytes(noncekey, sizeof noncekey);
     return;
 }
 
@@ -78,7 +78,7 @@ void dns_nonce(unsigned char *n) {
 
     if (!noncecounter) dns_nonce_init(0, 0);
 
-    fastrandombytes(n, 4);
+    randombytes(n, 4);
     for(x = 0; x < 4; ++x) {
         n[x] &= noncemask[x];
         n[x] += noncedata[x];

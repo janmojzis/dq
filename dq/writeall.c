@@ -1,3 +1,4 @@
+/* taken from nacl-20110221, from curvecp/writeall.c */
 #include <poll.h>
 #include <unistd.h>
 #include "e.h"
@@ -5,7 +6,7 @@
 
 int writeall(int fd,const void *xv,long long xlen)
 {
-  const unsigned char *x = xv;
+  char *x = (char *)xv;
   long long w;
   while (xlen > 0) {
     w = xlen;

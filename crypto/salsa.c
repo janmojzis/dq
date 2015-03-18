@@ -9,16 +9,16 @@ Public domain.
 #include "uint32_pack.h"
 #include "uint32_unpack.h"
 #include "cleanup.h"
+#include "salsa.h"
 
 #define ROTATE(x, c) ((x) << (c)) | ((x) >> (32 - (c)))
 
-void salsa_core(unsigned char *out, crypto_uint32 *n, const crypto_uint32 *k, int h, long long r) {
+/* sigma: "expand 32-byte k" */
+static const crypto_uint32 sigma[4] = { 0x61707865, 0x3320646E, 0x79622D32, 0x6B206574 };
 
-    /* sigma: "expand 32-byte k" */
-    static const crypto_uint32 c[4] = { 0x61707865, 0x3320646E, 0x79622D32, 0x6B206574 };
+void salsa_core(unsigned char *out, crypto_uint32 *n, const crypto_uint32 *k, const crypto_uint32 *c, int h, long long r) {
+
     long long i, j, m;
-
-
     crypto_uint32 x[16], y[16], t[4], w[16];
 
     for (i = 0; i < 4; ++i) {
@@ -75,7 +75,7 @@ int salsa_stream_xor(unsigned char *c, const unsigned char *m, unsigned long lon
     for (i = 0; i < 2; ++i) n[i    ] = uint32_unpack(nn + 4 * i);
 
     while (l >= 64) {
-        salsa_core(m ? x : c, n, k, 0, r);
+        salsa_core(m ? x : c, n, k, sigma, 0, r);
         if (m) for (i = 0; i < 64; ++i) c[i] = m[i] ^ x[i];
 
         u = 1;
@@ -90,23 +90,9 @@ int salsa_stream_xor(unsigned char *c, const unsigned char *m, unsigned long lon
         if (m) m += 64;
     }
     if (l) {
-        salsa_core(x, n, k, 0, r);
+        salsa_core(x, n, k, sigma, 0, r);
         for (i = 0; i < l; ++i) c[i] = (m ? m[i] : 0) ^ x[i];
     }
     cleanup(x); cleanup(k); cleanup(n);
-    return 0;
-}
-
-int salsa_hash(unsigned char *c, const unsigned char *nn, const unsigned char *kk, long long r) {
-
-    crypto_uint32 k[8], n[4];
-    long long i;
-
-    for (i = 0; i < 8; ++i) k[i] = uint32_unpack(kk + 4 * i);
-    for (i = 0; i < 4; ++i) n[i] = uint32_unpack(nn + 4 * i);
-
-    salsa_core(c, n, k, 1, r);
-
-    cleanup(k); cleanup(n);
     return 0;
 }

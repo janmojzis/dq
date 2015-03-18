@@ -1,4 +1,4 @@
-#include "fastrandommod.h"
+#include "randommod.h"
 #include "byte.h"
 #include "dns.h"
 
@@ -21,7 +21,7 @@ void dns_sortip(unsigned char *s, long long nn) {
 
     n >>= 4;
     while (n > 1) {
-        i = fastrandommod(n);
+        i = randommod(n);
         --n;
         swap(s + 16 * i, 16, s + 16 * n);
     }
@@ -44,7 +44,7 @@ void dns_sortipkey(unsigned char *s, unsigned char *t, long long nn) {
     n = nn;
 
     while (n > 1) {
-        i = fastrandommod(n);
+        i = randommod(n);
         --n;
         swap(s + 16 * i, 16, s + 16 * n);
         swap(t + 33 * i, 33, t + 33 * n);

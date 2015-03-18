@@ -1,3 +1,11 @@
+dq (20150318) stable; urgency=low
+
+  * fixed compilation warnings
+  * sync with upstream crypto tinynacl
+  * cache.c now uses siphash24
+
+ -- Jan Mojzis <jan.mojzis@gmail.com>  Wed, 18 Mar 2015 07:38:35 +0100
+
 dq (20141127) stable; urgency=low
 
   * added debian dependency on libnacl-dev for i386 and amd64

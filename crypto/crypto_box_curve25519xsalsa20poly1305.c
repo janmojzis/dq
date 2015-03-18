@@ -1,11 +1,11 @@
-/* #include "crypto_core_hsalsa20.h" */
-#include "salsa.h"
+#include "crypto_core_hsalsa20.h"
 #include "crypto_scalarmult_curve25519.h"
 #include "crypto_secretbox_xsalsa20poly1305.h"
 #include "randombytes.h"
+#include "crypto_box_curve25519xsalsa20poly1305.h"
 
+static const unsigned char zero[16] = {0};
 static const unsigned char sigma[16] = "expand 32-byte k";
-static const unsigned char n[16] = {0};
 
 int crypto_box_curve25519xsalsa20poly1305_tinynacl_beforenm(
   unsigned char *k,
@@ -15,8 +15,7 @@ int crypto_box_curve25519xsalsa20poly1305_tinynacl_beforenm(
 {
   unsigned char s[32];
   crypto_scalarmult_curve25519(s,sk,pk);
-  /* return crypto_core_hsalsa20(k,n,s,sigma); */
-  return salsa_hash(k,n,s,20);
+  return crypto_core_hsalsa20(k, zero, s, sigma);
 }
 
 int crypto_box_curve25519xsalsa20poly1305_tinynacl_afternm(

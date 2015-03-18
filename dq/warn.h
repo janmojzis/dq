@@ -1,4 +1,4 @@
-#ifndef _WARN_H
+#ifndef _WARN_H____
 #define _WARN_H____
 
 extern void warn_9(const char *,const char *,const char *,const char *,const char *,const char *,const char *,const char *,const char *);

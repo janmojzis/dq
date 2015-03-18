@@ -1,0 +1,2 @@
+-lrt
+-lsocket -lnsl

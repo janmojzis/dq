@@ -1,3 +1,4 @@
+/* taken from nacl-20110221, from curvecp/blocking.c */
 #include <fcntl.h>
 #include "blocking.h"
 

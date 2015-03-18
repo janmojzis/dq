@@ -30,8 +30,7 @@ dqcache
 droproot
 e
 env
-fastrandombytes
-fastrandommod
+randommod
 hexdecode
 hexparse
 inet_pton

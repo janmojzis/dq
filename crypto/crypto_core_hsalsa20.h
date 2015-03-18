@@ -1,0 +1,18 @@
+#ifndef crypto_core_hsalsa20_H
+#define crypto_core_hsalsa20_H
+
+#define crypto_core_hsalsa20_tinynacl_OUTPUTBYTES 32
+#define crypto_core_hsalsa20_tinynacl_INPUTBYTES 16
+#define crypto_core_hsalsa20_tinynacl_KEYBYTES 32
+#define crypto_core_hsalsa20_tinynacl_CONSTBYTES 16
+extern int crypto_core_hsalsa20_tinynacl(unsigned char *,const unsigned char *,const unsigned char *,const unsigned char *);
+
+#define crypto_core_hsalsa20 crypto_core_hsalsa20_tinynacl
+#define crypto_core_hsalsa20_OUTPUTBYTES crypto_core_hsalsa20_tinynacl_OUTPUTBYTES
+#define crypto_core_hsalsa20_INPUTBYTES crypto_core_hsalsa20_tinynacl_INPUTBYTES
+#define crypto_core_hsalsa20_KEYBYTES crypto_core_hsalsa20_tinynacl_KEYBYTES
+#define crypto_core_hsalsa20_CONSTBYTES crypto_core_hsalsa20_tinynacl_CONSTBYTES
+#define crypto_core_hsalsa20_IMPLEMENTATION "tinynacl"
+#define crypto_core_hsalsa20_VERSION "-"
+
+#endif

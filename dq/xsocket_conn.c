@@ -14,7 +14,7 @@ Public domain.
 #include "hasipv6.h"
 #include "xsocket.h"
 
-int xsocket_connect6(int s, const unsigned char *ip, const unsigned char *port, long long id) {
+static int xsocket_connect6(int s, const unsigned char *ip, const unsigned char *port, long long id) {
 #ifdef HASIPV6
     struct sockaddr_in6 sa;
 
@@ -32,7 +32,7 @@ int xsocket_connect6(int s, const unsigned char *ip, const unsigned char *port, 
 #endif
 }
 
-int xsocket_connect4(int s, const unsigned char *ip, const unsigned char *port, long long id) {
+static int xsocket_connect4(int s, const unsigned char *ip, const unsigned char *port, long long id) {
 
     struct sockaddr_in sa;
 

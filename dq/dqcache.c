@@ -5,7 +5,7 @@
 #include "byte.h"
 #include "xsocket.h"
 #include "strtoip.h"
-#include "fastrandombytes.h"
+#include "randombytes.h"
 #include "crypto_uint64.h"
 #include "query.h"
 #include "die.h"
@@ -74,13 +74,13 @@ static struct udpclient {
 } u[MAXUDP];
 long long uactive = 0;
 
-void u_drop(long long j) {
+static void u_drop(long long j) {
     if (!u[j].active) return;
     log_querydrop(&u[j].active);
     u[j].active = 0; --uactive;
 }
 
-void u_respond(long long j) {
+static void u_respond(long long j) {
 
     if (!u[j].active) return;
     response_id(u[j].id);
@@ -90,7 +90,7 @@ void u_respond(long long j) {
     u[j].active = 0; --uactive;
 }
 
-void u_new(void) {
+static void u_new(void) {
 
     long long j;
     long long i;
@@ -169,19 +169,19 @@ state 0: buf 0; handling query in q
 state -1: buf allocated; have written pos bytes
 */
 
-void t_free(long long j) {
+static void t_free(long long j) {
     if (!t[j].buf) return;
     alloc_free(t[j].buf);
     t[j].buf = 0;
 }
 
-void t_timeout(long long j) {
+static void t_timeout(long long j) {
 
     if (!t[j].active) return;
     t[j].timeout = milliseconds() + 10000;
 }
 
-void t_close(long long j) {
+static void t_close(long long j) {
     if (!t[j].active) return;
     t_free(j);
     log_tcpclose(t[j].ip, t[j].port);
@@ -189,13 +189,13 @@ void t_close(long long j) {
     t[j].active = 0; --tactive;
 }
 
-void t_drop(long long j) {
+static void t_drop(long long j) {
     log_querydrop(&t[j].active);
     errno = EPIPE;
     t_close(j);
 }
 
-void t_respond(long long j) {
+static void t_respond(long long j) {
     if (!t[j].active) return;
     log_querydone(&t[j].active, response_len);
     response_id(t[j].id);
@@ -209,7 +209,7 @@ void t_respond(long long j) {
     t[j].state = -1;
 }
 
-void t_rw(long long j) {
+static void t_rw(long long j) {
 
     struct tcpclient *x;
     unsigned char ch;
@@ -276,7 +276,7 @@ void t_rw(long long j) {
     x->state = 0;
 }
 
-void t_new(void) {
+static void t_new(void) {
 
     long long i;
     long long j;
@@ -316,9 +316,9 @@ void t_new(void) {
     log_tcpopen(x->ip,x->port);
 }
 
-struct pollfd io[3 + MAXUDP + MAXTCP];
-struct pollfd *udp53io;
-struct pollfd *tcp53io;
+static struct pollfd io[3 + MAXUDP + MAXTCP];
+static struct pollfd *udp53io;
+static struct pollfd *tcp53io;
 
 static void doit(void) {
 
@@ -414,28 +414,28 @@ static void die_fatal(const char *trouble, const char *fn) {
 }
 
 
-char *dnscurvetype = 0;
+static char *dnscurvetype = 0;
 
-void reload(int sig) {
+static void reload(int sig) {
     if (!roots_init(dnscurvetype)) die_fatal("unable to read servers", 0);
 }
-void dump(int sig){
+static void dump(int sig){
     if (cache_dump() == -1) warn_4(WARNING, "unable to dump cache: ", e_str(errno), "\n");
 }
 
-void exitasap(int sig){
+static void exitasap(int sig){
     dump(0);
     die_0(0);
 }
 
-void clean(int sig){
+static void clean(int sig){
     cache_clean();
 }
 
 
 int main(int argc, char **argv) {
 
-    char ch;
+    unsigned char ch;
     long long cachesize;
     unsigned char port[2];
 
@@ -458,7 +458,7 @@ int main(int argc, char **argv) {
     if (tcp53 == -1) die_fatal("unable to create TCP socket", 0);
     if (xsocket_bind_reuse(tcp53, mytypeincoming, myipincoming, myport, 0) == -1) die_fatal("unable to bind TCP socket", 0);
 
-    fastrandombytes(&ch, 1); /* open /dev/urandom before chroot */
+    randombytes(&ch, 1); /* open /dev/urandom before chroot */
 
     droproot(FATAL);
 

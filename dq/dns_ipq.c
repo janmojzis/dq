@@ -32,7 +32,7 @@ static int doit(stralloc *work,const unsigned char *rule)
   return stralloc_cats(work,rule + colon + 1);
 }
 
-int dns_ip_qualify_rules(struct dns_data *out,stralloc *fqdn,const char *in,const stralloc *rules, int (*op)(struct dns_data *, const char *))
+static int dns_ip_qualify_rules(struct dns_data *out,stralloc *fqdn,const char *in,const stralloc *rules, int (*op)(struct dns_data *, const char *))
 {
   long long i;
   long long j;

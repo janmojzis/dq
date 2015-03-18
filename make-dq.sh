@@ -46,7 +46,10 @@ rm -rf "$work"
 mkdir -p "$work"
 (
   cd "${work}"
-  for i in -Wno-parentheses -Wno-sign-compare -Wno-overlength-strings -Wno-deprecated-declarations -Wno-long-long -Wall -pedantic ${CFLAGS} ${LDFLAGS}; do
+  cflags=`cat "${top}/conf-cflags" 2>/dev/null || :`
+  cflags="${CFLAGS} ${LDFLAGS} ${cflags}"
+
+  for i in ${cflags}; do
     echo 'int main(void) { return 0; }' > try.c
     ${compiler} "$i" -o try try.c 2>/dev/null || { echo "=== `date` ===   $i failed"; continue; }
     options="$i $options"
@@ -64,13 +67,18 @@ rm -rf "$work"
 mkdir -p "$work"
 (
   cd "$work"
-  for i in '-lrt' '-lsocket -lnsl'; do
-    echo 'int main(void) { return 0; }' > try.c
-    ${compiler} $i -o try try.c 2>/dev/null || { echo "=== `date` ===   $i failed"; continue; }
-    syslibs="$i $syslibs"
-    echo "=== `date` ===   $i ok"
-  done
-  echo $syslibs > syslibs
+  (
+    exec 2>/dev/null
+    cat "${top}/conf-libs" || :
+  ) | (
+    exec 5>syslibs
+    while read i; do
+      echo 'int main(void) { return 0; }' > try.c
+      ${compiler} ${i} -o try try.c 2>/dev/null || { echo "=== `date` ===   ${i} failed"; continue; }
+      echo "${i}" >&5
+      echo "=== `date` ===   $i ok"
+    done
+  )
 )
 libs=`cat "${work}/syslibs"`
 echo "=== `date` === finishing"

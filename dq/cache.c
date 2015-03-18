@@ -10,10 +10,11 @@
 #include "uint32_unpack.h"
 #include "seconds.h"
 #include "die.h"
-#include "fastrandombytes.h"
+#include "randombytes.h"
 #include "buffer.h"
 #include "open.h"
 #include "dns.h"
+#include "crypto_auth_siphash24.h"
 #include "cache.h"
 
 crypto_uint64 cache_motion = 0;
@@ -26,6 +27,7 @@ static crypto_uint32 hsize;
 static crypto_uint32 writer;
 static crypto_uint32 oldest;
 static crypto_uint32 unused;
+static unsigned char hashkey[crypto_auth_siphash24_KEYBYTES];
 
 /*
 100 <= size <= 1000000000.
@@ -74,6 +76,7 @@ static crypto_uint32 get4(crypto_uint32 pos) {
     return result;
 }
 
+#if 0
 static crypto_uint32 hash(const unsigned char *key, crypto_uint32 keylen) {
 
   unsigned int result = 5381;
@@ -88,7 +91,16 @@ static crypto_uint32 hash(const unsigned char *key, crypto_uint32 keylen) {
   result &= hsize - 4;
   return result;
 }
+#else
+static crypto_uint32 hash(const unsigned char *key, crypto_uint32 keylen) {
 
+    unsigned char a[crypto_auth_siphash24_BYTES];
+
+    crypto_auth_siphash24(a, key, keylen, hashkey);
+
+    return (uint32_unpack(a) & (hsize - 4));
+}
+#endif
 
 unsigned char *cache_get(const unsigned char *key, long long keylen, long long *datalen, long long *ttl, unsigned char *flags) {
 
@@ -195,6 +207,8 @@ void cache_set(const unsigned char *key, long long keylen, const unsigned char *
 }
 
 int cache_init(long long cachesize) {
+
+    randombytes(hashkey, sizeof hashkey);
 
     if (x) {
         alloc_free(x);
