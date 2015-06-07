@@ -4,12 +4,11 @@ if [ x"$1" != "xremove" -a x"$1" != "xpurge" ]; then
     exit 0
 fi
 
-if [ -e /service ]; then
-  servicedir="/service"
-fi
-
 if [ -e /etc/service ]; then
   servicedir="/etc/service"
+fi
+if [ -e /service ]; then
+  servicedir="/service"
 fi
 
 for i in `ls -d ${servicedir}/${DPKG_MAINTSCRIPT_PACKAGE}_* 2>/dev/null`; do

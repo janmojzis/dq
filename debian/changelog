@@ -1,10 +1,10 @@
-dq (20150318) stable; urgency=low
+dq (20150319) stable; urgency=low
 
   * fixed compilation warnings
   * sync with upstream crypto tinynacl
   * cache.c now uses siphash24
 
- -- Jan Mojzis <jan.mojzis@gmail.com>  Wed, 18 Mar 2015 07:38:35 +0100
+ -- Jan Mojzis <jan.mojzis@gmail.com>  Thu, 19 Mar 2015 07:52:28 +0100
 
 dq (20141127) stable; urgency=low
 

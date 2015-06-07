@@ -16,11 +16,11 @@ chown -R dqcache /etc/dqcache/root/dump
 chown -R dqcachelog /var/log/dqcache
 
 
-if [ -e /service ]; then
-  servicedir="/service"
-fi
 if [ -e /etc/service ]; then
   servicedir="/etc/service"
+fi
+if [ -e /service ]; then
+  servicedir="/service"
 fi
 [ x"${servicedir}" = x ] && exit 111
 

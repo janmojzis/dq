@@ -1,4 +1,4 @@
-build/bin/dqcache usr/bin
+build/bin/dqcache usr/sbin
 debian/env/IP etc/dqcache/env
 debian/env/ROOT etc/dqcache/env
 debian/env/CACHESIZE etc/dqcache/env
