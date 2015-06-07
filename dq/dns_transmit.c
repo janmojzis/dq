@@ -50,6 +50,7 @@ static void regularquery(struct dns_transmit *d) {
     uint16_pack_big(d->query, d->querylen - 2);
     randombytes(d->id, 2);
     basequery(d, d->query + 2);
+    d->name = d->query + 14;
 }
 
 static void streamlinedquery(struct dns_transmit *d) {
