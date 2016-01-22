@@ -1,4 +1,4 @@
-dq (20150122) stable; urgency=low
+dq (20160122) stable; urgency=low
 
   * debian - support for systemd
 
