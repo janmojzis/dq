@@ -1,3 +1,9 @@
+dq (20150122) stable; urgency=low
+
+  * debian - support for systemd
+
+ -- Jan Mojzis <jan.mojzis@gmail.com>  Fri, 22 Jan 2016 09:45:32 +0100
+
 dq (20150319) stable; urgency=low
 
   * fixed compilation warnings

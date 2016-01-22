@@ -1,38 +1,5 @@
-#!/bin/sh -e
+#!/bin/sh
 
-if [ x"$1" != "xconfigure" ]; then
-  exit 0
-fi
+chmod 600 /etc/default/dqcache
 
-if ! grep -q "^dqcachelog:" /etc/passwd; then
-  adduser --quiet --system --no-create-home --disabled-password --home /nonexistent --ingroup nogroup --gecos "dqcachelog user" dqcachelog
-fi
-
-if ! grep -q "^dqcache:" /etc/passwd; then
-  adduser --quiet --system --no-create-home --disabled-password --home /nonexistent --ingroup nogroup --gecos "dqcache user" dqcache
-fi
-
-chown -R dqcache /etc/dqcache/root/dump
-chown -R dqcachelog /var/log/dqcache
-
-
-if [ -e /etc/service ]; then
-  servicedir="/etc/service"
-fi
-if [ -e /service ]; then
-  servicedir="/service"
-fi
-[ x"${servicedir}" = x ] && exit 111
-
-
-DIR="/etc/dqcache/service"; export DIR
-for S in `ls -d ${DIR}/* 2>/dev/null`; do
-    B=`basename "${S}"`
-    if [ -e "${servicedir}/${DPKG_MAINTSCRIPT_PACKAGE}_${B}" ]; then
-        echo "${servicedir}/${DPKG_MAINTSCRIPT_PACKAGE}_${B} exist."
-    else
-        echo -n "linking: ${S} -> ${servicedir}/${DPKG_MAINTSCRIPT_PACKAGE}_${B}"
-        ln -s "${S}" "${servicedir}/${DPKG_MAINTSCRIPT_PACKAGE}_${B}"
-        echo ". done."
-    fi
-done
+#DEBHELPER#
