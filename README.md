@@ -1,3 +1,3 @@
 See:
 
-http://mojzis.com/software/dq/
+https://mojzis.com/software/dq/
