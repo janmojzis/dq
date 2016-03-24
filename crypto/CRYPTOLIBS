@@ -23,3 +23,4 @@ crypto_stream_salsa20.o
 crypto_stream_xsalsa20.o
 crypto_secretbox_xsalsa20poly1305.o
 crypto_box_curve25519xsalsa20poly1305.o
+cleanup.o
