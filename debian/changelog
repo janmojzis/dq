@@ -1,3 +1,9 @@
+dq (20160324) stable; urgency=low
+
+  * debian - support for daemontools + systemd
+
+ -- Jan Mojzis <jan.mojzis@gmail.com>  Thu, 24 Mar 2016 10:42:41 +0100
+
 dq (20160122) stable; urgency=low
 
   * debian - support for systemd

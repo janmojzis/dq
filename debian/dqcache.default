@@ -1,3 +1,0 @@
-ROOT=/etc/dqcache/root
-IP=127.0.0.1
-CACHESIZE=10000000
