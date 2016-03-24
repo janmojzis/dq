@@ -6,7 +6,7 @@ export CACHESIZE
 export IP
 
 if [ x"${ROOT}" = x ]; then
-  echo 'dqcache-extreme.sh: $ROOT not set' >&2
+  echo 'dqcache-wrapper.sh: $ROOT not set' >&2
   exit 111
 fi
 
