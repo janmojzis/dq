@@ -11,7 +11,7 @@
 
 set -e
 
-NAME=dqcache
+NAME=dqcache-server
 DAEMON="/usr/sbin/${NAME}"
 PIDFILE="/var/run/${NAME}.pid"
 SCRIPTNAME="/etc/init.d/${NAME}"
