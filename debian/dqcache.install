@@ -1,3 +1,1 @@
 build/bin/dqcache usr/sbin
-debian/dqcache-wrapper.sh usr/sbin
-debian/root/servers/@ etc/dqcache/root/servers
