@@ -1,0 +1,3 @@
+#!/bin/sh
+
+exec setuidgid dqcachelog multilog t n20 s99999999 /var/log/dqcache
