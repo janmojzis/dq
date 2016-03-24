@@ -1,0 +1,114 @@
+.TH dq 1
+.SH NAME
+dq \- DNS/DNSCurve query tool
+.SH SYNOPSIS
+.B dq
+[ options ]
+.I type
+.I fqdn
+[
+.I host
+]
+
+.B dq -a
+[ options ]
+.I type
+.I fqdn
+.I host
+.SH DESCRIPTION
+.B dq
+asks for records of type
+.I type
+under the domain name
+.I fqdn
+
+.B dq -a
+sends a non-recursive DNS/DNSCurve query to DNS/DNSCurve server
+.I host
+for records of type 
+.I type
+under the domain name 
+.I fqdn
+.SH OPTIONS
+.TP 5
+.B \-v
+(optional): print extra information
+.TP
+.B \-r
+(optional): send recursive query (default)
+.TP
+.B \-a
+(optional): send authoritative query
+.TP
+.B \-u
+(optional): use UDP (default)
+.TP
+.B \-t
+(optional): force TCP
+.TP
+.B \-s
+(optional): send DNSCurve query in streamlined format (default), ignored for regular DNS queries
+.TP
+.B \-S \fIsuffix
+(optional): send DNSCurve query in TXT format using suffix
+.I suffix
+, ignored for regular DNS queries
+.TP
+.B \-T \fItimeout
+(optional): give up on the DNS/DNSCurve query attempt after
+.I timeout
+seconds
+(default 60)
+.TP
+.B \-p \fIport
+(optional): send query to port
+.I port
+(default 53)
+.TP
+.B \-k \fIkey
+(optional): force DNSCurve and use servers public-key
+.I key
+.TP
+.I type:
+DNS query type (A, NS, MX, ANY, PTR, TXT, SOA, SRV, AAAA, AXFR, CNAME or numeric type)
+.TP
+.I fqdn:
+fully qualified domain name
+.TP
+.I host:
+DNS server (hostname or IP address)
+.SH ENVIRONMENT
+.TP
+.B DNSCACHEIP
+use IP address $DNSCACHEIP instead of 'nameserver' lines from /etc/resolv.conf
+.TP
+.B LOCALDOMAIN
+use space separated names from $LOCALDOMAIN instead of 'search' line from /etc/resolv.conf
+.TP
+.B DNSREWRITEFILE
+use $DNSREWRITEFILE file instead of /etc/dnsrewrite
+.SH NOTES
+.B dq
+rewrites IP address to *.in-addr.arpa or *.ip6.arpa for PTR queries e.g.:
+ dq ptr 127.0.0.1 -> dq ptr 1.0.0.127.in-addr.arpa
+ dq ptr ::1 -> dq ptr 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa
+.SH RECURSIVE EXAMPLES
+ dq any dnscurve.cz
+ dq any dnscurve.cz 8.8.8.8
+ env DNSCACHEIP=8.8.8.8 dq any dnscurve.cz
+ dq ptr 1.0.0.127.in-addr.arpa
+ dq ptr 127.0.0.1
+ dq ptr ::1
+ dq ptr 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa
+.SH AUTHORITATIVE EXAMPLES
+ dq -a any dnscurve.cz uz5mj60yr9tnudkkpcglw1y0w6dlh78j1l4gk4z7t8bsf1u4d48wlq.ns.dnscurve.cz
+ dq -a -S cz any dnscurve.cz uz5mj60yr9tnudkkpcglw1y0w6dlh78j1l4gk4z7t8bsf1u4d48wlq.ns.dnscurve.cz
+ dq -a -k uz5mj60yr9tnudkkpcglw1y0w6dlh78j1l4gk4z7t8bsf1u4d48wlq any dnscurve.cz 2a02:2b88:2:1::127d:1
+.SH ACKNOWLEDGEMENT
+.B dq 
+is based on dnsq and dnsqr from djbdns https://cr.yp.to/djbdns.html
+.SH SEE ALSO
+dnsq(1),
+dnsqr(1)
+
+https://mojzis.com/software/dq
