@@ -1,9 +1,10 @@
 Source: dq
 Section: net
 Priority: standard
-Build-Depends: debhelper (>= 8), dh-systemd, build-essential, make, libnacl-dev [amd64] | libnacl-dev [i386]
+Build-Depends: debhelper (>= 9), dh-systemd, build-essential, make, libnacl-dev [amd64] | libnacl-dev [i386]
 Maintainer: Jan Mojzis <jan.mojzis@gmail.com>
 Homepage: https://mojzis.com/software/dq/install.html
+Standards-Version: 3.9.7
 
 Package: dq
 Section: net
