@@ -7,7 +7,7 @@ Homepage: https://mojzis.com/software/dq/install.html
 
 Package: dq
 Section: net
-Depends: ${shlibs:Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends}
 Architecture: any
 Description: DNS/DNSCurve query tool
  The dq package provides software for DNS/DNSCurve.
@@ -23,7 +23,7 @@ Description: DNS/DNSCurve query tool
 
 Package: dqcache
 Section: net
-Depends: ${shlibs:Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends}
 Architecture: any
 Description: DNS/DNSCurve recursive server - binaries
  The dq package provides software for DNS/DNSCurve.
@@ -38,7 +38,7 @@ Description: DNS/DNSCurve recursive server - binaries
 
 Package: dqcache-run
 Section: net
-Depends: daemontools-run, adduser, dqcache
+Depends: ${misc:Depends}, daemontools-run, adduser, dqcache
 Conflicts: dqcache-server
 Architecture: all
 Description: DNS/DNSCurve recursive server - running under daemontools
