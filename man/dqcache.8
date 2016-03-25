@@ -1,6 +1,11 @@
 .TH dqcache 8
 .SH NAME
 dqcache \- DNS cache with DNSCurve support
+.SH DESCRIPTION
+.B dqcache
+is recursive DNS server derived from 
+.B dnscache
+(https://cr.yp.to/djbdns/dnscache.html)
 .SH CONFIGURATION
 .B dqcache
 runs chrooted in the directory specified by the $ROOT environment variable, under the uid and gid specified by the $UID and $GID environment variables.
@@ -70,11 +75,6 @@ uses a fixed-size cache, as controlled by the $CACHESIZE environment variable.
 .sp
 .B dqcache
 generates DNSCurve keys at start of program. If environment variables $SECRETKEY, $PUBLICKEY, $NONCEKEY are set then, dqcache loads those keys.
-.SH ACKNOWLEDGEMENT
-.B dqcache
-is derived from
-.B dnscache
-(https://cr.yp.to/djbdns/dnscache.html)
 .SH SEE ALSO
 .BR dq (1),
 .BR dnscache (8)

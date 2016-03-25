@@ -17,6 +17,13 @@ dq \- DNS/DNSCurve query tool
 .I host
 .SH DESCRIPTION
 .B dq
+is commandline tool derived from
+.B dnsq
+/
+.B dnsqr
+(https://cr.yp.to/djbdns/debugging.html)
+.sp
+.B dq
 asks for records of type
 .I type
 under the domain name
@@ -111,13 +118,6 @@ dq -a any dnscurve.cz uz5mj60yr9tnudkkpcglw1y0w6dlh78j1l4gk4z7t8bsf1u4d48wlq.ns.
 dq -a -S cz any dnscurve.cz uz5mj60yr9tnudkkpcglw1y0w6dlh78j1l4gk4z7t8bsf1u4d48wlq.ns.dnscurve.cz
 dq -a -k uz5mj60yr9tnudkkpcglw1y0w6dlh78j1l4gk4z7t8bsf1u4d48wlq any dnscurve.cz 2a02:2b88:2:1::127d:1
 .fi
-.SH ACKNOWLEDGEMENT
-.B dq 
-is derived from
-.B dnsq
-/
-.B dnsqr
-(https://cr.yp.to/djbdns/debugging.html)
 .SH SEE ALSO
 .BR dqcache (8),
 .BR dnsq (1),
