@@ -1,0 +1,84 @@
+.TH dqcache 8
+.SH NAME
+dqcache \- DNS cache with DNSCurve support
+.SH CONFIGURATION
+.B dqcache
+runs chrooted in the directory specified by the $ROOT environment variable, under the uid and gid specified by the $UID and $GID environment variables.
+.sp
+.B dqcache
+listens for incoming UDP packets and TCP connections addressed to port 53 of $IP. Typically 127.0.0.1.
+.RS 4
+.B WARNING - dqcache currently accepts packets only from localhost (127.0.0.0/8 or ::1/128).
+.RE
+.sp
+.B dqcache
+sends outgoing IPv4 packets from high ports of $IPSEND4. Typically $IPSEND4 is 0.0.0.0, meaning the machine's primary IPv4 address.
+.sp
+.B dqcache
+sends outgoing IPv6 packets from high ports of $IPSEND6. Typically $IPSEND6 is ::, meaning the machine's primary IPv6 address.
+.sp
+.B dqcache
+reads a list of root servers as an anchor, one address per line, from servers/@.  e.g.:
+.RS 4
+.nf
+servers/@:
+198.41.0.4
+2001:503:ba3e::2:30
+192.228.79.201
+2001:500:84::b
+192.33.4.12
+2001:500:2::c
+199.7.91.13
+2001:500:2d::d
+192.203.230.10
+192.5.5.241
+2001:500:2f::f
+192.112.36.4
+128.63.2.53
+2001:500:1::803f:235
+192.36.148.17
+2001:7fe::53
+192.58.128.30
+2001:503:c27::2:30
+193.0.14.129
+2001:7fd::1
+199.7.83.42
+2001:500:3::42
+202.12.27.33
+2001:dc3::35
+.fi
+.RE
+.sp
+.B dqcache
+also scans the servers directory for anchors for other domains. The anchor can be configured with DNSCurve key.
+The separator is pipe '|' e.g. for domain dnscurve.cz:
+.RS 4
+.nf
+ servers/dnscurve.cz:
+ 185.66.36.55|uz5mj60yr9tnudkkpcglw1y0w6dlh78j1l4gk4z7t8bsf1u4d48wlq
+ 37.157.196.86|uz5mj60yr9tnudkkpcglw1y0w6dlh78j1l4gk4z7t8bsf1u4d48wlq
+ 2a02:2b88:2:1::127d:1|uz5mj60yr9tnudkkpcglw1y0w6dlh78j1l4gk4z7t8bsf1u4d48wlq
+ 2a03:1e20:0:5::2|uz5mj60yr9tnudkkpcglw1y0w6dlh78j1l4gk4z7t8bsf1u4d48wlq
+.fi
+.RE
+.sp
+.B dqcache
+supports forward-only mode. If $FORWARDONLY is set, dqcache treats servers/@ as a list of IP addresses for other caches, not root servers. It forwards queries to those caches the same way that a client does, rather than contacting a chain of servers according to NS records.
+.sp
+.B dqcache
+uses a fixed-size cache, as controlled by the $CACHESIZE environment variable.
+.sp
+.B dqcache
+generates DNSCurve keys at start of program. If environment variables $SECRETKEY, $PUBLICKEY, $NONCEKEY are set then, dqcache loads those keys.
+.SH ACKNOWLEDGEMENT
+.B dqcache
+is derived from
+.B dnscache
+(https://cr.yp.to/djbdns/dnscache.html)
+.SH SEE ALSO
+.BR dnscache (8)
+.sp
+.nf
+https://mojzis.com/software/dq
+https://dnscurve.org/
+.fi
