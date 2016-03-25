@@ -1,8 +1,11 @@
-dq (20160324) stable; urgency=low
+dq (20160325) stable; urgency=low
 
-  * debian - support for daemontools + systemd
+  * debian - support for daemontools
+  * debian - systemd support temporary disabled
+  * debian - added copyright
+  * added manpages
 
- -- Jan Mojzis <jan.mojzis@gmail.com>  Thu, 24 Mar 2016 10:42:41 +0100
+ -- Jan Mojzis <jan.mojzis@gmail.com>  Fri, 25 Mar 2016 11:13:53 +0100
 
 dq (20160122) stable; urgency=low
 
