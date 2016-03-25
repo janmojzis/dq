@@ -1,6 +1,6 @@
+debian/env/CACHESIZE etc/dqcache/env
 debian/env/IP etc/dqcache/env
 debian/env/ROOT etc/dqcache/env
-debian/env/CACHESIZE etc/dqcache/env
-debian/service/dqcache/run etc/dqcache/service/dqcache
-debian/service/dqcache/log/run etc/dqcache/service/dqcache/log
 debian/root/servers/@ etc/dqcache/root/servers
+debian/service/dqcache/log/run etc/dqcache/service/dqcache/log
+debian/service/dqcache/run etc/dqcache/service/dqcache
