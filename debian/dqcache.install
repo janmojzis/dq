@@ -1,1 +1,2 @@
 build/bin/dqcache usr/sbin
+man/dqcache.8 /usr/share/man/man8
