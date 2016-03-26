@@ -5,11 +5,11 @@ if [ x"$1" != "xconfigure" ]; then
   exit 0
 fi
 
-if ! grep -q "^dqcachelog:" /etc/passwd; then
+if ! getent passwd dqcachelog > /dev/null; then
   adduser --quiet --system --no-create-home --disabled-password --home /nonexistent --ingroup nogroup --gecos "dqcachelog user" dqcachelog
 fi
 
-if ! grep -q "^dqcache:" /etc/passwd; then
+if ! getent passwd dqcache > /dev/null; then
   adduser --quiet --system --no-create-home --disabled-password --home /nonexistent --ingroup nogroup --gecos "dqcache user" dqcache
 fi
 
@@ -36,3 +36,5 @@ for S in `ls -d ${DIR}/* 2>/dev/null`; do
         echo ". done."
     fi
 done
+
+#DEBHELPER#
