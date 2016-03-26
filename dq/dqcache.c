@@ -438,6 +438,7 @@ int main(int argc, char **argv) {
     unsigned char ch;
     long long cachesize;
     unsigned char port[2];
+    char *x;
 
     signal(SIGPIPE, SIG_IGN);
     signal(SIGHUP,  reload);
@@ -467,6 +468,17 @@ int main(int argc, char **argv) {
         !hexparse(nk, sizeof nk, env_get("NONCEKEY"))) {
             dns_keys(pk, sk, nk);
     }
+
+    /* remove secret keys */
+    x = env_get("SECRETKEY");
+    if (x) {
+        while (*x) { *x = 0; ++x; }
+    }
+    x = env_get("NONCEKEY");
+    if (x) {
+        while (*x) { *x = 0; ++x; }
+    }
+
     log_dnscurvekey(pk);
     query_init(pk, sk);
     dns_nonce_init(env_get("NONCESTART"), nk);
