@@ -9,7 +9,7 @@ override_dh_auto_build:
 	dh $@ --with systemd
 
 clean:
-	rm -rf debian/dq debian/dqcache debian/dqcache-run debian/dqcache-server
+	rm -rf debian/dq debian/dqcache debian/dqcache-run debian/dqcache-server debian/tmp
 	rm -f debian/*.substvars debian/*.debhelper debian/*.log debian/files
 	rm -rf build
 
