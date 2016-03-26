@@ -19,3 +19,5 @@ for i in `ls -d ${servicedir}/${DPKG_MAINTSCRIPT_PACKAGE}_* 2>/dev/null`; do
     svc -dx . log
     echo ". done"
 done
+
+#DEBHELPER#

@@ -8,3 +8,5 @@ fi
 rm -rf /var/log/dqcache /etc/dqcache/service /etc/dqcache/root/dump
 deluser --force dqcache || :
 deluser --force dqcachelog || :
+
+#DEBHELPER#
