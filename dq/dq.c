@@ -34,7 +34,7 @@ dq: usage:\n\
  name:\n\
    dq - DNS/DNSCurve query tool\n\
 \n\
- syntax:\n\
+ synopsis:\n\
    dq [options] type fqdn [host]\n\
    dq -a [options] type fqdn host\n\
 \n\
@@ -43,12 +43,12 @@ dq: usage:\n\
    -r (optional): send recursive query (default)\n\
    -a (optional): send authoritative query\n\
    -u (optional): use UDP (default)\n\
-   -t (optional): force TCP\n\
+   -t (optional): use TCP\n\
    -s (optional): send DNSCurve query in streamlined format (default), ignored for regular DNS queries\n\
    -S suffix (optional): send DNSCurve query in TXT format using suffix suffix, ignored for regular DNS queries\n\
-   -T timeout (optional): timeout (default 60)\n\
+   -T timeout (optional): give up on the DNS/DNSCurve query attempt after timeout seconds (default 60)\n\
    -p port (optional): send query to port port (default 53)\n\
-   -k key (optional): force DNSCurve and use servers public-key key\n\
+   -k key (optional): send DNSCurve query and use servers public-key key\n\
    type: DNS query type (A, NS, MX, ANY, PTR, TXT, SOA, SRV, AAAA, AXFR, CNAME or numeric type)\n\
    fqdn: fully qualified domain name\n\
    host: DNS server, hostname or IP address\n\
@@ -59,7 +59,9 @@ dq: usage:\n\
    DNSREWRITEFILE: use $DNSREWRITEFILE file instead of /etc/dnsrewrite\n\
    \n\
  notes:\n\
-   for PTR queries dq automatically rewrites IP address to *.in-addr.arpa, *.ip6.arpa\n\
+   dq rewrites IP address to *.in-addr.arpa or *.ip6.arpa for PTR queries e.g.:\n\
+     127.0.0.1 -> 1.0.0.127.in-addr.arpa\n\
+     ::1 -> 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa\n\
    \n\
  recursive examples:\n\
    dq any dnscurve.cz\n\
