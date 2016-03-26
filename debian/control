@@ -1,14 +1,17 @@
 Source: dq
 Section: net
 Priority: standard
-Build-Depends: debhelper (>= 9), dh-systemd, build-essential, make, libnacl-dev [amd64] | libnacl-dev [i386]
+Build-Depends: debhelper (>= 9),
+               dh-systemd,
+               libnacl-dev [amd64] | libnacl-dev [i386],
 Maintainer: Jan Mojzis <jan.mojzis@gmail.com>
 Homepage: https://mojzis.com/software/dq/
-Standards-Version: 3.9.7
+Standards-Version: 3.9.6
 
 Package: dq
 Section: net
-Depends: ${shlibs:Depends}, ${misc:Depends}
+Depends: ${misc:Depends},
+         ${shlibs:Depends},
 Architecture: any
 Description: DNS/DNSCurve query tool
  The dq package provides software for DNS/DNSCurve.
@@ -20,11 +23,11 @@ Description: DNS/DNSCurve query tool
  type of records about a given domain name.
  .
  dqcache is recursive DNS/DNSCurve server derived from dnscache.
- 
 
 Package: dqcache
 Section: net
-Depends: ${shlibs:Depends}, ${misc:Depends}
+Depends: ${misc:Depends},
+         ${shlibs:Depends},
 Architecture: any
 Description: DNS/DNSCurve recursive server - binaries
  The dq package provides software for DNS/DNSCurve.
@@ -39,17 +42,12 @@ Description: DNS/DNSCurve recursive server - binaries
 
 Package: dqcache-run
 Section: net
-Depends: ${misc:Depends}, daemontools-run, adduser, dqcache
-Conflicts: dqcache-server
+Depends: adduser,
+         daemontools-run,
+         dqcache,
+         ${misc:Depends},
+Conflicts: dqcache-server,
 Architecture: all
 Description: DNS/DNSCurve recursive server - running under daemontools
  This package automatically sets up the dqcache package to provide a
  dqcache service.
-
-
-#Package: dqcache-server
-#Section: net
-#Depends: systemd, adduser, dqcache
-#Conflicts: dqcache-run
-#Architecture: all
-#Description: DNS/DNSCurve recursive server - running under systemd
