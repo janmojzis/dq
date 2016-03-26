@@ -2,7 +2,6 @@ Source: dq
 Section: net
 Priority: standard
 Build-Depends: debhelper (>= 9),
-               dh-systemd,
                libnacl-dev [amd64] | libnacl-dev [i386],
 Maintainer: Jan Mojzis <jan.mojzis@gmail.com>
 Homepage: https://mojzis.com/software/dq/
