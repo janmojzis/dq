@@ -1,9 +1,0 @@
-[Unit]
-Description=DNS/DNSCurve recursive server
-
-[Service]
-ExecStart=/usr/sbin/dqcache-wrapper.sh
-Restart=always
-
-[Install]
-WantedBy=multi-user.target
