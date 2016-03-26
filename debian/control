@@ -8,7 +8,7 @@ Homepage: https://mojzis.com/software/dq/
 Standards-Version: 3.9.6
 
 Package: dq
-Section: net
+#Section: net
 Depends: ${misc:Depends},
          ${shlibs:Depends},
 Architecture: any
@@ -20,11 +20,9 @@ Description: DNS/DNSCurve query tool
  dq is commandline tool similar to dnsq, dnsqr from djbdns.
  Is used to query DNS/DNSCurve server for specific
  type of records about a given domain name.
- .
- dqcache is recursive DNS/DNSCurve server derived from dnscache.
 
 Package: dqcache
-Section: net
+#Section: net
 Depends: ${misc:Depends},
          ${shlibs:Depends},
 Architecture: any
@@ -33,14 +31,10 @@ Description: DNS/DNSCurve recursive server - binaries
  This software is derived from djbdns, adds DNSCurve protection and
  support for IPv6.
  .
- dq is commandline tool similar to dnsq, dnsqr from djbdns.
- Is used to query DNS/DNSCurve server for specific
- type of records about a given domain name.
- .
  dqcache is recursive DNS/DNSCurve server derived from dnscache.
 
 Package: dqcache-run
-Section: net
+#Section: net
 Depends: adduser,
          daemontools-run,
          dqcache,
@@ -48,5 +42,9 @@ Depends: adduser,
 Conflicts: dqcache-server,
 Architecture: all
 Description: DNS/DNSCurve recursive server - running under daemontools
- This package automatically sets up the dqcache package to provide a
+ The dq package provides software for DNS/DNSCurve.
+ This software is derived from djbdns, adds DNSCurve protection and
+ support for IPv6.
+ .
+ dqcache-run automatically sets up the dqcache package to provide a
  dqcache service.
