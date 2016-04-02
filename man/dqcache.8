@@ -24,7 +24,7 @@ sends outgoing IPv6 packets from high ports of $IPSEND6. Typically $IPSEND6 is :
 .sp
 .B dqcache
 reads a list of root servers as an anchor, one record per line, from servers/@.
-The record has format {IP} or {IP}|{DNSCURVEKEY} e.g.:
+The record has format {IP} or {IP}|{DNSCURVEPUBLICKEY} e.g.:
 .RS 4
 .nf
 servers/@:
@@ -38,7 +38,7 @@ etc.
 .sp
 .B dqcache
 also scans the servers directory for anchors for other domains, one record per line.
-The record has format {IP} or {IP}|{DNSCURVEKEY} e.g.:
+The record has format {IP} or {IP}|{DNSCURVEPUBLICKEY} e.g.:
 .RS 4
 .nf
  servers/dnscurve.cz:
