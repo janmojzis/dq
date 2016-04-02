@@ -25,6 +25,7 @@
 #include "strtoip.h"
 #include "keyparse.h"
 #include "typeparse.h"
+#include "purge.h"
 #include "crypto.h"
 
 #define USAGE "\
@@ -124,7 +125,7 @@ static void die_usage(const char *s) {
 
 static void die_fatal(const char *trouble, const char *fn) {
 
-    randombytes((unsigned char *)&g, sizeof g);
+    purge(&g, sizeof g);
 
     if (errno) {
         if (fn) die_7(111, FATAL, trouble, " ", fn, ": ", e_str(errno), "\n");
@@ -298,7 +299,7 @@ int main(int argc, char **argv) {
 
     if (writeall(1, g.out.s, g.out.len) == -1) die_fatal("unable to write output", 0);
 
-    randombytes((unsigned char *)&g, sizeof g);
+    purge(&g, sizeof g);
     die_0(0);
     return 111;
 }
