@@ -306,7 +306,7 @@ int cache_load(void) {
     if (fd == -1) return -1;
 
     if (fstat(fd,&st) == -1) {
-        if (errno == ENOENT) return 0;
+        if (errno == ENOENT) { close(fd); return 0; }
         close(fd);
         return -1;
     }
