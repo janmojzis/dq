@@ -309,7 +309,7 @@ int cache_load(void) {
     }
 
     if (fstat(fd,&st) == -1) { close(fd); return -1; }
-    if (st.st_size == 0) return 0;
+    if (st.st_size == 0) { close(fd); return 0; }
     xx = mmap(0, st.st_size, PROT_READ, MAP_SHARED, fd, 0);
     if (xx == MAP_FAILED) {close(fd); return -1;}
     len = st.st_size;
