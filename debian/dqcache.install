@@ -1,1 +1,2 @@
 build/bin/dqcache usr/sbin
+build/bin/dqcache-makekey usr/sbin

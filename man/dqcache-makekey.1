@@ -1,0 +1,24 @@
+.TH dqcache-makekey 1
+.SH NAME
+dqcache-makekey \- make DNSCurve keys for dqcache
+.SH SYNOPSIS
+.B dqcache-makekey
+.SH DESCRIPTION
+.B dqcache-makekey
+creates 3 keys for dqcache
+.TP
+.B PUBLICKEY
+DNSCurve public-key.
+.TP
+.B SECRETKEY
+DNSCurve secret-key.
+.TP
+.B NONCEKEY
+secret-key to encrypt the DNSCurve nonce.
+.SH SEE ALSO
+.BR dqcache (8)
+.sp
+.nf
+https://mojzis.com/software/dq
+https://dnscurve.org/
+.fi
