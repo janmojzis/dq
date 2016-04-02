@@ -303,13 +303,12 @@ int cache_load(void) {
     unsigned char expirestr[8];
 
     fd = open_read(fn);
-    if (fd == -1) return -1;
-
-    if (fstat(fd,&st) == -1) {
-        if (errno == ENOENT) { close(fd); return 0; }
-        close(fd);
+    if (fd == -1) {
+        if (errno == ENOENT) return 0;
         return -1;
     }
+
+    if (fstat(fd,&st) == -1) { close(fd); return -1; }
     if (st.st_size == 0) return 0;
     xx = mmap(0, st.st_size, PROT_READ, MAP_SHARED, fd, 0);
     if (xx == MAP_FAILED) {close(fd); return -1;}
