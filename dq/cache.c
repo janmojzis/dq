@@ -235,7 +235,7 @@ int cache_init(long long cachesize) {
 }
 
 static const char fn[]="dump/dnsdata";
-static const char fntmp[]="dump/data.tmp";
+static const char fntmp[]="dump/dnsdata.tmp";
 
 char bspace[8096];
 buffer b;
