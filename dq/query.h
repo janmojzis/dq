@@ -31,7 +31,7 @@ extern int query_start(struct query *,unsigned char *,unsigned char *,unsigned c
 extern void query_io(struct query *,struct pollfd *,long long *);
 extern int query_get(struct query *,struct pollfd *,long long);
 
-extern void query_init(const unsigned char *, const unsigned char *);
+extern void query_init(const unsigned char *);
 extern void query_forwardonly(void);
 extern void query_tcponly(void);
 extern void query_remoteport(unsigned char *);

@@ -15,13 +15,14 @@
 #include "xsocket.h"
 #include "crypto.h"
 
-static unsigned char secretkey[crypto_box_curve25519xsalsa20poly1305_SECRETKEYBYTES];
-static unsigned char publickey[crypto_box_curve25519xsalsa20poly1305_PUBLICKEYBYTES];
+static unsigned char secretkey[32];
+static unsigned char publickey[32];
 
-void query_init(const unsigned char *pk, const unsigned char *sk)
+void query_init(const unsigned char *sk)
 {
-  byte_copy(publickey,crypto_box_curve25519xsalsa20poly1305_PUBLICKEYBYTES,pk);
-  byte_copy(secretkey,crypto_box_curve25519xsalsa20poly1305_SECRETKEYBYTES,sk);
+  byte_copy(secretkey,32,sk);
+  crypto_scalarmult_curve25519_base(publickey, secretkey);
+  log_dnscurvekey(publickey);
   return;
 }
 

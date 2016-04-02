@@ -396,9 +396,8 @@ static void doit(void) {
 }
 
 
-static unsigned char pk[32];
-static unsigned char sk[32];
-static unsigned char nk[16];
+static unsigned char skseed[32];
+static unsigned char sk[64];
 
 #define FATAL "dnscache: fatal: "
 #define WARNING "dnscache: warning: "
@@ -435,7 +434,6 @@ static void clean(int sig){
 
 int main(int argc, char **argv) {
 
-    unsigned char ch;
     long long cachesize;
     unsigned char port[2];
     char *x;
@@ -459,29 +457,24 @@ int main(int argc, char **argv) {
     if (tcp53 == -1) die_fatal("unable to create TCP socket", 0);
     if (xsocket_bind_reuse(tcp53, mytypeincoming, myipincoming, myport, 0) == -1) die_fatal("unable to bind TCP socket", 0);
 
-    randombytes(&ch, 1); /* open /dev/urandom before chroot */
+    randombytes(skseed, sizeof skseed);
+    x = env_get("SECRETKEY");
+    if (x) {
+        if (!hexparse(skseed, sizeof skseed, x)) {
+            warn_2(WARNING, "unable to parse $SECRETKEY\n");
+            randombytes(skseed, sizeof skseed);
+        }
+        while (*x) { *x = 0; ++x; }
+    }
 
     droproot(FATAL);
 
-    if (!hexparse(sk, sizeof sk, env_get("SECRETKEY")) ||
-        !hexparse(pk, sizeof pk, env_get("PUBLICKEY")) ||
-        !hexparse(nk, sizeof nk, env_get("NONCEKEY"))) {
-            dns_keys(pk, sk, nk);
-    }
+    dns_keys_derive(sk, skseed);
+    query_init(sk);
+    dns_nonce_init(env_get("NONCESTART"), sk + 32);
+    randombytes(skseed, sizeof skseed);
+    randombytes(sk, sizeof sk);
 
-    /* remove secret keys */
-    x = env_get("SECRETKEY");
-    if (x) {
-        while (*x) { *x = 0; ++x; }
-    }
-    x = env_get("NONCEKEY");
-    if (x) {
-        while (*x) { *x = 0; ++x; }
-    }
-
-    log_dnscurvekey(pk);
-    query_init(pk, sk);
-    dns_nonce_init(env_get("NONCESTART"), nk);
     dns_transmit_magic(env_get("QUERYMAGIC"), env_get("RESPONSEMAGIC"));
 
     xsocket_tryreservein(udp53, 131072);

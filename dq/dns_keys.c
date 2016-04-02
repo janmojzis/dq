@@ -1,9 +1,10 @@
 #include "crypto.h"
-#include "randombytes.h"
 #include "dns.h"  
 
-void dns_keys(unsigned char *pk, unsigned char *sk, unsigned char *nk) {
+static const unsigned char zero[16] = {0};
+static const unsigned char sigma[16] = "expand 32-byte k";
 
-    randombytes(nk, 16);
-    crypto_box_curve25519xsalsa20poly1305_keypair(pk, sk);
+void dns_keys_derive(unsigned char *out, unsigned char *skseed) {
+
+    crypto_core_salsa20(out, zero, skseed, sigma);
 }

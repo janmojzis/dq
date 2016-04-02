@@ -56,7 +56,7 @@ supports forward-only mode. If $FORWARDONLY is set, dqcache treats servers/@ as 
 uses a fixed-size cache, as controlled by the $CACHESIZE environment variable. Typically $CACHESIZE is 10000000 (10MB).
 .sp
 .B dqcache
-typically generates new DNSCurve keys at start of program. If environment variables $SECRETKEY, $PUBLICKEY, $NONCEKEY are set, then dqcache loads those keys. Keys are generated using
+typically generates new DNSCurve secret-key and appropriate public-key at start of program. If environment variable $SECRETKEY is set, then dqcache loads this secret-key and computes appropriate public-key. Secret-key must be safely generated using
 .BR dqcache-makekey (1).
 .SH SEE ALSO
 .BR dnscache-makekey (1),

@@ -1,20 +1,20 @@
 .TH dqcache-makekey 1
 .SH NAME
-dqcache-makekey \- make DNSCurve keys for dqcache
+dqcache-makekey \- make DNSCurve secret-key for dqcache
 .SH SYNOPSIS
 .B dqcache-makekey
 .SH DESCRIPTION
 .B dqcache-makekey
-creates 3 keys for dqcache
-.TP
-.B PUBLICKEY
-DNSCurve public-key.
-.TP
-.B SECRETKEY
-DNSCurve secret-key.
-.TP
-.B NONCEKEY
-secret-key to encrypt the DNSCurve nonce.
+creates secret-key (in hex format) for dqcache
+.SH EXAMPLE
+.nf
+(
+  cd /etc/dqcache/env/
+  umask 077
+  dqcache-makekey > SECRETKEY.tmp
+  mv -f SECRETKEY.tmp SECRETKEY
+)
+.fi
 .SH SEE ALSO
 .BR dqcache (8)
 .sp
