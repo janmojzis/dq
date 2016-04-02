@@ -13,12 +13,17 @@ Public domain.
 #include "uint32_unpack.h"
 #include "crypto_uint64.h"
 #include "byte.h"
+#include "purge.h"
 #include "dns.h"
 
 static unsigned char noncekey[16] = {0};
 static crypto_uint64 noncecounter = 0;
 static unsigned char noncemask[4] = {0xff, 0xff, 0xff, 0xff};
 static unsigned char noncedata[4] = {0};
+
+void dns_nonce_purge(void) {
+    purge(noncekey, sizeof noncekey);
+}
 
 void dns_nonce_init(const char *ns, const unsigned char *nk) {
 

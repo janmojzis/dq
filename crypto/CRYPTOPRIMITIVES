@@ -17,3 +17,4 @@ uint32_pack 0
 uint32_unpack 0
 uint32_pack_big 0
 uint32_unpack_big 0
+cleanup 0

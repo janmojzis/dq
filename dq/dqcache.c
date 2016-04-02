@@ -26,6 +26,7 @@
 #include "portparse.h"
 #include "droproot.h"
 #include "okclient.h"
+#include "purge.h"
 
 
 static int packetquery(unsigned char *buf, long long len, unsigned char **q, unsigned char qtype[2], unsigned char qclass[2], unsigned char id[2]) {
@@ -402,8 +403,18 @@ static unsigned char sk[64];
 #define FATAL "dnscache: fatal: "
 #define WARNING "dnscache: warning: "
 
+
+static void removesecrets(void) {
+
+    query_purge();
+    dns_nonce_purge();
+    purge(skseed, sizeof skseed);
+    purge(sk, sizeof sk);
+}
+
 static void die_fatal(const char *trouble, const char *fn) {
 
+    removesecrets();
     if (errno) {
         if (fn) die_7(111, FATAL, trouble, " ", fn, ": ", e_str(errno), "\n");
         die_5(111, FATAL, trouble, ": ", e_str(errno), "\n");
@@ -423,6 +434,7 @@ static void dump(int sig){
 }
 
 static void exitasap(int sig){
+    removesecrets();
     dump(0);
     die_0(0);
 }
@@ -472,8 +484,8 @@ int main(int argc, char **argv) {
     dns_keys_derive(sk, skseed);
     query_init(sk);
     dns_nonce_init(env_get("NONCESTART"), sk + 32);
-    randombytes(skseed, sizeof skseed);
-    randombytes(sk, sizeof sk);
+    purge(skseed, sizeof skseed);
+    purge(sk, sizeof sk);
 
     dns_transmit_magic(env_get("QUERYMAGIC"), env_get("RESPONSEMAGIC"));
 

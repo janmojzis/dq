@@ -132,6 +132,7 @@ extern void dns_base32_encodekey(unsigned char *, const unsigned char *);
 extern long long base32_decode(unsigned char *, const unsigned char *, long long, int);
 
 /* nonce */
+extern void dns_nonce_purge(void);
 extern void dns_nonce_init(const char *, const unsigned char *);
 extern void dns_nonce(unsigned char *);
 
