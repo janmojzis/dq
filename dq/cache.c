@@ -15,6 +15,7 @@
 #include "open.h"
 #include "dns.h"
 #include "crypto_auth_siphash24.h"
+#include "e.h"
 #include "cache.h"
 
 crypto_uint64 cache_motion = 0;
@@ -304,7 +305,12 @@ int cache_load(void) {
     fd = open_read(fn);
     if (fd == -1) return -1;
 
-    if (fstat(fd,&st) == -1) {close(fd); return -1;}
+    if (fstat(fd,&st) == -1) {
+        if (errno == ENOENT) return 0;
+        close(fd);
+        return -1;
+    }
+    if (st.st_size == 0) return 0;
     xx = mmap(0, st.st_size, PROT_READ, MAP_SHARED, fd, 0);
     if (xx == MAP_FAILED) {close(fd); return -1;}
     len = st.st_size;
