@@ -60,8 +60,13 @@ supports forward-only mode. If $FORWARDONLY is set, dqcache treats servers/@ as 
 uses a fixed-size cache, as controlled by the $CACHESIZE environment variable. Typically $CACHESIZE is 10000000 (10MB).
 .sp
 .B dqcache
-typically generates new DNSCurve secret-key and appropriate public-key at start of program. If environment variable $SECRETKEY is set, then dqcache loads this secret-key and computes appropriate public-key. Secret-key must be safely generated using
+typically generates new secret key at start of program. If environment variable $SECRETKEY is set, then
+.B dqcache
+loads this secret key. Secret key must be safely generated using
 .BR dqcache-makekey (1).
+Note that
+.B dqcache
+uses internally two secret keys, one used as the discrete logarithm of the public key (256bit DNSCurve key) and one to encrypt the nonce (128bit TEA symetric key). Both of these keys are actually derived from $SECRETKEY using crypto_core_salsa20().
 .sp
 .B dqcache
 also supports nonce-separation via environment variable $NONCESTART. This means that several caches share a key but use separate nonces:
@@ -75,8 +80,9 @@ NONCESTART=111 ... and the fourth is configured to use top bits 111.
 etc.
 .fi
 .RE
+.sp
 .B dqcache
-typically supports DNSCurve in 'mixed mode' - (meaning: if Streamlined query fails,
+typically supports DNSCurve in 'mixed mode' (meaning: if Streamlined query fails,
 .B dqcache
 tries also TXT query).
 Environment variable $DNSCURVETYPE selects specific DNSCurve type.
