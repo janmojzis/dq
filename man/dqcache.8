@@ -22,6 +22,10 @@ sends outgoing IPv4 packets from high ports of $IPSEND4. Typically $IPSEND4 is 0
 .B dqcache
 sends outgoing IPv6 packets from high ports of $IPSEND6. Typically $IPSEND6 is ::, meaning the machine's primary IPv6 address.
 .sp
+If $HIDETTL is set,
+.B dqcache
+always uses a TTL of 0 in its responses
+.sp
 .B dqcache
 reads a list of root servers as an anchor, one record per line, from servers/@.
 The record has format {IP} or {IP}|{DNSCURVEPUBLICKEY} e.g.:
@@ -58,6 +62,30 @@ uses a fixed-size cache, as controlled by the $CACHESIZE environment variable. T
 .B dqcache
 typically generates new DNSCurve secret-key and appropriate public-key at start of program. If environment variable $SECRETKEY is set, then dqcache loads this secret-key and computes appropriate public-key. Secret-key must be safely generated using
 .BR dqcache-makekey (1).
+.sp
+.B dqcache
+also supports nonce-separation via environment variable $NONCESTART. This means that several caches share a key but use separate nonces:
+.RS 2
+.nf
+e.g.:
+NONCESTART=100 ... the first of four caches is configured to use top bits 100
+NONCESTART=101 ... the second is configured to use top bits 101
+NONCESTART=110 ... the third is configured to use top bits 110
+NONCESTART=111 ... and the fourth is configured to use top bits 111.
+etc.
+.fi
+.RE
+.B dqcache
+typically supports DNSCurve in 'mixed mode' - (meaning: if Streamlined query fails,
+.B dqcache
+tries also TXT query).
+Environment variable $DNSCURVETYPE selects specific DNSCurve type.
+.RS 2
+.nf
+DNSCURVETYPE=1 ... Streamlined only DNSCurve
+DNSCURVETYPE=2 ... TXT only DNSCurve
+.fi
+.RE
 .SH SEE ALSO
 .BR dnscache-makekey (1),
 .BR dq (1),
@@ -66,4 +94,5 @@ typically generates new DNSCurve secret-key and appropriate public-key at start 
 .nf
 https://mojzis.com/software/dq
 https://dnscurve.org/
+https://cr.yp.to/djbdns/dnscache.html
 .fi
