@@ -484,7 +484,7 @@ int main(int argc, char **argv) {
     dns_keys_derive(sk, skseed);
     query_init(sk);
 
-    x = env_get("NONCESTART")
+    x = env_get("NONCESTART");
     if (!dns_nonce_init(x, sk + 32)) die_fatal("too long $NONCESTART", x);
 
     purge(skseed, sizeof skseed);
