@@ -512,6 +512,7 @@ int main(int argc, char **argv) {
     if (env_get("HIDETTL")) response_hidettl();
     if (env_get("FORWARDONLY")) query_forwardonly();
     if (env_get("TCPONLY")) query_tcponly();
+    if (env_get("DISABLEIPV6")) query_ipv4only();
     dnscurvetype = env_get("DNSCURVETYPE");
     query_dnscurvetype(dnscurvetype);
     if (!roots_init(dnscurvetype)) die_fatal("unable to read servers", 0);

@@ -142,7 +142,7 @@ static int resolve(void) {
     struct pollfd x[1];
     int r;
 
-    if (dns_transmit_startext(&g.tx, g.servers, flagrecursive, flagtcp, g.q, g.qtype, 0, port, g.keys, g.pk, suffix) == -1) return -1;
+    if (dns_transmit_startext(&g.tx, g.servers, flagrecursive, flagtcp, 0, g.q, g.qtype, 0, port, g.keys, g.pk, suffix) == -1) return -1;
 
     max = maxtimeout * 1000 + milliseconds();
 

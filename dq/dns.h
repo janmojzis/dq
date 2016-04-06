@@ -48,6 +48,7 @@ struct dns_transmit {
     const unsigned char *suffix;
     const unsigned char *name;
     int flagrecursive;
+    int flagipv4only;
 };
 
 #define DNS_HASKEY(d) (d->keys && *(d->keys + 33 * d->curserver))
@@ -73,7 +74,7 @@ extern long long dns_packet_getname_static(const unsigned char *,long long,long 
 
 /* dns_transmit */
 extern int dns_transmit_start(struct dns_transmit *d, const unsigned char servers[256], int flagrecursive, const unsigned char *q, const unsigned char qtype[2], const unsigned char localip[32]);
-extern int dns_transmit_startext(struct dns_transmit *d, const unsigned char servers[256], int flagrecursive, int flagtcp, const unsigned char *q, const unsigned char qtype[2], const unsigned char localip[32], const unsigned char port[2], const unsigned char keys[528], const unsigned char pk[32], const unsigned char *suffix);
+extern int dns_transmit_startext(struct dns_transmit *d, const unsigned char servers[256], int flagrecursive, int flagtcp, int flagipv4only, const unsigned char *q, const unsigned char qtype[2], const unsigned char localip[32], const unsigned char port[2], const unsigned char keys[528], const unsigned char pk[32], const unsigned char *suffix);
 
 extern void dns_transmit_free(struct dns_transmit *);
 extern void dns_transmit_io(struct dns_transmit *,struct pollfd *,long long *);

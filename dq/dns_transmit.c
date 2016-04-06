@@ -299,6 +299,8 @@ static int thisudp(struct dns_transmit *d) {
                     d->s1type = XSOCKET_V4;
                 }
 
+                if (d->s1type == XSOCKET_V6 && d->flagipv4only) continue;
+
                 d->s1 = 1 + xsocket_udp(d->s1type);
                 if (!d->s1) { 
                     if (errno == EPROTONOSUPPORT) { dns_verbosity_queryfailed(d, 0); continue; }
@@ -357,6 +359,8 @@ static int thistcp(struct dns_transmit *d) {
                 d->s1type = XSOCKET_V4;
             }
 
+            if (d->s1type == XSOCKET_V6 && d->flagipv4only) continue;
+
             d->s1 = 1 + xsocket_tcp(d->s1type);
             if (!d->s1) {
                 if (errno == EPROTONOSUPPORT) { dns_verbosity_queryfailed(d, 1); continue; }
@@ -400,7 +404,7 @@ static int nexttcp(struct dns_transmit *d) {
     return thistcp(d);
 }
 
-int dns_transmit_startext(struct dns_transmit *d, const unsigned char servers[256], int flagrecursive, int flagtcp, const unsigned char *q, const unsigned char qtype[2], const unsigned char localip[32], const unsigned char port[2], const unsigned char keys[512], const unsigned char pk[32], const unsigned char *suffix) {
+int dns_transmit_startext(struct dns_transmit *d, const unsigned char servers[256], int flagrecursive, int flagtcp, int flagipv4only, const unsigned char *q, const unsigned char qtype[2], const unsigned char localip[32], const unsigned char port[2], const unsigned char keys[512], const unsigned char pk[32], const unsigned char *suffix) {
 
     long long len, suffixlen = 0;
 
@@ -438,6 +442,7 @@ int dns_transmit_startext(struct dns_transmit *d, const unsigned char servers[25
     d->udploop = flagrecursive ? 1 : 0;
 
     d->flagrecursive = flagrecursive;
+    d->flagipv4only = flagipv4only;
     d->name = q;
     d->keys = keys;
     d->pk = pk;
@@ -455,7 +460,7 @@ int dns_transmit_startext(struct dns_transmit *d, const unsigned char servers[25
 }
 
 int dns_transmit_start(struct dns_transmit *d, const unsigned char servers[256], int flagrecursive, const unsigned char *q, const unsigned char qtype[2], const unsigned char localip[32]) {
-    return dns_transmit_startext(d, servers, flagrecursive, 0, q, qtype, localip, 0, 0, 0, 0);
+    return dns_transmit_startext(d, servers, flagrecursive, 0, 0, q, qtype, localip, 0, 0, 0, 0);
 }
 
 

@@ -35,6 +35,7 @@ extern void query_init(const unsigned char *);
 extern void query_purge(void);
 extern void query_forwardonly(void);
 extern void query_tcponly(void);
+extern void query_ipv4only(void);
 extern void query_remoteport(unsigned char *);
 extern void query_dnscurvetype(char *);
 

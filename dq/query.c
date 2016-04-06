@@ -45,6 +45,12 @@ void query_tcponly(void) {
     flagtcponly = 1;
 }
 
+static int flagipv4only = 0;
+
+void query_ipv4only(void) {
+    flagipv4only = 1;
+}
+
 unsigned char remoteport[2] = { 0, 53 };
 void query_remoteport(unsigned char *port) {
     byte_copy(remoteport, 2, port);
@@ -728,7 +734,7 @@ static int doit(struct query *z,int state)
   /* dtype = z->level ? DNS_T_A : z->type; */
   dtype = z->level ? (z->ipv6[z->level] ? DNS_T_AAAA : DNS_T_A) : z->type;
   log_tx(z->name[z->level],dtype,z->control[z->level],z->servers[z->level],z->keys[z->level],z->flaghavekeys[z->level],z->level);
-  if (dns_transmit_startext(&z->dt,z->servers[z->level],flagforwardonly,flagtcponly,z->name[z->level],dtype,z->localip,remoteport,z->keys[z->level],publickey,z->control[z->level]) == -1) goto DIE;
+  if (dns_transmit_startext(&z->dt,z->servers[z->level],flagforwardonly,flagtcponly,flagipv4only,z->name[z->level],dtype,z->localip,remoteport,z->keys[z->level],publickey,z->control[z->level]) == -1) goto DIE;
   return 0;
 
 
