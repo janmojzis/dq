@@ -70,7 +70,7 @@ loads this secret key. $SECRETKEY must be safely generated using
 .BR dqcache-makekey (1).
 Note that
 .B dqcache
-uses internally two secret keys, one used as the discrete logarithm of the public key (256bit DNSCurve key) and one to encrypt the nonce (128bit TEA symetric key). Both of these keys are actually derived from $SECRETKEY using crypto_core_salsa20().
+uses internally two secret keys, one used as the discrete logarithm of the public key (256bit DNSCurve key) and one to encrypt the nonce (128bit TEA symetric key). Both of these keys are actually derived from $SECRETKEY using crypto_stream_salsa20().
 .sp
 .B dqcache
 also supports nonce-separation via environment variable $NONCESTART. This means that several caches share a key but use separate nonces:
