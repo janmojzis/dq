@@ -9,6 +9,7 @@ Public domain.
 
 static char *iptostr4(char *, const unsigned char *);
 static char *iptostr6(char *, const unsigned char *);
+static char *iptostr6x(char *, const unsigned char *);
 
 /*
 The 'iptostr(strbuf,ip)' function converts IP address 'ip'
@@ -26,6 +27,19 @@ char *iptostr(char *strbuf, const unsigned char *ip) {
         return iptostr4(strbuf, ip + 12);
     }
     return iptostr6(strbuf, ip);
+}
+
+
+char *iptostrx(char *strbuf, const unsigned char *ip) {
+
+    static char staticbuf[IPTOSTR_LEN];
+
+    if (!strbuf) strbuf = staticbuf; /* not thread-safe */
+
+    if (byte_isequal("\0\0\0\0\0\0\0\0\0\0\377\377", 12, ip)) {
+        return iptostr4(strbuf, ip + 12);
+    }
+    return iptostr6x(strbuf, ip);
 }
 
 
@@ -128,3 +142,33 @@ static char *iptostr6(char *strbuf, const unsigned char *ip) {
     byte_zero(s + IPTOSTR_LEN - i, i);
     return s;
 }
+
+/* convert IPv6 address without '::' compression */
+static char *iptostr6x(char *strbuf, const unsigned char *ip) {
+
+    long long i;
+    unsigned long long ip2[8];
+    char *s = strbuf;
+
+    for (i = 7; i >= 0; --i) {
+        ip2[i] = ip[2 * i];
+        ip2[i] <<= 8;
+        ip2[i] += ip[2 * i + 1];
+    }
+
+    strbuf += IPTOSTR_LEN - 1;
+    *strbuf = 0;
+
+    for (i = 7; i >= 0; --i) {
+        do {
+            *--strbuf = "0123456789abcdef"[ip2[i] & 15];
+            ip2[i] >>= 4;
+        } while (ip2[i]);
+        if (i > 0) *--strbuf = ':';
+    }
+    i = strbuf - s;
+    byte_copy(s,  IPTOSTR_LEN - i, strbuf);
+    byte_zero(s + IPTOSTR_LEN - i, i);
+    return s;
+}
+
