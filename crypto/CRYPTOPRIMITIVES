@@ -4,7 +4,6 @@ crypto_verify_8 1
 crypto_verify_16 1
 crypto_verify_32 1
 crypto_scalarmult_curve25519 1
-crypto_core_salsa20 1
 crypto_core_hsalsa20 1
 crypto_stream_salsa20 1
 crypto_stream_xsalsa20 1

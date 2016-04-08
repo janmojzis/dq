@@ -18,7 +18,6 @@ fe.o
 fe25519.o
 crypto_scalarmult_curve25519.o
 salsa.o
-crypto_core_salsa20.o
 crypto_core_hsalsa20.o
 crypto_stream_salsa20.o
 crypto_stream_xsalsa20.o

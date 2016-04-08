@@ -398,7 +398,7 @@ static void doit(void) {
 
 
 static unsigned char skseed[32];
-static unsigned char sk[64];
+static unsigned char sk[32 + 16];
 
 #define FATAL "dnscache: fatal: "
 #define WARNING "dnscache: warning: "
@@ -481,7 +481,7 @@ int main(int argc, char **argv) {
 
     droproot(FATAL);
 
-    dns_keys_derive(sk, skseed);
+    dns_keys_derive(sk, sizeof sk, skseed);
     query_init(sk);
 
     x = env_get("NONCESTART");

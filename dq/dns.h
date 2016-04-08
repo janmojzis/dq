@@ -152,6 +152,6 @@ extern void dns_verbosity_queryfailedtc(struct dns_transmit *);
 extern void dns_verbosity_queryok(struct dns_transmit *);
 
 /* keys */
-extern void dns_keys_derive(unsigned char *, unsigned char *);
+extern void dns_keys_derive(unsigned char *, long long, unsigned char *);
 
 #endif
