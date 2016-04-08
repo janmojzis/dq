@@ -11,10 +11,13 @@ is recursive DNS server derived from
 runs chrooted in the directory specified by the $ROOT environment variable, under the uid and gid specified by the $UID and $GID environment variables.
 .sp
 .B dqcache
-listens for incoming UDP packets and TCP connections addressed to port 53 of $IP. Typically $IP 127.0.0.1, but it can also be an externally accessible IP address.
+listens for incoming UDP packets and TCP connections addressed to port 53 of $IP. Typically $IP is 127.0.0.1, but it can also be an externally accessible IP address.
 .sp
 .B dqcache
-has file-style accesslist for incoming connections.
+accepts connections from localhost (127.0.0.0/8 or ::1/128).
+For external connections
+.B dqcache
+has file-style accesslist.
 .RS 4
 .nf
 e.g. for IPv4 address 1.2.3.4 dqcache allows connection when sees a file named:
@@ -33,6 +36,10 @@ ip6/2a02:598 or
 ip6/2a02
 .fi
 .RE
+.sp
+Note that DNSCurve software is security software and should run on client's machine. If You run
+.B dqcache
+on external IP (not on localhost), You're probably doing it wrong.
 .sp
 .B dqcache
 sends outgoing IPv4 packets from high ports of $IPSEND4. Typically $IPSEND4 is 0.0.0.0, meaning the machine's primary IPv4 address.
@@ -86,6 +93,7 @@ typically generates new secret key at start of program. If environment variable 
 .B dqcache
 loads this secret key. $SECRETKEY must be safely generated using
 .BR dqcache-makekey (1).
+.sp
 Note that
 .B dqcache
 uses internally two secret keys, one used as the discrete logarithm of the public key (256bit DNSCurve key) and one to encrypt the nonce (128bit TEA symetric key). Both of these keys are actually derived from $SECRETKEY using crypto_stream_salsa20().
@@ -104,7 +112,7 @@ etc.
 .RE
 .sp
 .B dqcache
-typically supports DNSCurve in 'mixed mode' (meaning: if Streamlined query fails,
+typically supports DNSCurve in 'combined mode' (meaning: if Streamlined query fails,
 .B dqcache
 tries also TXT query).
 Environment variable $DNSCURVETYPE selects specific DNSCurve type.
