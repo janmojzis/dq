@@ -4,4 +4,4 @@ debian/env/ROOT etc/dqcache/env
 debian/root/servers/@ etc/dqcache/root/servers
 debian/service/dqcache/log/run etc/dqcache/service/dqcache/log
 debian/service/dqcache/run etc/dqcache/service/dqcache
-debian/root/ip/127 etc/dqcache/root/ip
+debian/root/ip4/127 etc/dqcache/root/ip4

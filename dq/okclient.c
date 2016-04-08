@@ -5,7 +5,7 @@
 #include "iptostr.h"
 #include "okclient.h"
 
-static char fn[3 + IPTOSTR_LEN];
+static char fn[4 + IPTOSTR_LEN];
 
 int okclient(unsigned char *ip) {
 
@@ -13,16 +13,22 @@ int okclient(unsigned char *ip) {
     long long i;
     char sep;
 
-    fn[0] = 'i';
-    fn[1] = 'p';
-    fn[2] = '/';
-    iptostrx(fn + 3, ip);
 
-    if (!byte_isequal("\0\0\0\0\0\0\0\0\0\0\377\377", 12, ip)) {
-        sep = ':';
+    if (byte_isequal("\0\0\0\0\0\0\0\0\0\0\377\377", 12, ip)) {
+        fn[0] = 'i';
+        fn[1] = 'p';
+        fn[2] = '4';
+        fn[3] = '/';
+        iptostrx(fn + 3, ip);
+        sep = '.';
     }
     else {
-        sep = '.';
+        fn[0] = 'i';
+        fn[1] = 'p';
+        fn[2] = '6';
+        fn[3] = '/';
+        iptostrx(fn + 3, ip);
+        sep = ':';
     }
 
     for (;;) {
