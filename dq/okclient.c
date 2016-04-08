@@ -19,7 +19,7 @@ int okclient(unsigned char *ip) {
         fn[1] = 'p';
         fn[2] = '4';
         fn[3] = '/';
-        iptostrx(fn + 3, ip);
+        iptostrx(fn + 4, ip);
         sep = '.';
     }
     else {
@@ -27,7 +27,7 @@ int okclient(unsigned char *ip) {
         fn[1] = 'p';
         fn[2] = '6';
         fn[3] = '/';
-        iptostrx(fn + 3, ip);
+        iptostrx(fn + 4, ip);
         sep = ':';
     }
 
