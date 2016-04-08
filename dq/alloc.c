@@ -11,6 +11,7 @@ Public domain.
 #include "uint64_pack.h"
 #include "uint64_unpack.h"
 #include "byte.h"
+#include "purge.h"
 #include "alloc.h"
 
 #define ALLOC_ALIGNMENT 16
@@ -139,7 +140,7 @@ void alloc_free(void *xv) {
     n = uint64_unpack(x);
     allocated -= n;
 
-    byte_zero(x, n);
+    purge(x, n);
     free(x);
 }
 
@@ -149,5 +150,5 @@ void alloc_freeall(void) {
         alloc_free(ptr[0]);
     }
     if (ptr) { free(ptr); ptr = 0; ptrlen = 0; ptralloc = 0; }
-    byte_zero(space, ALLOC_SPACE);
+    purge(space, ALLOC_SPACE);
 }
