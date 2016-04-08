@@ -14,6 +14,13 @@ int okclient(unsigned char *ip) {
     char sep;
 
 
+    /* allow ::1/128 */
+    if (byte_isequal("\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\1", 16, ip)) return 1;
+  
+    /* allow 127.0.0.0/8 */
+    if (byte_isequal("\0\0\0\0\0\0\0\0\0\0\377\377\177", 13, ip)) return 1;
+
+
     if (byte_isequal("\0\0\0\0\0\0\0\0\0\0\377\377", 12, ip)) {
         fn[0] = 'i';
         fn[1] = 'p';
