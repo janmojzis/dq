@@ -31,7 +31,7 @@ static crypto_uint32 unused;
 static unsigned char hashkey[crypto_auth_siphash24_KEYBYTES];
 
 /*
-100 <= size <= 1000000000.
+100 <= size <= 3000000000.
 4 <= hsize <= size/16.
 hsize is a power of 2.
 
@@ -216,7 +216,7 @@ int cache_init(long long cachesize) {
         x = 0;
     }
 
-    if (cachesize > 1000000000) cachesize = 1000000000;
+    if (cachesize > 3000000000) cachesize = 3000000000;
     if (cachesize < 100) cachesize = 100;
     size = cachesize;
 

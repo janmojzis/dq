@@ -15,7 +15,7 @@ Public domain.
 
 #define ALLOC_ALIGNMENT 16
 #define ALLOC_SPACE 8192
-#define ALLOC_LIMIT 1073741823 /* 1G */
+#define ALLOC_LIMIT 4000000000
 
 typedef union { unsigned char irrelevant[ALLOC_ALIGNMENT]; double d; } aligned;
 static aligned realspace[ALLOC_SPACE / ALLOC_ALIGNMENT];
