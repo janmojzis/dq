@@ -216,7 +216,7 @@ int cache_init(long long cachesize) {
         x = 0;
     }
 
-    if (cachesize > 3000000000) cachesize = 3000000000;
+    if (cachesize > 3000000000LL) cachesize = 3000000000LL;
     if (cachesize < 100) cachesize = 100;
     size = cachesize;
 
