@@ -1,8 +1,0 @@
-debian/env/CACHESIZE etc/dqcache/env
-debian/env/IP etc/dqcache/env
-debian/env/ROOT etc/dqcache/env
-debian/root/servers/@ etc/dqcache/root/servers
-debian/service/dqcache/log/run etc/dqcache/service/dqcache/log
-debian/service/dqcache/run etc/dqcache/service/dqcache
-debian/root/ip4/127 etc/dqcache/root/ip4
-debian/root/ip6/0:0:0:0:0:0:0:1 etc/dqcache/root/ip6
