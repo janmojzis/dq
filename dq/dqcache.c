@@ -446,7 +446,7 @@ static void clean(int sig){
 
 int main(int argc, char **argv) {
 
-    long long cachesize;
+    long long cachesize, ll;
     unsigned char port[2];
     char *x;
 
@@ -513,6 +513,8 @@ int main(int argc, char **argv) {
     if (env_get("FORWARDONLY")) query_forwardonly();
     if (env_get("TCPONLY")) query_tcponly();
     if (env_get("DISABLEIPV6")) query_ipv4only();
+    if (strtonum(&ll, env_get("MINTTL"))) query_minttl(ll);
+
     dnscurvetype = env_get("DNSCURVETYPE");
     query_dnscurvetype(dnscurvetype);
     if (!roots_init(dnscurvetype)) die_fatal("unable to read servers", 0);

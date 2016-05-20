@@ -51,6 +51,14 @@ void query_ipv4only(void) {
     flagipv4only = 1;
 }
 
+static crypto_uint32 minttl = 0;
+
+void query_minttl(long long x) {
+    if (x < 0) x = 0;
+    if (x > 86400) x = 86400;
+    minttl = x;
+}
+
 unsigned char remoteport[2] = { 0, 53 };
 void query_remoteport(unsigned char *port) {
     byte_copy(remoteport, 2, port);
@@ -129,6 +137,7 @@ static long long ttlget(unsigned char buf[4])
   crypto_uint32 ttl;
 
   ttl=uint32_unpack_big(buf);
+  if (ttl < minttl) ttl = minttl;
   if (ttl > 1000000000) return 0;
   if (ttl > 604800) return 604800;
   return ttl;
