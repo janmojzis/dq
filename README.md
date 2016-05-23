@@ -5,7 +5,6 @@
 
 #### dqcache recursive server ####
 * based on dnscache from djbdns
-* allowed running ONLY from localhost
 * added support for streamlined DNSCurve
 * added support for TXT DNSCurve
 * added support for combined DNSCurve (streamlined and TXT)
