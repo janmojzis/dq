@@ -1,4 +1,4 @@
-/* taken from nacl-20110221, from curvecp/writeall.c */
+/* taken from nacl-20110221, from curvecp/writeall.c (public domain) */
 #include <poll.h>
 #include <unistd.h>
 #include "e.h"

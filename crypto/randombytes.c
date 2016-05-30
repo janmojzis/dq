@@ -1,4 +1,4 @@
-/* taken from nacl-20110221, from randombytes/devurandom.c */
+/* taken from nacl-20110221, from randombytes/devurandom.c (public domain) */
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
