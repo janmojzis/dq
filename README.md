@@ -18,4 +18,8 @@
 * improved logs - IPs not printed in hex format
 * fixed CVE-2012-1191
 
+#### url ####
 https://mojzis.com/software/dq/
+
+#### licence ####
+public domain
