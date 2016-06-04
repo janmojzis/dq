@@ -8,18 +8,18 @@ Public domain.
 #include "misc.h"
 #include "crypto_stream_salsa20.h"
 
-unsigned char space[5232];
-unsigned char k[crypto_stream_salsa20_KEYBYTES + 16];
-unsigned char n[crypto_stream_salsa20_NONCEBYTES + 16];
+static unsigned char space[5232];
+static unsigned char k[crypto_stream_salsa20_KEYBYTES + 16];
+static unsigned char n[crypto_stream_salsa20_NONCEBYTES + 16];
 
-unsigned char o[32] = {
+static unsigned char o[32] = {
     0x09, 0x96, 0x21, 0xd0, 0xa4, 0x0c, 0x75, 0x0d,
     0xdb, 0x4c, 0x03, 0xaf, 0xe9, 0xe0, 0xf4, 0x3e,
     0xa1, 0x82, 0x5a, 0x36, 0x41, 0x62, 0x49, 0x08,
     0x65, 0xeb, 0x2f, 0x3d, 0x14, 0x1f, 0xc3, 0x37
 };
 
-void test_alignment(void) {
+static void test_alignment(void) {
 
     long long i;
 
@@ -28,7 +28,7 @@ void test_alignment(void) {
     }
 }
 
-void test_rand(void) {
+static void test_rand(void) {
 
     long long i, j;
     unsigned int u;
