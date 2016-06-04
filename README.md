@@ -22,4 +22,6 @@
 https://mojzis.com/software/dq/
 
 #### licence ####
-public domain
+Dq is placed into the public domain
+Dq is derived from public-domain djbdns-1.05 - see: https://cr.yp.to/distributors.html
+Dq also uses public-domain nacl-20110221 - https://nacl.cr.yp.to/features.html
