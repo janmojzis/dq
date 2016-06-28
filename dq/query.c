@@ -1159,6 +1159,18 @@ static int doit(struct query *z,int state)
   }
 
   if (!dns_domain_suffix(d,referral)) goto DIE;
+
+  /* In strict "forwardonly" mode, we don't, as the manual states,
+  ** contact a chain of servers according to "NS" resource records.
+  ** We don't obey any referral responses, therefore.  Instead, we
+  ** eliminate the server from the list and try the next one.
+  */
+  if (flagforwardonly) {
+      log_ignore_referral(whichserver,control,referral);
+      byte_zero(whichserver,16);
+      goto HAVENS;
+  }
+
   control = d + dns_domain_suffixpos(d,referral);
   z->control[z->level] = control;
   byte_zero(z->servers[z->level],256);
