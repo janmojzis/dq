@@ -31,7 +31,6 @@ env.o
 randommod.o
 hexdecode.o
 hexparse.o
-inet_pton.o
 iptostr.o
 keyparse.o
 log.o
