@@ -66,11 +66,12 @@ dq: usage:\n\
    \n\
  recursive examples:\n\
    dq any dnscurve.cz\n\
-   dq any dnscurve.cz 127.10.10.10\n\
-   env DNSCACHEIP=127.10.10.10 dq any dnscurve.cz\n\
+   dq any dnscurve.cz 8.8.8.8\n\
+   env DNSCACHEIP=8.8.8.8 dq any dnscurve.cz\n\
    dq ptr 1.0.0.127.in-addr.arpa\n\
    dq ptr 127.0.0.1\n\
    dq ptr ::1\n\
+   dq ptr 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa\n\
    \n\
  authoritative examples:\n\
    dq -a any dnscurve.cz uz5mj60yr9tnudkkpcglw1y0w6dlh78j1l4gk4z7t8bsf1u4d48wlq.ns.dnscurve.cz\n\
