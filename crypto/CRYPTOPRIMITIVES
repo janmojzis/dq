@@ -9,7 +9,7 @@ crypto_stream_salsa20 1
 crypto_stream_xsalsa20 1
 crypto_secretbox_xsalsa20poly1305 1
 crypto_box_curve25519xsalsa20poly1305 1
-randombytes 1
+randombytes 0
 uint64_pack 0
 uint64_unpack 0
 uint32_pack 0
