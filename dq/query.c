@@ -55,7 +55,7 @@ static crypto_uint32 minttl = 0;
 
 void query_minttl(long long x) {
     if (x < 0) x = 0;
-    if (x > 86400) x = 86400;
+    if (x > 300) x = 300;
     minttl = x;
 }
 
