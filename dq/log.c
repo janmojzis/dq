@@ -223,7 +223,7 @@ void log_lame(const unsigned char *server,const unsigned char *control,const uns
   line();
 }
 
-void log_ignore_referral(const char *server, const char *control, const char *referral)
+void log_ignore_referral(const unsigned char *server, const unsigned char *control, const unsigned char *referral)
 {
   string("ignored referral "); ip(server); space();
   name(control); space(); name(referral);
