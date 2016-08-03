@@ -306,7 +306,7 @@ static void t_new(void) {
     x->tcp = xsocket_accept(tcp53, mytypeincoming, x->ip, x->port, &x->scope_id);
     if (x->tcp == -1) return;
     port = uint16_unpack_big(x->port);
-    if (port < 1024) if (port != 53) return;
+    if (port < 1024) if (port != 53) { close(x->tcp); return; }
     if (!okclient(x->ip)) { close(x->tcp); return; }
     blocking_disable(x->tcp);
 
