@@ -400,8 +400,8 @@ static void doit(void) {
 static unsigned char skseed[32];
 static unsigned char sk[32 + 16];
 
-#define FATAL "dnscache: fatal: "
-#define WARNING "dnscache: warning: "
+#define FATAL "dqcache: fatal: "
+#define WARNING "dqcache: warning: "
 
 
 static void removesecrets(void) {
