@@ -62,6 +62,7 @@ crypto_uint64 numqueries = 0;
 
 static int udp53;
 
+#define MAXUDPDUPLICATED 10
 #define MAXUDP 200
 static struct udpclient {
     struct query q;
@@ -89,6 +90,22 @@ static void u_respond(long long j) {
     xsocket_send(udp53, mytypeincoming, response, response_len, u[j].ip, u[j].port, u[j].scope_id);
     log_querydone(&u[j].active, response_len);
     u[j].active = 0; --uactive;
+}
+
+
+static long long u_duplicatequerycount(unsigned char *q, unsigned char *qtype) {
+
+    long long j, c = 0;
+    struct query *z;
+
+    for (j = 0; j < MAXUDP; ++j) {
+        if (!u[j].active) continue;
+        z = &u[j].q;
+        if (!byte_isequal(z->type, 2, qtype)) continue;
+        if (!dns_domain_equal(z->name[0], q)) continue;
+        ++c;
+    }
+    return c;
 }
 
 static void u_new(void) {
@@ -127,6 +144,7 @@ static void u_new(void) {
     if (!okclient(x->ip)) return;
 
     if (!packetquery(buf, len, &q, qtype, qclass, x->id)) return;
+    if (u_duplicatequerycount(q, qtype) >= MAXUDPDUPLICATED) return;
 
     x->active = ++numqueries; ++uactive;
     log_query(&x->active, x->ip, x->port, x->id, q, qtype);
