@@ -23,6 +23,7 @@ extern void log_tx(const unsigned char *,const unsigned char *,const unsigned ch
 extern void log_nxdomain(const unsigned char *,const unsigned char *,unsigned int);
 extern void log_nodata(const unsigned char *,const unsigned char *,const unsigned char *,unsigned int);
 extern void log_servfail(const unsigned char *);
+extern void log_cachedservfail(const unsigned char *, const unsigned char *);
 extern void log_lame(const unsigned char *,const unsigned char *,const unsigned char *);
 extern void log_ignore_referral(const unsigned char *,const unsigned char *,const unsigned char *);
 

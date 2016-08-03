@@ -103,6 +103,23 @@ static void cachegeneric(const unsigned char type[2],const unsigned char *d,cons
   cache_set(key,len + 2,data,datalen,ttl,flagns);
 }
 
+static void cachegeneric2(const unsigned char type[2],const unsigned char dtype[2], const unsigned char *d,const unsigned char *data,long long datalen,crypto_uint32 ttl, unsigned char flagns)
+{
+  long long len;
+  unsigned char key[259];
+
+  len = dns_domain_length(d);
+  if (len > 255) return;
+
+  byte_copy(key,2,type);
+  byte_copy(key + 2,len,d);
+  byte_copy(key + 2 + len,2,dtype);
+  case_lowerb(key + 2,len);
+
+  cache_set(key,len + 4,data,datalen,ttl,flagns);
+}
+
+
 static unsigned char save_buf[8192];
 static long long save_len;
 static long long save_ok;
@@ -326,7 +343,7 @@ crypto_uint64 tx6 = 0;
 
 static int doit(struct query *z,int state)
 {
-  unsigned char key[257];
+  unsigned char key[259];
   unsigned char *cached;
   long long cachedlen;
   unsigned char *buf;
@@ -371,6 +388,7 @@ static int doit(struct query *z,int state)
   errno = EIO;
   if (state == 1) goto HAVEPACKET;
   if (state == -1) {
+    cachegeneric2(DNS_T_AXFR, z->type, z->name[z->level], (unsigned char *)"", 0, 10, 0);
     log_servfail(z->name[z->level]);
     goto SERVFAIL;
   }
@@ -434,6 +452,14 @@ static int doit(struct query *z,int state)
     if (cached) {
       log_cachednxdomain(d);
       goto NXDOMAIN;
+    }
+
+    byte_copy(key,2,DNS_T_AXFR);
+    byte_copy(key + 2 + dlen,2,dtype);
+    cached = cache_get(key,dlen + 4,&cachedlen,&ttl,0);
+    if (cached && cachedlen == 0) {
+      log_cachedservfail(d, dtype);
+      goto SERVFAIL;
     }
 
     byte_copy(key,2,DNS_T_CNAME);

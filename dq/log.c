@@ -239,6 +239,13 @@ void log_servfail(const unsigned char *dn)
   line();
 }
 
+void log_cachedservfail(const unsigned char *dn, const unsigned char *dt)
+{
+  string("cached servfail "); name(dn); space();
+  logtype(dt);
+  line();
+}
+
 void log_rr(const unsigned char *server,const unsigned char *q,const unsigned char type[2],const unsigned char *buf,unsigned int len,unsigned int ttl, unsigned char flagkey)
 {
   int i;
