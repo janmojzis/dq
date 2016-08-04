@@ -116,7 +116,7 @@ void log_dnscurvekey(const unsigned char *key) {
     line();
 }
 
-void log_query(crypto_uint64 *qnum, const unsigned char client[4], unsigned char port[2], const unsigned char id[2], const unsigned char *q, const unsigned char qtype[2]) {
+void log_query(crypto_uint64 *qnum, const unsigned char client[16], unsigned char port[2], const unsigned char id[2], const unsigned char *q, const unsigned char qtype[2]) {
 
     string("query "); number(*qnum); space();
     ip(client); string(":"); string(numtostr(0, uint16_unpack_big(port)));
@@ -174,13 +174,13 @@ void log_querydrop(crypto_uint64 *qnum) {
     line();
 }
 
-void log_tcpopen(const unsigned char client[4], unsigned char port[2]) {
+void log_tcpopen(const unsigned char client[16], unsigned char port[2]) {
     string("tcpopen ");
     ip(client); string(":"); hex(port[0]); hex(port[1]);
     line();
 }
 
-void log_tcpclose(const unsigned char client[4],unsigned char port[2]) {
+void log_tcpclose(const unsigned char client[16],unsigned char port[2]) {
 
     const char *x = e_str(errno);
     string("tcpclose ");
