@@ -28,6 +28,7 @@
 #include "okclient.h"
 #include "purge.h"
 
+static int flagokclient = 0;
 
 static int packetquery(unsigned char *buf, long long len, unsigned char **q, unsigned char qtype[2], unsigned char qclass[2], unsigned char id[2]) {
 
@@ -141,7 +142,7 @@ static void u_new(void) {
     port = uint16_unpack_big(x->port);
     if (port < 1024) if (port != 53) return;
 
-    if (!okclient(x->ip)) { log_queryreject(x->ip, x->port, 0, 0, 0, "IP address not allowed"); return; }
+    if (!flagokclient && !okclient(x->ip)) { log_queryreject(x->ip, x->port, 0, 0, 0, "IP address not allowed"); return; }
 
     if (!packetquery(buf, len, &q, qtype, qclass, x->id)) { log_queryreject(x->ip, x->port, x->id, q, qtype, "bad query"); return; }
     if (u_duplicatequerycount(q, qtype) >= MAXUDPDUPLICATED) { log_queryreject(x->ip, x->port, x->id, q, qtype, "too many duplicate queries"); return; }
@@ -325,7 +326,7 @@ static void t_new(void) {
     if (x->tcp == -1) return;
     port = uint16_unpack_big(x->port);
     if (port < 1024) if (port != 53) { close(x->tcp); return; }
-    if (!okclient(x->ip)) { log_queryreject(x->ip, x->port, 0, 0, 0, "IP address not allowed"); close(x->tcp); return; }
+    if (!flagokclient && !okclient(x->ip)) { log_queryreject(x->ip, x->port, 0, 0, 0, "IP address not allowed"); close(x->tcp); return; }
     blocking_disable(x->tcp);
 
     x->active = 1; ++tactive;
@@ -532,6 +533,7 @@ int main(int argc, char **argv) {
     if (env_get("TCPONLY")) query_tcponly();
     if (env_get("DISABLEIPV6")) query_ipv4only();
     if (strtonum(&ll, env_get("MINTTL"))) query_minttl(ll);
+    if (env_get("OKCLIENT")) flagokclient = 1;
 
     dnscurvetype = env_get("DNSCURVETYPE");
     query_dnscurvetype(dnscurvetype);
