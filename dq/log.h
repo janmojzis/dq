@@ -7,6 +7,7 @@ extern void log_startup(void);
 extern void log_dnscurvekey(const unsigned char *key);
 
 extern void log_query(crypto_uint64 *,const unsigned char *,unsigned char *,const unsigned char *,const unsigned char *,const unsigned char *);
+extern void log_queryreject(const unsigned char *, unsigned char *, const unsigned char *, const unsigned char *, const unsigned char *, const char *);
 extern void log_querydrop(crypto_uint64 *);
 extern void log_querydone(crypto_uint64 *,long long);
 

@@ -141,10 +141,10 @@ static void u_new(void) {
     port = uint16_unpack_big(x->port);
     if (port < 1024) if (port != 53) return;
 
-    if (!okclient(x->ip)) return;
+    if (!okclient(x->ip)) { log_queryreject(x->ip, x->port, 0, 0, 0, "IP address not allowed"); return; }
 
-    if (!packetquery(buf, len, &q, qtype, qclass, x->id)) return;
-    if (u_duplicatequerycount(q, qtype) >= MAXUDPDUPLICATED) return;
+    if (!packetquery(buf, len, &q, qtype, qclass, x->id)) { log_queryreject(x->ip, x->port, x->id, q, qtype, "bad query"); return; }
+    if (u_duplicatequerycount(q, qtype) >= MAXUDPDUPLICATED) { log_queryreject(x->ip, x->port, x->id, q, qtype, "too many duplicate queries"); return; }
 
     x->active = ++numqueries; ++uactive;
     log_query(&x->active, x->ip, x->port, x->id, q, qtype);
@@ -279,7 +279,7 @@ static void t_rw(long long j) {
     x->pos += r;
     if (x->pos < x->len) return;
 
-    if (!packetquery(x->buf, x->len, &q, qtype, qclass, x->id)) { t_close(j); return; }
+    if (!packetquery(x->buf, x->len, &q, qtype, qclass, x->id)) { log_queryreject(x->ip, x->port, x->id, q, qtype, "bad query"); t_close(j); return; }
 
     x->active = ++numqueries;
     log_query(&x->active, x->ip, x->port, x->id, q, qtype);
@@ -325,7 +325,7 @@ static void t_new(void) {
     if (x->tcp == -1) return;
     port = uint16_unpack_big(x->port);
     if (port < 1024) if (port != 53) { close(x->tcp); return; }
-    if (!okclient(x->ip)) { close(x->tcp); return; }
+    if (!okclient(x->ip)) { log_queryreject(x->ip, x->port, 0, 0, 0, "IP address not allowed"); close(x->tcp); return; }
     blocking_disable(x->tcp);
 
     x->active = 1; ++tactive;

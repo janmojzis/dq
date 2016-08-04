@@ -125,6 +125,40 @@ void log_query(crypto_uint64 *qnum, const unsigned char client[4], unsigned char
     line();
 }
 
+
+void log_queryreject(const unsigned char *client, unsigned char *port, const unsigned char *id, const unsigned char *q, const unsigned char *qtype, const char *x) {
+
+    string("reject ");
+    ip(client); string(":"); string(numtostr(0, uint16_unpack_big(port)));
+    string(":");
+
+    if (id) {
+        logid(id);
+    }
+    else {
+        string("?");
+    }
+    space();
+
+    if (qtype) {
+        logtype(qtype);
+    }
+    else {
+        string("?");
+    }
+    space();
+
+    if (q) {
+        name(q);
+    }
+    else {
+        string("?");
+    }
+    space();
+    string(x);
+    line();
+}
+
 void log_querydone(crypto_uint64 *qnum, long long len) {
     string("sent "); number(*qnum); space();
     number(len);
