@@ -129,6 +129,9 @@ DNSCURVETYPE=1 ... Streamlined only DNSCurve
 DNSCURVETYPE=2 ... TXT only DNSCurve
 .fi
 .RE
+.sp
+.B dqcache
+caches records for at least $MINTTL seconds, when MINTTL is set. It's limited <0-300> seconds. Use only if you really know what you're doing.
 .SH SEE ALSO
 .BR dnscache-makekey (1),
 .BR dq (1),
