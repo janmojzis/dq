@@ -1,0 +1,25 @@
+.TH dqcache-start 1
+.SH NAME
+dqcache-start \- wrapper for dqcache daemon
+.SH SYNOPSIS
+.B dqcache-start root-directory account child
+.SH DESCRIPTION
+.B dqcache
+is designed to run under daemontools.
+.B dqcache-start
+is a wrapper and allows running under e.g. systemd.
+.sp
+.B dqcache-start
+sets $ROOT,$UID,$GID env. variables, sets appropriate permissions in $ROOT directory and runs
+.B dqcache
+.SH EXAMPLE
+.nf
+dqcache-start /etc/dqcache/root dqcache dqcache
+.fi
+.SH SEE ALSO
+.BR dqcache (8)
+.sp
+.nf
+https://mojzis.com/software/dq
+https://dnscurve.org/
+.fi
