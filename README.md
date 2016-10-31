@@ -17,6 +17,7 @@
 * added authority record to DNS response
 * improved logs - IPs not printed in hex format
 * fixed CVE-2012-1191
+* fixed CVE-2008-4392
 
 #### url ####
 https://mojzis.com/software/dq/
