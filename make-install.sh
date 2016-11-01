@@ -3,6 +3,7 @@
 build="`pwd`/build"
 source="`pwd`"
 bin="${build}/bin"
+man="${build}/man"
 
 cat "${source}/dq/TARGETS" |\
 while read x
@@ -14,24 +15,34 @@ do
     ) || exit 111
 done || exit 111
 
-#bin
-confbin="`head -1 conf-bin`"
-x=dq
-echo "=== `date` ===   installing build/bin/${x} -> $1/${confbin}/${x}"
-mkdir -p "$1/${confbin}" || exit 111
-cp "${bin}/${x}" "$1/${confbin}" || exit 111
-chmod 755 "$1/${confbin}/${x}" || exit 111
-chown 0:0 "$1/${confbin}/${x}" || exit 111
+echo "=== `date` === installing bin directory"
+cat "${source}/dq/TARGETS" |\
+while read x
+do
+  if [ x"${x}" = xdq ]; then
+    confbin="`head -1 conf-bin`"
+  else
+    confbin="`head -1 conf-sbin`"
+  fi
+  echo "=== `date` ===   installing build/bin/${x} -> $1/${confbin}/${x}"
+  mkdir -p "$1/${confbin}" || exit 111
+  cp "${bin}/${x}" "$1/${confbin}" || exit 111
+  chmod 755 "$1/${confbin}/${x}" || exit 111
+  chown 0:0 "$1/${confbin}/${x}" || exit 111
+done
 echo "=== `date` === finishing"
 
-#sbin
-confsbin="`head -1 conf-sbin`"
-x=dqcache
-echo "=== `date` ===   installing build/bin/${x} -> $1/${confsbin}/${x}"
-mkdir -p "$1/${confsbin}" || exit 111
-cp "${bin}/dqcache" "$1/${confsbin}" || exit 111
-chmod 755 "$1/${confsbin}/${x}" || exit 111
-chown 0:0 "$1/${confsbin}/${x}" || exit 111
+#man
+confman="`head -1 conf-man`"
+echo "=== `date` === installing man directory"
+ls "${man}" | sort |\
+while read x
+do
+  n=`echo "${x}" | cut -d'.' -f2`
+  mkdir -p "$1/${confman}/man${n}" || exit 111
+  cp "${man}/${x}" "$1/${confman}/man${n}" || exit 111
+  echo "=== `date` ===   installing ${man}/${x} -> $1/${confman}/man${n}/${x}"
+done || exit 111
 echo "=== `date` === finishing"
 
 exit 0
