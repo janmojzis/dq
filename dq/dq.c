@@ -243,8 +243,7 @@ int main(int argc, char **argv) {
             die_usage(0);
         }
     }
-    strtonum(&maxtimeout, timeoutstr);
-    if (maxtimeout < 1) maxtimeout = 1;
+    if (!strtonum(&maxtimeout, timeoutstr) || maxtimeout < 1 || maxtimeout > 60) die_usage("unable to parse timeout, timeout must be an integer between 1 and 60");
     dns_verbosity_setflag(flagverbose);
     dns_verbosity_setmessage(DEBUG);
     if (!portparse(port, portstr)) die_usage("unable to parse port");
