@@ -47,7 +47,7 @@ dq: usage:\n\
    -t (optional): use TCP\n\
    -s (optional): send DNSCurve query in streamlined format (default), ignored for regular DNS queries\n\
    -S suffix (optional): send DNSCurve query in TXT format using suffix suffix, ignored for regular DNS queries\n\
-   -T timeout (optional): give up on the DNS/DNSCurve query attempt after timeout seconds (default 60)\n\
+   -T timeout (optional): give up on the DNS/DNSCurve query attempt after timeout seconds <1-60> (default 60)\n\
    -p port (optional): send query to port port (default 53)\n\
    -k key (optional): send DNSCurve query and use servers public-key key\n\
    type: DNS query type (A, NS, MX, ANY, PTR, TXT, SOA, SRV, AAAA, AXFR, CNAME or numeric type)\n\
