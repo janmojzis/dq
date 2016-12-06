@@ -5,6 +5,7 @@ Public domain.
 */
 
 #include <arpa/inet.h>
+#include <sys/socket.h>
 #include "byte.h"
 #include "strtoip.h"
 
