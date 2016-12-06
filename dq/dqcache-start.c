@@ -1,7 +1,11 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <pwd.h>
+/* 
+workaround for *BSD
 #include <stdlib.h>
+*/
+extern int setenv(const char *, const char *, int);
 #include "numtostr.h"
 #include "strtonum.h"
 #include "e.h"
