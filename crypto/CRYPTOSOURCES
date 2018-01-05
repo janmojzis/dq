@@ -14,8 +14,6 @@ verify
 crypto_verify_8
 crypto_verify_16
 crypto_verify_32
-fe
-fe25519
 crypto_scalarmult_curve25519
 salsa
 crypto_core_hsalsa20

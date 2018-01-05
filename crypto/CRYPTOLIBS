@@ -14,8 +14,6 @@ verify.o
 crypto_verify_8.o
 crypto_verify_16.o
 crypto_verify_32.o
-fe.o
-fe25519.o
 crypto_scalarmult_curve25519.o
 salsa.o
 crypto_core_hsalsa20.o
