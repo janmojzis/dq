@@ -1,5 +1,7 @@
 /*
 20180104
+Jan Mojzis
+Public domain.
 */
 
 #include "crypto_scalarmult_curve25519.h"
