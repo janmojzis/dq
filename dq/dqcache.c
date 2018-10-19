@@ -516,7 +516,7 @@ int main(int argc, char **argv) {
     if (!strtoip(myipoutgoing, env_get("IPSEND4"))) {
         byte_copy(myipoutgoing, 16, xsocket_ANYIP4);
     }
-    if (!strtoip(myipoutgoing, env_get("IPSEND6"))) {
+    if (!strtoip(myipoutgoing + 16, env_get("IPSEND6"))) {
         byte_copy(myipoutgoing + 16, 16, xsocket_ANYIP6);
     }
     if (portparse(port, env_get("REMOTEPORT"))) {
