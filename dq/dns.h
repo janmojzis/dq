@@ -123,6 +123,7 @@ extern int dns_ip6_qualify(struct dns_data *, const char *);
 extern char *dns_iptoname(char *, const unsigned char *);
 
 /* utils */
+extern void dns_sortip4(unsigned char *, long long);
 extern void dns_sortip(unsigned char *, long long);
 extern void dns_sortipkey(unsigned char *, unsigned char *, long long);
 

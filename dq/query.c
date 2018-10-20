@@ -565,6 +565,7 @@ static int doit(struct query *z,int state)
       if (cached && (cachedlen || !byte_isequal(dtype,2,DNS_T_ANY))) {
 	if (z->level) {
           flaghaskey = findkey(d,pubkey);
+      dns_sortip4(cached, cachedlen);
 	  log_cachedanswer(d,DNS_T_A);
 	  while (cachedlen >= 4) {
             byte_copy(misc, 12, "\0\0\0\0\0\0\0\0\0\0\377\377");
@@ -578,6 +579,7 @@ static int doit(struct query *z,int state)
           cached = cache_get(key,dlen + 2,&cachedlen,&ttl,&flagns);
           if (cached && (cachedlen || !byte_isequal(dtype,2,DNS_T_ANY))) {
               flaghaskey = findkey(d,pubkey);
+              dns_sortip(cached, cachedlen);
               log_cachedanswer(d,DNS_T_AAAA);
               while (cachedlen >= 16) {
                 addserver(z,cached,flaghaskey ? pubkey : 0);
@@ -588,6 +590,7 @@ static int doit(struct query *z,int state)
 	  goto LOWERLEVEL;
 	}
 
+    dns_sortip4(cached, cachedlen);
 	log_cachedanswer(d,DNS_T_A);
 	if (!rqa(z)) goto DIE;
 	while (cachedlen >= 4) {
@@ -625,6 +628,7 @@ static int doit(struct query *z,int state)
       if (cached && (cachedlen || !byte_isequal(dtype,2,DNS_T_ANY))) {
         if (z->level) {
           flaghaskey = findkey(d,pubkey);
+          dns_sortip(cached, cachedlen);
           log_cachedanswer(d,DNS_T_AAAA);
           while (cachedlen >= 16) {
             byte_copy(misc, 16, cached);
@@ -635,6 +639,7 @@ static int doit(struct query *z,int state)
           goto LOWERLEVEL;
         }
 
+        dns_sortip(cached, cachedlen);
         log_cachedanswer(d,DNS_T_AAAA);
         if (!rqa(z)) goto DIE;
         while (cachedlen >= 16) {

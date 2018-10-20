@@ -12,6 +12,20 @@ static void swap(unsigned char *x, long long len, unsigned char *y) {
 
 }
 
+void dns_sortip4(unsigned char *s, long long n) {
+
+    long long i;
+
+    if (n < 0) return;
+
+    n >>= 2;
+    while (n > 1) {
+        i = randommod(n);
+        --n;
+        swap(s + (i << 2), 4, s + (n << 2));
+    }
+}
+
 void dns_sortip(unsigned char *s, long long nn) {
 
     long long i;
@@ -23,7 +37,7 @@ void dns_sortip(unsigned char *s, long long nn) {
     while (n > 1) {
         i = randommod(n);
         --n;
-        swap(s + 16 * i, 16, s + 16 * n);
+        swap(s + (i << 4), 16, s + (n << 4));
     }
 
     for (i = 0; i + 16 <= nn; i += 16) {
