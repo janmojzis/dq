@@ -95,7 +95,7 @@ uses a fixed-size cache, as controlled by the $CACHESIZE environment variable. T
 typically generates new secret key at start of program. If environment variable $SECRETKEY is set, then
 .B dqcache
 loads this secret key. $SECRETKEY must be safely generated using
-.BR dqcache-makekey (1).
+.BR dqcache-makekey (8).
 .sp
 Note that
 .B dqcache
@@ -133,7 +133,7 @@ caches records for at least $MINTTL seconds, when MINTTL is set. It's limited <0
 .B dqcache
 sends only IPv4 queries, when DISABLEIPV6 is set.  Use only if you really know what you're doing.
 .SH SEE ALSO
-.BR dqcache-makekey (1),
+.BR dqcache-makekey (8),
 .BR dq (1),
 .BR dnscache (8)
 .sp
