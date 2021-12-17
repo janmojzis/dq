@@ -149,26 +149,6 @@ libsorig=${libs}
 libs="${libs} `cat ${work}/syslibs`"
 log1 "finishing"
 
-log1 "building sysdep headers"
-rm -rf "${work}"
-mkdir -p "${work}"
-cp -pr sysdep/* "${work}"
-(
-  cd "${work}"
-  sh list | (
-    while read target source
-    do
-      [ -f "${include}/${target}" ] && continue
-      rm -f "${source}" "${target}.tmp" 
-      ${compiler} -O0 -o "${source}" "${source}.c" ${libs} || continue
-      ./${source} > "${target}.tmp" || continue
-      cp "${target}.tmp" "${include}/${target}"
-      log2 "${target} ${source}"
-    done
-  )
-)
-log1 "finishing"
-
 log1 "starting crypto lib"
 rm -rf "${work}"
 mkdir -p "${work}"
@@ -298,7 +278,7 @@ echo "=== `date` === counting words of code"
 rm -rf "${work}"
 mkdir -p "${work}"
 
-for dir in sysdep dq crypto; do
+for dir in dq crypto; do
   (
     cd "${dir}"
     cat *.c *.h > "${work}/${dir}" || :

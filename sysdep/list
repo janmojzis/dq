@@ -1,8 +1,0 @@
-#!/bin/sh -e
-
-#hasipv6
-echo 'hasipv6.h hasipv6.h-yes'
-echo 'hasipv6.h default.h-no'
-
-echo 'direntry.h direntry.h-dirent'
-echo 'direntry.h direntry.h-direct'
