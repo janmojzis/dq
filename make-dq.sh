@@ -67,6 +67,28 @@ mkdir -p "${work}"
 compiler=`head -1 "${work}/compiler"`
 log1 "finishing"
 
+log1 "obtaining ar"
+rm -rf "${work}"
+mkdir -p "${work}"
+(
+  cd "${work}"
+  (
+    if [ x"${AR}" != x ]; then
+      echo "${AR} "
+    fi
+    cat "${top}/conf-ar"
+  ) | while read ar
+  do
+    touch test.o
+    ${ar} cr test.a test.o || { log2 "${ar} failed"; continue; }
+    log2 "${ar} ok"
+    echo "${ar}" > ar
+    break
+  done
+)
+ar=`head -1 "${work}/ar"`
+log1 "finishing"
+
 log1 "checking compiler options"
 rm -rf "${work}"
 mkdir -p "${work}"
@@ -251,7 +273,7 @@ cp -pr dq/* "${work}"
     ${compiler} "-DCOMPILER=\"${compilerorig}\"" "-DVERSION=\"${version}\"" -I"${include}" -c "${x}.c" || { log2 "${x}.o failed ... see the log ${log}"; exit 111; }
     log2 "${x}.o ok"
   done || exit 111
-  ar cr libdq.a `cat LIBS` || exit 111
+  ${ar} cr libdq.a `cat LIBS` || exit 111
   log1 "finishing"
 
   log1 "starting dq"
