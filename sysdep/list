@@ -6,7 +6,3 @@ echo 'hasipv6.h default.h-no'
 
 echo 'direntry.h direntry.h-dirent'
 echo 'direntry.h direntry.h-direct'
-
-#__asm__ __volatile__ ...
-echo 'hasasmvolatilememory.h hasasmvolatilememory.h-yes'
-echo 'hasasmvolatilememory.h default.h-no'
