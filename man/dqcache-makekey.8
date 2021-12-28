@@ -1,17 +1,17 @@
-.TH dqcache-makekey 8
+.TH dqcache\-makekey 8
 .SH NAME
-dqcache-makekey \- make DNSCurve secret-key for dqcache
+dqcache\-makekey \- make DNSCurve secret\-key for dqcache
 .SH SYNOPSIS
-.B dqcache-makekey
+.B dqcache\-makekey
 .SH DESCRIPTION
-.B dqcache-makekey
-creates secret-key (in hex format) for dqcache
+.B dqcache\-makekey
+creates secret\-key (in hex format) for dqcache
 .SH EXAMPLE
 .nf
 (
   cd /etc/dqcache/env/
   umask 077
-  dqcache-makekey > SECRETKEY.tmp
+  dqcache\-makekey > SECRETKEY.tmp
   mv \-f SECRETKEY.tmp SECRETKEY
 )
 .fi

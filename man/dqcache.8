@@ -17,7 +17,7 @@ listens for incoming UDP packets and TCP connections addressed to port 53 of $IP
 accepts connections from localhost (127.0.0.0/8 or ::1/128).
 For external connections
 .B dqcache
-has file-style accesslist.
+has file\-style accesslist.
 .RS 4
 .nf
 e.g. for IPv4 address 1.2.3.4 dqcache allows connection when sees a file named:
@@ -86,23 +86,23 @@ The record has format {IP} or {IP}|{DNSCURVEPUBLICKEY} e.g.:
 .RE
 .sp
 .B dqcache
-supports forward-only mode. If $FORWARDONLY is set, dqcache treats servers/@ as a list of IP addresses for other caches, not root servers. It forwards queries to those caches the same way that a client does, rather than contacting a chain of servers according to NS records.
+supports forward\-only mode. If $FORWARDONLY is set, dqcache treats servers/@ as a list of IP addresses for other caches, not root servers. It forwards queries to those caches the same way that a client does, rather than contacting a chain of servers according to NS records.
 .sp
 .B dqcache
-uses a fixed-size cache, as controlled by the $CACHESIZE environment variable. Typically $CACHESIZE is 10000000 (10MB).
+uses a fixed\-size cache, as controlled by the $CACHESIZE environment variable. Typically $CACHESIZE is 10000000 (10MB).
 .sp
 .B dqcache
 typically generates new secret key at start of program. If environment variable $SECRETKEY is set, then
 .B dqcache
 loads this secret key. $SECRETKEY must be safely generated using
-.BR dqcache-makekey (8).
+.BR dqcache\-makekey (8).
 .sp
 Note that
 .B dqcache
 uses internally two secret keys, one used as the discrete logarithm of the public key (256bit DNSCurve key) and one to encrypt the nonce (128bit TEA symmetric key). Both of these keys are actually derived from $SECRETKEY using crypto_stream_salsa20().
 .sp
 .B dqcache
-also supports nonce-separation via environment variable $NONCESTART. This means that several caches share a key but use separate nonces:
+also supports nonce\-separation via environment variable $NONCESTART. This means that several caches share a key but use separate nonces:
 .RS 2
 .nf
 e.g.:
@@ -127,13 +127,13 @@ DNSCURVETYPE=2 ... TXT only DNSCurve
 .RE
 .sp
 .B dqcache
-caches records for at least $MINTTL seconds, when MINTTL is set. It's limited <0-300> seconds. Use only if you really know what you're doing.
+caches records for at least $MINTTL seconds, when MINTTL is set. It's limited <0\-300> seconds. Use only if you really know what you're doing.
 .RE
 .sp
 .B dqcache
 sends only IPv4 queries, when DISABLEIPV6 is set.  Use only if you really know what you're doing.
 .SH SEE ALSO
-.BR dqcache-makekey (8),
+.BR dqcache\-makekey (8),
 .BR dq (1),
 .BR dnscache (8)
 .sp

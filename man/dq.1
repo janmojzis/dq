@@ -10,7 +10,7 @@ dq \- DNS/DNSCurve query tool
 .I host
 ]
 .TP
-.B dq -a
+.B dq \-a
 [ options ]
 .I type
 .I fqdn
@@ -29,8 +29,8 @@ asks for records of type
 under the domain name
 .I fqdn
 .TP
-.B dq -a
-sends a non-recursive DNS/DNSCurve query to DNS/DNSCurve server
+.B dq \-a
+sends a non\-recursive DNS/DNSCurve query to DNS/DNSCurve server
 .I host
 for records of type 
 .I type
@@ -64,7 +64,7 @@ ignored for regular DNS queries
 .B \-T \fItimeout
 give up on the DNS/DNSCurve query attempt after
 .I timeout
-seconds <1-60>
+seconds <1\-60>
 (default 60)
 .TP
 .B \-p \fIport
@@ -73,7 +73,7 @@ send query to port
 (default 53)
 .TP
 .B \-k \fIkey
-send DNSCurve query and use servers public-key
+send DNSCurve query and use servers public\-key
 .I key
 .TP
 .I type
@@ -96,18 +96,18 @@ use space separated names from $LOCALDOMAIN instead of 'search' line from /etc/r
 use $DNSREWRITEFILE file instead of /etc/dnsrewrite
 .SH NOTES
 .B dq
-rewrites IP address to *.in-addr.arpa or *.ip6.arpa for PTR queries e.g.:
+rewrites IP address to *.in\-addr.arpa or *.ip6.arpa for PTR queries e.g.:
 .nf
 .RS 2
-127.0.0.1 -> 1.0.0.127.in-addr.arpa
-::1 -> 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa
+127.0.0.1 \-> 1.0.0.127.in\-addr.arpa
+::1 \-> 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa
 .RE
 .SH RECURSIVE EXAMPLES
 .nf
 dq any dnscurve.cz
 dq any dnscurve.cz 8.8.8.8
 env DNSCACHEIP=8.8.8.8 dq any dnscurve.cz
-dq ptr 1.0.0.127.in-addr.arpa
+dq ptr 1.0.0.127.in\-addr.arpa
 dq ptr 127.0.0.1
 dq ptr ::1
 dq ptr 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa
