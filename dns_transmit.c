@@ -11,7 +11,7 @@
 #include "case.h"
 #include "str.h"
 #include "dns.h"
-#include "crypto.h"
+#include "crypto_box_curve25519xsalsa20poly1305.h"
 
 unsigned char *magicq = DNS_MAGICQ;
 unsigned char *magicr = DNS_MAGICR;

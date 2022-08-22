@@ -13,7 +13,8 @@
 #include "strtoip.h"
 #include "iptostr.h"
 #include "xsocket.h"
-#include "crypto.h"
+#include "crypto_scalarmult_curve25519.h"
+#include "crypto_box_curve25519xsalsa20poly1305.h"
 #include "purge.h"
 
 static unsigned char secretkey[32];

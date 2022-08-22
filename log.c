@@ -366,23 +366,23 @@ void log_rrsoa(const unsigned char *server,const unsigned char *q,const unsigned
   line();
 }
 
+crypto_uint64 log_numqueries = 0;
+long long log_uactive = 0;
+long long log_tactive = 0;
 
 void log_stats(void)
 {
-  extern crypto_uint64 numqueries;
   extern crypto_uint64 cache_motion;
   extern crypto_uint64 cache_hit;
   extern crypto_uint64 cache_miss;
   extern crypto_uint64 tx4;
   extern crypto_uint64 tx6;
-  extern int uactive;
-  extern int tactive;
 
   string("stats ");
-  number(numqueries); space();
+  number(log_numqueries); space();
   number(cache_motion); space();
-  number(uactive); space();
-  number(tactive); space();
+  number(log_uactive); space();
+  number(log_tactive); space();
   number(cache_hit); space();
   number(cache_miss); space();
   number(tx4); space();

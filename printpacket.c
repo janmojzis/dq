@@ -12,7 +12,7 @@ static unsigned char *d = 0;
 
 int printpacket_cat(stralloc *out, unsigned char *buf, long long len)
 {
-  crypto_uint16 numqueries;
+  crypto_uint16 xnumqueries;
   crypto_uint16 numanswers;
   crypto_uint16 numauthority;
   crypto_uint16 numglue;
@@ -22,14 +22,14 @@ int printpacket_cat(stralloc *out, unsigned char *buf, long long len)
 
   pos = dns_packet_copy(buf,len,0,data,12); if (!pos) return 0;
 
-  numqueries = uint16_unpack_big(data + 4);
+  xnumqueries = uint16_unpack_big(data + 4);
   numanswers = uint16_unpack_big(data + 6);
   numauthority = uint16_unpack_big(data + 8);
   numglue = uint16_unpack_big(data + 10);
 
   NUM(len)
   X(" bytes, ")
-  NUM(numqueries)
+  NUM(xnumqueries)
   X("+")
   NUM(numanswers)
   X("+")
@@ -55,8 +55,8 @@ int printpacket_cat(stralloc *out, unsigned char *buf, long long len)
 
   X("\n")
 
-  while (numqueries) {
-    --numqueries;
+  while (xnumqueries) {
+    --xnumqueries;
     X("query: ")
 
     pos = dns_packet_getname(buf,len,pos,&d); if (!pos) return 0;
