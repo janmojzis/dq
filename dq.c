@@ -26,7 +26,7 @@
 #include "keyparse.h"
 #include "typeparse.h"
 #include "purge.h"
-#include "crypto.h"
+#include "crypto_box_curve25519xsalsa20poly1305.h"
 
 #define USAGE "\
 \n\

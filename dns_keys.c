@@ -1,4 +1,4 @@
-#include "crypto.h"
+#include "crypto_stream_salsa20.h"
 #include "dns.h"  
 
 static const unsigned char zero[8] = {0};

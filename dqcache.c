@@ -58,8 +58,6 @@ static unsigned char myipincoming[16];
 static int mytypeincoming = XSOCKET_V6;
 
 static unsigned char buf[1024];
-crypto_uint64 numqueries = 0;
-
 
 static int udp53;
 
@@ -75,12 +73,11 @@ static struct udpclient {
     long long scope_id;
     unsigned char id[2];
 } u[MAXUDP];
-long long uactive = 0;
 
 static void u_drop(long long j) {
     if (!u[j].active) return;
     log_querydrop(&u[j].active);
-    u[j].active = 0; --uactive;
+    u[j].active = 0; --log_uactive;
 }
 
 static void u_respond(long long j) {
@@ -90,7 +87,7 @@ static void u_respond(long long j) {
     if (response_len > 512) response_tc();
     xsocket_send(udp53, mytypeincoming, response, response_len, u[j].ip, u[j].port, u[j].scope_id);
     log_querydone(&u[j].active, response_len);
-    u[j].active = 0; --uactive;
+    u[j].active = 0; --log_uactive;
 }
 
 
@@ -147,7 +144,7 @@ static void u_new(void) {
     if (!packetquery(buf, len, &q, qtype, qclass, x->id)) { log_queryreject(x->ip, x->port, x->id, q, qtype, "bad query"); return; }
     if (u_duplicatequerycount(q, qtype) >= MAXUDPDUPLICATED) { log_queryreject(x->ip, x->port, x->id, q, qtype, "too many duplicate queries"); return; }
 
-    x->active = ++numqueries; ++uactive;
+    x->active = ++log_numqueries; ++log_uactive;
     log_query(&x->active, x->ip, x->port, x->id, q, qtype);
     switch(query_start(&x->q, q, qtype, qclass, myipoutgoing)) {
         case -1:
@@ -179,7 +176,6 @@ struct tcpclient {
     long long len;
     long long pos;
 } t[MAXTCP];
-long long tactive = 0;
 
 /*
 state 1: buf 0; normal state at beginning of TCP connection
@@ -206,7 +202,7 @@ static void t_close(long long j) {
     t_free(j);
     log_tcpclose(t[j].ip, t[j].port);
     close(t[j].tcp);
-    t[j].active = 0; --tactive;
+    t[j].active = 0; --log_tactive;
 }
 
 static void t_drop(long long j) {
@@ -282,7 +278,7 @@ static void t_rw(long long j) {
 
     if (!packetquery(x->buf, x->len, &q, qtype, qclass, x->id)) { log_queryreject(x->ip, x->port, x->id, q, qtype, "bad query"); t_close(j); return; }
 
-    x->active = ++numqueries;
+    x->active = ++log_numqueries;
     log_query(&x->active, x->ip, x->port, x->id, q, qtype);
     switch(query_start(&x->q,q,qtype,qclass,myipoutgoing)) {
         case -1:
@@ -329,7 +325,7 @@ static void t_new(void) {
     if (!flagokclient && !okclient(x->ip)) { log_queryreject(x->ip, x->port, 0, 0, 0, "IP address not allowed"); close(x->tcp); return; }
     blocking_disable(x->tcp);
 
-    x->active = 1; ++tactive;
+    x->active = 1; ++log_tactive;
     x->state = 1;
     t_timeout(j);
 

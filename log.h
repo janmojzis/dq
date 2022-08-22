@@ -39,4 +39,8 @@ extern void log_rrsoa(const unsigned char *,const unsigned char *,const unsigned
 
 extern void log_stats(void);
 
+extern crypto_uint64 log_numqueries;
+extern long long log_uactive;
+extern long long log_tactive;
+
 #endif
