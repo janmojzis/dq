@@ -23,7 +23,7 @@
 https://mojzis.com/software/dq/
 
 #### licence ####
-* Dq is placed into the public domain
 * Dq is derived from public-domain djbdns-1.05 - see: https://cr.yp.to/distributors.html
+* Dq is released under CC0 licence http://creativecommons.org/publicdomain/zero/1.0/
 
 [![TravisCI status](https://travis-ci.org/janmojzis/dq.svg?branch=master)](https://travis-ci.org/janmojzis/dq)
