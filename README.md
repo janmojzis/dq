@@ -22,6 +22,9 @@
 #### examples ####
 - [examples page](examples.md)
 
+#### installation ####
+- [installation](install.md)
+
 #### licence ####
 * Dq is derived from public-domain djbdns-1.05 - see: https://cr.yp.to/distributors.html
 * Dq is released under CC0 licence http://creativecommons.org/publicdomain/zero/1.0/
