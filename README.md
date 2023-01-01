@@ -19,8 +19,8 @@
 * fixed CVE-2012-1191
 * fixed CVE-2008-4392
 
-#### url ####
-https://mojzis.com/software/dq/
+#### examples ####
+- [examples page](examples.md)
 
 #### licence ####
 * Dq is derived from public-domain djbdns-1.05 - see: https://cr.yp.to/distributors.html
