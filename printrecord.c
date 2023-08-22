@@ -81,7 +81,7 @@ long long printrecord_cat(stralloc *out,const unsigned char *buf,long long  len,
     if (!stralloc_cats(out,iptostr(0, misc))) return 0;
   }
   else if (byte_isequal(misc,2,DNS_T_TXT)) {
-    if (pos + datalen > len) return -1;
+    if (pos + datalen > len) return 0;
     if (!stralloc_cats(out," TXT ")) return 0;
     txtlen = 0;
     for (i = 0;i < datalen;++i) {
@@ -98,7 +98,7 @@ long long printrecord_cat(stralloc *out,const unsigned char *buf,long long  len,
           if (!stralloc_catb(out,misc,4)) return 0;
         }
         else {
-          if (!stralloc_append(out,&ch)) return -1;
+          if (!stralloc_append(out,&ch)) return 0;
         }
       }
     }
