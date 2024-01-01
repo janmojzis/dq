@@ -8,11 +8,11 @@ apt-get install dqcache
 
 #### download ####
 ~~~
-wget https://github.com/janmojzis/dq/releases/download/20230101/20230101.tar.gz.asc
-wget https://github.com/janmojzis/dq/archive/20230101.tar.gz
-gpg --verify 20230101.tar.gz.asc 20230101.tar.gz
-gunzip < 20230101.tar.gz | tar -xf -
-cd dq-20230101
+wget https://github.com/janmojzis/dq/releases/download/20240101/20240101.tar.gz.asc
+wget https://github.com/janmojzis/dq/archive/20240101.tar.gz
+gpg --verify 20240101.tar.gz.asc 20240101.tar.gz
+gunzip < 20240101.tar.gz | tar -xf -
+cd dq-20240101
 ~~~
 
 #### compile and install binaries ####
