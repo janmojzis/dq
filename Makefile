@@ -53,8 +53,8 @@ crypto_auth_siphash24.o: crypto_auth_siphash24.c siphash.h \
 
 crypto_box_curve25519xsalsa20poly1305.o: \
  crypto_box_curve25519xsalsa20poly1305.c crypto_core_hsalsa20.h \
- crypto_scalarmult_curve25519.h crypto_secretbox_xsalsa20poly1305.h \
- randombytes.h haslibrandombytes.h \
+ crypto_scalarmult_curve25519.h haslib25519.h \
+ crypto_secretbox_xsalsa20poly1305.h randombytes.h haslibrandombytes.h \
  crypto_box_curve25519xsalsa20poly1305.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c crypto_box_curve25519xsalsa20poly1305.c
 
@@ -67,7 +67,7 @@ crypto_onetimeauth_poly1305.o: crypto_onetimeauth_poly1305.c \
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c crypto_onetimeauth_poly1305.c
 
 crypto_scalarmult_curve25519.o: crypto_scalarmult_curve25519.c \
- crypto_scalarmult_curve25519.h
+ crypto_scalarmult_curve25519.h haslib25519.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c crypto_scalarmult_curve25519.c
 
 crypto_secretbox_xsalsa20poly1305.o: crypto_secretbox_xsalsa20poly1305.c \
@@ -445,17 +445,17 @@ OBJECTS+=xsocket_tcp.o
 OBJECTS+=xsocket_type.o
 OBJECTS+=xsocket_udp.o
 
-dq: dq.o $(OBJECTS) librandombytes.lib
-	$(CC) $(CFLAGS) $(CPPFLAGS) -o dq dq.o $(OBJECTS) $(LDFLAGS) `cat librandombytes.lib`
+dq: dq.o $(OBJECTS) librandombytes.lib lib25519.lib
+	$(CC) $(CFLAGS) $(CPPFLAGS) -o dq dq.o $(OBJECTS) $(LDFLAGS) `cat librandombytes.lib` `cat lib25519.lib`
 
-dqcache: dqcache.o $(OBJECTS) librandombytes.lib
-	$(CC) $(CFLAGS) $(CPPFLAGS) -o dqcache dqcache.o $(OBJECTS) $(LDFLAGS) `cat librandombytes.lib`
+dqcache: dqcache.o $(OBJECTS) librandombytes.lib lib25519.lib
+	$(CC) $(CFLAGS) $(CPPFLAGS) -o dqcache dqcache.o $(OBJECTS) $(LDFLAGS) `cat librandombytes.lib` `cat lib25519.lib`
 
-dqcache-makekey: dqcache-makekey.o $(OBJECTS) librandombytes.lib
-	$(CC) $(CFLAGS) $(CPPFLAGS) -o dqcache-makekey dqcache-makekey.o $(OBJECTS) $(LDFLAGS) `cat librandombytes.lib`
+dqcache-makekey: dqcache-makekey.o $(OBJECTS) librandombytes.lib lib25519.lib
+	$(CC) $(CFLAGS) $(CPPFLAGS) -o dqcache-makekey dqcache-makekey.o $(OBJECTS) $(LDFLAGS) `cat librandombytes.lib` `cat lib25519.lib`
 
-dqcache-start: dqcache-start.o $(OBJECTS) librandombytes.lib
-	$(CC) $(CFLAGS) $(CPPFLAGS) -o dqcache-start dqcache-start.o $(OBJECTS) $(LDFLAGS) `cat librandombytes.lib`
+dqcache-start: dqcache-start.o $(OBJECTS) librandombytes.lib lib25519.lib
+	$(CC) $(CFLAGS) $(CPPFLAGS) -o dqcache-start dqcache-start.o $(OBJECTS) $(LDFLAGS) `cat librandombytes.lib` `cat lib25519.lib`
 
 
 haslibrandombytes.h: trylibrandombytes.sh
@@ -464,6 +464,12 @@ haslibrandombytes.h: trylibrandombytes.sh
 librandombytes.lib: trylibrandombytes.sh
 	env CC=$(CC) ./trylibrandombytes.sh && echo '-lrandombytes' > librandombytes.lib || true > librandombytes.lib
 
+haslib25519.h: trylib25519.sh
+	env CC=$(CC) ./trylib25519.sh && echo '#define HASLIB25519 1' > haslib25519.h || true > haslib25519.h
+
+lib25519.lib: trylib25519.sh
+	env CC=$(CC) ./trylib25519.sh && echo '-l25519' > lib25519.lib || true > lib25519.lib
+
 install: dq dqcache dqcache-makekey dqcache-start
 	install -D -m 0755 dq $(DESTDIR)/usr/bin/dq
 	install -D -m 0755 dqcache $(DESTDIR)/usr/sbin/dqcache
@@ -471,5 +477,5 @@ install: dq dqcache dqcache-makekey dqcache-start
 	install -D -m 0755 dqcache-start $(DESTDIR)/usr/sbin/dqcache-start
 
 clean:
-	rm -f *.o *.out $(BINARIES) haslibrandombytes.h librandombytes.lib
+	rm -f *.o *.out $(BINARIES) haslibrandombytes.h librandombytes.lib haslib25519.h lib25519.lib
 

@@ -6,6 +6,8 @@ Public domain.
 
 #include "crypto_scalarmult_curve25519.h"
 
+#ifndef HASLIB25519
+
 typedef unsigned long fe[8];
 
 /*
@@ -332,3 +334,15 @@ static const unsigned char basepoint[32] = {9};
 int crypto_scalarmult_curve25519_tinynacl_base(unsigned char *q, const unsigned char *n) {
     return crypto_scalarmult_curve25519_tinynacl(q, n, basepoint);
 }
+
+#else
+#include <lib25519.h>
+int crypto_scalarmult_curve25519_lib25519(unsigned char *q, const unsigned char *n, const unsigned char *p) {
+    lib25519_nP_montgomery25519(q, n, p);
+    return 0;
+}
+int crypto_scalarmult_curve25519_lib25519_base(unsigned char *q, const unsigned char *n) {
+    lib25519_nG_montgomery25519(q, n);
+    return 0;
+}
+#endif

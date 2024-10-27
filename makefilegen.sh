@@ -25,7 +25,7 @@
     echo "all: \$(BINARIES)"
     echo 
 
-    touch haslibrandombytes.h
+    touch haslibrandombytes.h haslib25519.h
     for file in `ls *.c`; do
       (
         gcc -MM "${file}"
@@ -33,7 +33,7 @@
         echo
       )
     done
-    rm -f haslibrandombytes.h
+    rm -f haslibrandombytes.h haslib25519.h
 
     i=0
     for file in `ls *.c`; do
@@ -52,8 +52,8 @@
     for file in `ls *.c`; do
       if grep '^int main(' "${file}" >/dev/null; then
         x=`echo "${file}" | sed 's/\.c$//'`
-        echo "${x}: ${x}.o \$(OBJECTS) librandombytes.lib"
-        echo "	\$(CC) \$(CFLAGS) \$(CPPFLAGS) -o ${x} ${x}.o \$(OBJECTS) \$(LDFLAGS) \`cat librandombytes.lib\`"
+        echo "${x}: ${x}.o \$(OBJECTS) librandombytes.lib lib25519.lib"
+        echo "	\$(CC) \$(CFLAGS) \$(CPPFLAGS) -o ${x} ${x}.o \$(OBJECTS) \$(LDFLAGS) \`cat librandombytes.lib\` \`cat lib25519.lib\`"
         echo 
       fi
     done
@@ -67,6 +67,14 @@
     echo "	env CC=\$(CC) ./trylibrandombytes.sh && echo '-lrandombytes' > librandombytes.lib || true > librandombytes.lib"
     echo
 
+    # try lib25519
+    echo "haslib25519.h: trylib25519.sh"
+    echo "	env CC=\$(CC) ./trylib25519.sh && echo '#define HASLIB25519 1' > haslib25519.h || true > haslib25519.h"
+    echo
+    echo "lib25519.lib: trylib25519.sh"
+    echo "	env CC=\$(CC) ./trylib25519.sh && echo '-l25519' > lib25519.lib || true > lib25519.lib"
+    echo
+
     echo "install: dq dqcache dqcache-makekey dqcache-start"
     echo "	install -D -m 0755 dq \$(DESTDIR)/usr/bin/dq"
     echo "	install -D -m 0755 dqcache \$(DESTDIR)/usr/sbin/dqcache"
@@ -75,7 +83,7 @@
     echo
 
     echo "clean:"
-    echo "	rm -f *.o *.out \$(BINARIES) haslibrandombytes.h librandombytes.lib"
+    echo "	rm -f *.o *.out \$(BINARIES) haslibrandombytes.h librandombytes.lib haslib25519.h lib25519.lib"
     echo 
 
   ) > Makefile
