@@ -246,7 +246,7 @@ query.o: query.c e.h roots.h log.h crypto_uint64.h case.h cache.h byte.h \
  crypto_box_curve25519xsalsa20poly1305.h purge.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c query.c
 
-randombytes.o: randombytes.c haslibrandombytes.h
+randombytes.o: randombytes.c haslibrandombytes.h randombytes.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c randombytes.c
 
 randommod.o: randommod.c randombytes.h haslibrandombytes.h randommod.h
