@@ -25,6 +25,7 @@
     echo "all: \$(BINARIES)"
     echo 
 
+    touch haslibrandombytes.h
     for file in `ls *.c`; do
       (
         gcc -MM "${file}"
@@ -32,6 +33,7 @@
         echo
       )
     done
+    rm -f haslibrandombytes.h
 
     i=0
     for file in `ls *.c`; do
@@ -50,11 +52,19 @@
     for file in `ls *.c`; do
       if grep '^int main(' "${file}" >/dev/null; then
         x=`echo "${file}" | sed 's/\.c$//'`
-        echo "${x}: ${x}.o \$(OBJECTS)"
-        echo "	\$(CC) \$(CFLAGS) \$(CPPFLAGS) -o ${x} ${x}.o \$(OBJECTS) \$(LDFLAGS)"
+        echo "${x}: ${x}.o \$(OBJECTS) librandombytes.lib"
+        echo "	\$(CC) \$(CFLAGS) \$(CPPFLAGS) -o ${x} ${x}.o \$(OBJECTS) \$(LDFLAGS) \`cat librandombytes.lib\`"
         echo 
       fi
     done
+    echo
+
+    # try librandombytes
+    echo "haslibrandombytes.h: trylibrandombytes.sh"
+    echo "	env CC=\$(CC) ./trylibrandombytes.sh && echo '#define HASLIBRANDOMBYTES 1' > haslibrandombytes.h || true > haslibrandombytes.h"
+    echo
+    echo "librandombytes.lib: trylibrandombytes.sh"
+    echo "	env CC=\$(CC) ./trylibrandombytes.sh && echo '-lrandombytes' > librandombytes.lib || true > librandombytes.lib"
     echo
 
     echo "install: dq dqcache dqcache-makekey dqcache-start"
@@ -65,7 +75,7 @@
     echo
 
     echo "clean:"
-    echo "	rm -f *.o *.out \$(BINARIES)"
+    echo "	rm -f *.o *.out \$(BINARIES) haslibrandombytes.h librandombytes.lib"
     echo 
 
   ) > Makefile

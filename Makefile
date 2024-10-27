@@ -37,7 +37,7 @@ byte.o: byte.c byte.h
 
 cache.o: cache.c alloc.h byte.h uint64_pack.h crypto_uint64.h \
  uint64_unpack.h uint32_pack.h crypto_uint32.h uint32_unpack.h seconds.h \
- die.h randombytes.h buffer.h open.h dns.h stralloc.h \
+ die.h randombytes.h haslibrandombytes.h buffer.h open.h dns.h stralloc.h \
  crypto_auth_siphash24.h e.h cache.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c cache.c
 
@@ -54,7 +54,8 @@ crypto_auth_siphash24.o: crypto_auth_siphash24.c siphash.h \
 crypto_box_curve25519xsalsa20poly1305.o: \
  crypto_box_curve25519xsalsa20poly1305.c crypto_core_hsalsa20.h \
  crypto_scalarmult_curve25519.h crypto_secretbox_xsalsa20poly1305.h \
- randombytes.h crypto_box_curve25519xsalsa20poly1305.h
+ randombytes.h haslibrandombytes.h \
+ crypto_box_curve25519xsalsa20poly1305.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c crypto_box_curve25519xsalsa20poly1305.c
 
 crypto_core_hsalsa20.o: crypto_core_hsalsa20.c salsa.h crypto_uint32.h \
@@ -120,9 +121,9 @@ dns_iptoname.o: dns_iptoname.c byte.h numtostr.h dns.h stralloc.h
 dns_keys.o: dns_keys.c crypto_stream_salsa20.h dns.h stralloc.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c dns_keys.c
 
-dns_nonce.o: dns_nonce.c nanoseconds.h randombytes.h uint32_pack.h \
- crypto_uint32.h uint32_unpack.h crypto_uint64.h byte.h purge.h dns.h \
- stralloc.h
+dns_nonce.o: dns_nonce.c nanoseconds.h randombytes.h haslibrandombytes.h \
+ uint32_pack.h crypto_uint32.h uint32_unpack.h crypto_uint64.h byte.h \
+ purge.h dns.h stralloc.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c dns_nonce.c
 
 dns_packet.o: dns_packet.c e.h byte.h dns.h stralloc.h
@@ -144,8 +145,8 @@ dns_sortip.o: dns_sortip.c randommod.h byte.h dns.h stralloc.h
 
 dns_transmit.o: dns_transmit.c alloc.h milliseconds.h xsocket.h hasipv6.h \
  e.h byte.h uint16_pack_big.h crypto_uint16.h uint16_unpack_big.h \
- randombytes.h randommod.h case.h str.h dns.h stralloc.h \
- crypto_box_curve25519xsalsa20poly1305.h
+ randombytes.h haslibrandombytes.h randommod.h case.h str.h dns.h \
+ stralloc.h crypto_box_curve25519xsalsa20poly1305.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c dns_transmit.c
 
 dns_verbosity.o: dns_verbosity.c stralloc.h writeall.h iptostr.h \
@@ -154,21 +155,22 @@ dns_verbosity.o: dns_verbosity.c stralloc.h writeall.h iptostr.h \
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c dns_verbosity.c
 
 dq.o: dq.c dns.h stralloc.h strtonum.h case.h die.h e.h randombytes.h \
- byte.h printpacket.h writeall.h milliseconds.h str.h uint16_pack_big.h \
- crypto_uint16.h uint16_unpack_big.h portparse.h base32decode.h \
- hexdecode.h strtoip.h keyparse.h typeparse.h purge.h \
+ haslibrandombytes.h byte.h printpacket.h writeall.h milliseconds.h str.h \
+ uint16_pack_big.h crypto_uint16.h uint16_unpack_big.h portparse.h \
+ base32decode.h hexdecode.h strtoip.h keyparse.h typeparse.h purge.h \
  crypto_box_curve25519xsalsa20poly1305.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c dq.c
 
 dqcache.o: dqcache.c env.h byte.h xsocket.h hasipv6.h strtoip.h \
- randombytes.h crypto_uint64.h query.h dns.h stralloc.h crypto_uint32.h \
- die.h warn.h e.h numtostr.h strtonum.h cache.h response.h log.h roots.h \
- hexparse.h alloc.h milliseconds.h blocking.h uint16_pack_big.h \
- crypto_uint16.h uint16_unpack_big.h portparse.h droproot.h okclient.h \
- purge.h
+ randombytes.h haslibrandombytes.h crypto_uint64.h query.h dns.h \
+ stralloc.h crypto_uint32.h die.h warn.h e.h numtostr.h strtonum.h \
+ cache.h response.h log.h roots.h hexparse.h alloc.h milliseconds.h \
+ blocking.h uint16_pack_big.h crypto_uint16.h uint16_unpack_big.h \
+ portparse.h droproot.h okclient.h purge.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c dqcache.c
 
-dqcache-makekey.o: dqcache-makekey.c randombytes.h writeall.h
+dqcache-makekey.o: dqcache-makekey.c randombytes.h haslibrandombytes.h \
+ writeall.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c dqcache-makekey.c
 
 dqcache-start.o: dqcache-start.c numtostr.h strtonum.h e.h die.h
@@ -244,10 +246,10 @@ query.o: query.c e.h roots.h log.h crypto_uint64.h case.h cache.h byte.h \
  crypto_box_curve25519xsalsa20poly1305.h purge.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c query.c
 
-randombytes.o: randombytes.c randombytes.h
+randombytes.o: randombytes.c haslibrandombytes.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c randombytes.c
 
-randommod.o: randommod.c randombytes.h randommod.h
+randommod.o: randommod.c randombytes.h haslibrandombytes.h randommod.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c randommod.c
 
 response.o: response.c dns.h stralloc.h byte.h uint16_pack_big.h \
@@ -443,18 +445,24 @@ OBJECTS+=xsocket_tcp.o
 OBJECTS+=xsocket_type.o
 OBJECTS+=xsocket_udp.o
 
-dq: dq.o $(OBJECTS)
-	$(CC) $(CFLAGS) $(CPPFLAGS) -o dq dq.o $(OBJECTS) $(LDFLAGS)
+dq: dq.o $(OBJECTS) librandombytes.lib
+	$(CC) $(CFLAGS) $(CPPFLAGS) -o dq dq.o $(OBJECTS) $(LDFLAGS) `cat librandombytes.lib`
 
-dqcache: dqcache.o $(OBJECTS)
-	$(CC) $(CFLAGS) $(CPPFLAGS) -o dqcache dqcache.o $(OBJECTS) $(LDFLAGS)
+dqcache: dqcache.o $(OBJECTS) librandombytes.lib
+	$(CC) $(CFLAGS) $(CPPFLAGS) -o dqcache dqcache.o $(OBJECTS) $(LDFLAGS) `cat librandombytes.lib`
 
-dqcache-makekey: dqcache-makekey.o $(OBJECTS)
-	$(CC) $(CFLAGS) $(CPPFLAGS) -o dqcache-makekey dqcache-makekey.o $(OBJECTS) $(LDFLAGS)
+dqcache-makekey: dqcache-makekey.o $(OBJECTS) librandombytes.lib
+	$(CC) $(CFLAGS) $(CPPFLAGS) -o dqcache-makekey dqcache-makekey.o $(OBJECTS) $(LDFLAGS) `cat librandombytes.lib`
 
-dqcache-start: dqcache-start.o $(OBJECTS)
-	$(CC) $(CFLAGS) $(CPPFLAGS) -o dqcache-start dqcache-start.o $(OBJECTS) $(LDFLAGS)
+dqcache-start: dqcache-start.o $(OBJECTS) librandombytes.lib
+	$(CC) $(CFLAGS) $(CPPFLAGS) -o dqcache-start dqcache-start.o $(OBJECTS) $(LDFLAGS) `cat librandombytes.lib`
 
+
+haslibrandombytes.h: trylibrandombytes.sh
+	env CC=$(CC) ./trylibrandombytes.sh && echo '#define HASLIBRANDOMBYTES 1' > haslibrandombytes.h || true > haslibrandombytes.h
+
+librandombytes.lib: trylibrandombytes.sh
+	env CC=$(CC) ./trylibrandombytes.sh && echo '-lrandombytes' > librandombytes.lib || true > librandombytes.lib
 
 install: dq dqcache dqcache-makekey dqcache-start
 	install -D -m 0755 dq $(DESTDIR)/usr/bin/dq
@@ -463,5 +471,5 @@ install: dq dqcache dqcache-makekey dqcache-start
 	install -D -m 0755 dqcache-start $(DESTDIR)/usr/sbin/dqcache-start
 
 clean:
-	rm -f *.o *.out $(BINARIES)
+	rm -f *.o *.out $(BINARIES) haslibrandombytes.h librandombytes.lib
 
