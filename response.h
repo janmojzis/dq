@@ -6,16 +6,16 @@
 extern unsigned char response[];
 extern long long response_len;
 
-extern int response_query(const unsigned char *, const unsigned char *, const unsigned char *);
+extern int response_query(const unsigned char *, const unsigned char [2], const unsigned char [2]);
 extern void response_nxdomain(void);
 extern void response_servfail(void);
-extern void response_id(const unsigned char *);
+extern void response_id(const unsigned char [2]);
 extern void response_tc(void);
 
 extern int response_addbytes(const unsigned char *, long long);
 extern int response_addname(const unsigned char *);
 extern void response_hidettl(void);
-extern int response_rstart(const unsigned char *, const unsigned char *, crypto_uint32);
+extern int response_rstart(const unsigned char *, const unsigned char [2], crypto_uint32);
 extern void response_rfinish(int);
 
 #define RESPONSE_ANSWER 6
