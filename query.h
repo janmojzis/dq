@@ -27,7 +27,7 @@ struct query {
   struct dns_transmit dt;
 } ;
 
-extern int query_start(struct query *,unsigned char *,unsigned char *,unsigned char *,unsigned char *);
+extern int query_start(struct query *,unsigned char *,unsigned char [2],unsigned char [2],unsigned char [32]);
 extern void query_io(struct query *,struct pollfd *,long long *);
 extern int query_get(struct query *,struct pollfd *,long long);
 
