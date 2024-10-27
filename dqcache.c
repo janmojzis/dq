@@ -359,12 +359,13 @@ static void doit(void) {
     tcp53io->fd = tcp53;
     tcp53io->events = POLLIN;
 
-    for (j = 0;j < MAXUDP;++j)
+    for (j = 0;j < MAXUDP;++j) {
       if (u[j].active) {
         u[j].io = io + iolen++;
         query_io(&u[j].q,u[j].io,&deadline);
       }
-    for (j = 0;j < MAXTCP;++j)
+    }
+    for (j = 0;j < MAXTCP;++j) {
       if (t[j].active) {
         t[j].io = io + iolen++;
         if (t[j].state == 0)
@@ -375,10 +376,11 @@ static void doit(void) {
           t[j].io->events = (t[j].state > 0) ? POLLIN : POLLOUT;
         }
       }
+    }
 
-      timeout = deadline - stamp;
-      if (timeout < 0) timeout = 10;
-      poll(io, iolen, timeout);
+    timeout = deadline - stamp;
+    if (timeout < 0) timeout = 10;
+    poll(io, iolen, timeout);
 
     for (j = 0;j < MAXUDP;++j)
       if (u[j].active) {
