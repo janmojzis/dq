@@ -40,24 +40,29 @@ long long dns_packet_getname(const unsigned char *buf, long long len, long long 
     long long namelen = 0;
 
     for (;;) {
-        if (pos >= len) goto PROTO; ch = buf[pos++];
+        if (pos >= len) goto PROTO;
+        ch = buf[pos++];
         if (++loop >= 1000) goto PROTO;
 
         if (state > 0) {
-            if (namelen + 1 > sizeof name) goto PROTO; name[namelen++] = ch;
+            if (namelen + 1 > sizeof name) goto PROTO;
+            name[namelen++] = ch;
             --state;
         }
         else {
             while (ch >= 192) {
                 where = ch; where -= 192; where <<= 8;
-                if (pos >= len) goto PROTO; ch = buf[pos++];
+                if (pos >= len) goto PROTO;
+                ch = buf[pos++];
                 if (!firstcompress) firstcompress = pos;
                 pos = where + ch;
-                if (pos >= len) goto PROTO; ch = buf[pos++];
+                if (pos >= len) goto PROTO;
+                ch = buf[pos++];
                 if (++loop >= 1000) goto PROTO;
             }
             if (ch >= 64) goto PROTO;
-            if (namelen + 1 > sizeof name) goto PROTO; name[namelen++] = ch;
+            if (namelen + 1 > sizeof name) goto PROTO;
+            name[namelen++] = ch;
             if (!ch) break;
             state = ch;
         }
@@ -85,24 +90,29 @@ long long dns_packet_getname_static(const unsigned char *buf, long long len, lon
     byte_zero(name, 256);
 
     for (;;) {
-        if (pos >= len) goto PROTO; ch = buf[pos++];
+        if (pos >= len) goto PROTO;
+        ch = buf[pos++];
         if (++loop >= 1000) goto PROTO;
 
         if (state > 0) {
-            if (namelen + 1 > 255) goto PROTO; name[namelen++] = ch;
+            if (namelen + 1 > 255) goto PROTO;
+            name[namelen++] = ch;
             --state;
         }
         else {
             while (ch >= 192) {
                 where = ch; where -= 192; where <<= 8;
-                if (pos >= len) goto PROTO; ch = buf[pos++];
+                if (pos >= len) goto PROTO;
+                ch = buf[pos++];
                 if (!firstcompress) firstcompress = pos;
                 pos = where + ch;
-                if (pos >= len) goto PROTO; ch = buf[pos++];
+                if (pos >= len) goto PROTO;
+                ch = buf[pos++];
                 if (++loop >= 1000) goto PROTO;
             }
             if (ch >= 64) goto PROTO;
-            if (namelen + 1 > 255) goto PROTO; name[namelen++] = ch;
+            if (namelen + 1 > 255) goto PROTO;
+            name[namelen++] = ch;
             if (!ch) break;
             state = ch;
         }
