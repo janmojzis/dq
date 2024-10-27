@@ -404,7 +404,7 @@ static int nexttcp(struct dns_transmit *d) {
     return thistcp(d);
 }
 
-int dns_transmit_startext(struct dns_transmit *d, const unsigned char servers[256], int flagrecursive, int flagtcp, int flagipv4only, const unsigned char *q, const unsigned char qtype[2], const unsigned char localip[32], const unsigned char port[2], const unsigned char keys[512], const unsigned char pk[32], const unsigned char *suffix) {
+int dns_transmit_startext(struct dns_transmit *d, const unsigned char servers[256], int flagrecursive, int flagtcp, int flagipv4only, const unsigned char *q, const unsigned char qtype[2], const unsigned char localip[32], const unsigned char port[2], const unsigned char keys[528], const unsigned char pk[32], const unsigned char *suffix) {
 
     long long len, suffixlen = 0;
 
