@@ -24,11 +24,11 @@ trap "cleanup" EXIT TERM INT
   echo '}'
 ) > trylibrandombytes.c
 
-${CC} -o trylibrandombytes trylibrandombytes.c -lrandombytes
+${CC} -o trylibrandombytes trylibrandombytes.c -lrandombytes 1>/dev/null 2>&1
 if [ $? -eq 0 ]; then
-  echo "librandombytes detected"
+  echo "trylibrandombytes: librandombytes detected"
   exit 0
 else
-  echo "librandombytes not detected"
+  echo "trylibrandombytes: librandombytes not detected"
   exit 1
 fi
