@@ -242,7 +242,7 @@ printrecord.o: printrecord.c uint16_unpack_big.h crypto_uint16.h \
 query.o: query.c e.h roots.h log.h crypto_uint64.h case.h cache.h byte.h \
  dns.h stralloc.h uint32_unpack_big.h crypto_uint32.h uint16_unpack_big.h \
  crypto_uint16.h alloc.h response.h query.h strtoip.h iptostr.h xsocket.h \
- hasipv6.h crypto_scalarmult_curve25519.h \
+ hasipv6.h crypto_scalarmult_curve25519.h haslib25519.h \
  crypto_box_curve25519xsalsa20poly1305.h purge.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c query.c
 
