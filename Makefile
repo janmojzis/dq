@@ -1,6 +1,7 @@
 CC?=cc
 CFLAGS+=-O3 -fno-strict-overflow -fwrapv -Wno-parentheses -Wundef -Wunused-value -Wmissing-prototypes -Wmissing-declarations -Wwrite-strings -Wdeclaration-after-statement -Wshadow -Wno-unused-function -Wno-overlength-strings -Wno-long-long -Wall -pedantic
 LDFLAGS?=
+CPPFLAGS?=
 DESTDIR?=
 
 BINARIES=dq
@@ -130,7 +131,7 @@ dns_packet.o: dns_packet.c e.h byte.h dns.h stralloc.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c dns_packet.c
 
 dns_rcip.o: dns_rcip.c milliseconds.h openreadclose.h stralloc.h byte.h \
- env.h strtoip.h strtomultiip.h hasipv6.h xsocket.h dns.h
+ env.h strtoip.h strtomultiip.h xsocket.h dns.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c dns_rcip.c
 
 dns_rcrw.o: dns_rcrw.c milliseconds.h env.h byte.h str.h openreadclose.h \
@@ -143,8 +144,8 @@ dns_resolve.o: dns_resolve.c milliseconds.h byte.h e.h dns.h stralloc.h
 dns_sortip.o: dns_sortip.c randommod.h byte.h dns.h stralloc.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c dns_sortip.c
 
-dns_transmit.o: dns_transmit.c alloc.h milliseconds.h xsocket.h hasipv6.h \
- e.h byte.h uint16_pack_big.h crypto_uint16.h uint16_unpack_big.h \
+dns_transmit.o: dns_transmit.c alloc.h milliseconds.h xsocket.h e.h \
+ byte.h uint16_pack_big.h crypto_uint16.h uint16_unpack_big.h \
  randombytes.h haslibrandombytes.h randommod.h case.h str.h dns.h \
  stralloc.h crypto_box_curve25519xsalsa20poly1305.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c dns_transmit.c
@@ -161,12 +162,12 @@ dq.o: dq.c dns.h stralloc.h strtonum.h case.h die.h e.h randombytes.h \
  crypto_box_curve25519xsalsa20poly1305.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c dq.c
 
-dqcache.o: dqcache.c env.h byte.h xsocket.h hasipv6.h strtoip.h \
- randombytes.h haslibrandombytes.h crypto_uint64.h query.h dns.h \
- stralloc.h crypto_uint32.h die.h warn.h e.h numtostr.h strtonum.h \
- cache.h response.h log.h roots.h hexparse.h alloc.h milliseconds.h \
- blocking.h uint16_pack_big.h crypto_uint16.h uint16_unpack_big.h \
- portparse.h droproot.h okclient.h purge.h
+dqcache.o: dqcache.c env.h byte.h xsocket.h strtoip.h randombytes.h \
+ haslibrandombytes.h crypto_uint64.h query.h dns.h stralloc.h \
+ crypto_uint32.h die.h warn.h e.h numtostr.h strtonum.h cache.h \
+ response.h log.h roots.h hexparse.h alloc.h milliseconds.h blocking.h \
+ uint16_pack_big.h crypto_uint16.h uint16_unpack_big.h portparse.h \
+ droproot.h okclient.h purge.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c dqcache.c
 
 dqcache-makekey.o: dqcache-makekey.c randombytes.h haslibrandombytes.h \
@@ -242,7 +243,7 @@ printrecord.o: printrecord.c uint16_unpack_big.h crypto_uint16.h \
 query.o: query.c e.h roots.h log.h crypto_uint64.h case.h cache.h byte.h \
  dns.h stralloc.h uint32_unpack_big.h crypto_uint32.h uint16_unpack_big.h \
  crypto_uint16.h alloc.h response.h query.h strtoip.h iptostr.h xsocket.h \
- hasipv6.h crypto_scalarmult_curve25519.h haslib25519.h \
+ crypto_scalarmult_curve25519.h haslib25519.h \
  crypto_box_curve25519xsalsa20poly1305.h purge.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c query.c
 
@@ -325,31 +326,31 @@ warn.o: warn.c writeall.h warn.h
 writeall.o: writeall.c e.h writeall.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c writeall.c
 
-xsocket_accept.o: xsocket_accept.c e.h byte.h hasipv6.h xsocket.h
+xsocket_accept.o: xsocket_accept.c e.h byte.h xsocket.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c xsocket_accept.c
 
-xsocket_bind.o: xsocket_bind.c e.h byte.h hasipv6.h xsocket.h
+xsocket_bind.o: xsocket_bind.c e.h byte.h xsocket.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c xsocket_bind.c
 
-xsocket_conn.o: xsocket_conn.c e.h byte.h hasipv6.h xsocket.h
+xsocket_conn.o: xsocket_conn.c e.h byte.h xsocket.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c xsocket_conn.c
 
-xsocket_listen.o: xsocket_listen.c e.h xsocket.h hasipv6.h
+xsocket_listen.o: xsocket_listen.c e.h xsocket.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c xsocket_listen.c
 
-xsocket_recv.o: xsocket_recv.c e.h byte.h hasipv6.h xsocket.h
+xsocket_recv.o: xsocket_recv.c e.h byte.h xsocket.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c xsocket_recv.c
 
-xsocket_send.o: xsocket_send.c e.h byte.h hasipv6.h xsocket.h
+xsocket_send.o: xsocket_send.c e.h byte.h xsocket.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c xsocket_send.c
 
-xsocket_tcp.o: xsocket_tcp.c hasipv6.h blocking.h e.h xsocket.h
+xsocket_tcp.o: xsocket_tcp.c blocking.h e.h xsocket.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c xsocket_tcp.c
 
-xsocket_type.o: xsocket_type.c byte.h xsocket.h hasipv6.h
+xsocket_type.o: xsocket_type.c byte.h xsocket.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c xsocket_type.c
 
-xsocket_udp.o: xsocket_udp.c hasipv6.h blocking.h e.h xsocket.h
+xsocket_udp.o: xsocket_udp.c blocking.h e.h xsocket.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c xsocket_udp.c
 
 OBJECTS=alloc.o
@@ -445,30 +446,30 @@ OBJECTS+=xsocket_tcp.o
 OBJECTS+=xsocket_type.o
 OBJECTS+=xsocket_udp.o
 
-dq: dq.o $(OBJECTS) librandombytes.lib lib25519.lib
-	$(CC) $(CFLAGS) $(CPPFLAGS) -o dq dq.o $(OBJECTS) $(LDFLAGS) `cat librandombytes.lib` `cat lib25519.lib`
+dq: dq.o $(OBJECTS) libs
+	$(CC) $(CFLAGS) $(CPPFLAGS) -o dq dq.o $(OBJECTS) $(LDFLAGS) `cat libs`
 
-dqcache: dqcache.o $(OBJECTS) librandombytes.lib lib25519.lib
-	$(CC) $(CFLAGS) $(CPPFLAGS) -o dqcache dqcache.o $(OBJECTS) $(LDFLAGS) `cat librandombytes.lib` `cat lib25519.lib`
+dqcache: dqcache.o $(OBJECTS) libs
+	$(CC) $(CFLAGS) $(CPPFLAGS) -o dqcache dqcache.o $(OBJECTS) $(LDFLAGS) `cat libs`
 
-dqcache-makekey: dqcache-makekey.o $(OBJECTS) librandombytes.lib lib25519.lib
-	$(CC) $(CFLAGS) $(CPPFLAGS) -o dqcache-makekey dqcache-makekey.o $(OBJECTS) $(LDFLAGS) `cat librandombytes.lib` `cat lib25519.lib`
+dqcache-makekey: dqcache-makekey.o $(OBJECTS) libs
+	$(CC) $(CFLAGS) $(CPPFLAGS) -o dqcache-makekey dqcache-makekey.o $(OBJECTS) $(LDFLAGS) `cat libs`
 
-dqcache-start: dqcache-start.o $(OBJECTS) librandombytes.lib lib25519.lib
-	$(CC) $(CFLAGS) $(CPPFLAGS) -o dqcache-start dqcache-start.o $(OBJECTS) $(LDFLAGS) `cat librandombytes.lib` `cat lib25519.lib`
+dqcache-start: dqcache-start.o $(OBJECTS) libs
+	$(CC) $(CFLAGS) $(CPPFLAGS) -o dqcache-start dqcache-start.o $(OBJECTS) $(LDFLAGS) `cat libs`
 
 
-haslibrandombytes.h: trylibrandombytes.sh
-	env CC=$(CC) ./trylibrandombytes.sh && echo '#define HASLIBRANDOMBYTES 1' > haslibrandombytes.h || true > haslibrandombytes.h
+haslib25519.h: tryfeature.sh haslib25519.c libs
+	env CC="$(CC)" CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS) `cat libs`" ./tryfeature.sh haslib25519.c >haslib25519.h 2>haslib25519.log
+	cat haslib25519.h
 
-librandombytes.lib: trylibrandombytes.sh
-	env CC=$(CC) ./trylibrandombytes.sh && echo '-lrandombytes' > librandombytes.lib || true > librandombytes.lib
+haslibrandombytes.h: tryfeature.sh haslibrandombytes.c libs
+	env CC="$(CC)" CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS) `cat libs`" ./tryfeature.sh haslibrandombytes.c >haslibrandombytes.h 2>haslibrandombytes.log
+	cat haslibrandombytes.h
 
-haslib25519.h: trylib25519.sh
-	env CC=$(CC) ./trylib25519.sh && echo '#define HASLIB25519 1' > haslib25519.h || true > haslib25519.h
-
-lib25519.lib: trylib25519.sh
-	env CC=$(CC) ./trylib25519.sh && echo '-l25519' > lib25519.lib || true > lib25519.lib
+libs: trylibs.sh
+	env CC="$(CC)" ./trylibs.sh -lsocket -lnsl -lrandombytes -l25519 >libs
+	cat libs
 
 install: dq dqcache dqcache-makekey dqcache-start
 	install -D -m 0755 dq $(DESTDIR)/usr/bin/dq
@@ -477,5 +478,5 @@ install: dq dqcache dqcache-makekey dqcache-start
 	install -D -m 0755 dqcache-start $(DESTDIR)/usr/sbin/dqcache-start
 
 clean:
-	rm -f *.o *.out $(BINARIES) haslibrandombytes.h librandombytes.lib haslib25519.h lib25519.lib
+	rm -f *.log has*.h $(OBJECTS) $(BINARIES) libs
 

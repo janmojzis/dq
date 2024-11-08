@@ -10,7 +10,6 @@ Public domain.
 #include <netinet/in.h>
 #include "e.h"
 #include "byte.h"
-#include "hasipv6.h"
 #include "xsocket.h"
 
 static int xsocket_bind6(int fd, const unsigned char *ip, const unsigned char *port, long long id) {

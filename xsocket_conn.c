@@ -11,7 +11,6 @@ Public domain.
 #include <unistd.h>
 #include "e.h"
 #include "byte.h"
-#include "hasipv6.h"
 #include "xsocket.h"
 
 static int xsocket_connect6(int s, const unsigned char *ip, const unsigned char *port, long long id) {

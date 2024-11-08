@@ -5,7 +5,6 @@
 #include "stralloc.h"
 #include "strtoip.h"
 #include "strtomultiip.h"
-#include "hasipv6.h"
 #include "xsocket.h"
 #include "dns.h"
 
@@ -55,10 +54,8 @@ static int init(unsigned char ip[256]) {
     }
 
     if (!iplen) {
-#ifdef HASIPV6
         byte_copy(ip + iplen, 16, "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\1");
         iplen += 16;
-#endif
         byte_copy(ip + iplen, 16, "\0\0\0\0\0\0\0\0\0\0\377\377\177\0\0\1");
         iplen += 16;
     }
