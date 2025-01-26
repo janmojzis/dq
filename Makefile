@@ -193,6 +193,18 @@ hexdecode.o: hexdecode.c hexdecode.h
 hexparse.o: hexparse.c hexparse.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c hexparse.c
 
+int16_optblocker.o: int16_optblocker.c cryptoint/crypto_int16.h
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c int16_optblocker.c
+
+int32_optblocker.o: int32_optblocker.c cryptoint/crypto_int32.h
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c int32_optblocker.c
+
+int64_optblocker.o: int64_optblocker.c cryptoint/crypto_int64.h
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c int64_optblocker.c
+
+int8_optblocker.o: int8_optblocker.c cryptoint/crypto_int8.h
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c int8_optblocker.c
+
 iptostr.o: iptostr.c byte.h iptostr.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c iptostr.c
 
@@ -392,6 +404,10 @@ OBJECTS+=e.o
 OBJECTS+=env.o
 OBJECTS+=hexdecode.o
 OBJECTS+=hexparse.o
+OBJECTS+=int16_optblocker.o
+OBJECTS+=int32_optblocker.o
+OBJECTS+=int64_optblocker.o
+OBJECTS+=int8_optblocker.o
 OBJECTS+=iptostr.o
 OBJECTS+=keyparse.o
 OBJECTS+=log.o
