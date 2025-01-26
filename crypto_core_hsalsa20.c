@@ -1,6 +1,5 @@
 #include "salsa.h"
 #include "crypto_uint32.h"
-#include "cleanup.h"
 #include "crypto_core_hsalsa20.h"
 
 int crypto_core_hsalsa20_tinynacl(unsigned char *o, const unsigned char *nn, const unsigned char *kk, const unsigned char *cc) {

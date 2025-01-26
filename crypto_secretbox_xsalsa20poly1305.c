@@ -1,6 +1,5 @@
 #include "crypto_onetimeauth_poly1305.h"
 #include "crypto_stream_xsalsa20.h"
-#include "cleanup.h"
 #include "crypto_secretbox_xsalsa20poly1305.h"
 
 int crypto_secretbox_xsalsa20poly1305_tinynacl(unsigned char *c, const unsigned char *m, unsigned long long mlen, const unsigned char *n, const unsigned char *k) {
@@ -22,6 +21,5 @@ int crypto_secretbox_xsalsa20poly1305_tinynacl_open(unsigned char *m, const unsi
     if (crypto_onetimeauth_poly1305_verify(c + 16, c + 32, clen - 32, subkey) != 0) return -1;
     crypto_stream_xsalsa20_xor(m, c, clen, n, k);
     for (i = 0; i < 32; ++i) m[i] = 0;
-    cleanup(subkey);
     return 0;
 }

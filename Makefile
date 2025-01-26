@@ -45,9 +45,6 @@ cache.o: cache.c alloc.h byte.h uint64_pack.h cryptoint/crypto_uint64.h \
 case.o: case.c case.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c case.c
 
-cleanup.o: cleanup.c cleanup.h
-	$(CC) $(CFLAGS) $(CPPFLAGS) -c cleanup.c
-
 crypto_auth_siphash24.o: crypto_auth_siphash24.c siphash.h \
  crypto_verify_8.h crypto_auth_siphash24.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c crypto_auth_siphash24.c
@@ -60,7 +57,7 @@ crypto_box_curve25519xsalsa20poly1305.o: \
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c crypto_box_curve25519xsalsa20poly1305.c
 
 crypto_core_hsalsa20.o: crypto_core_hsalsa20.c salsa.h \
- cryptoint/crypto_uint32.h cleanup.h crypto_core_hsalsa20.h
+ cryptoint/crypto_uint32.h crypto_core_hsalsa20.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c crypto_core_hsalsa20.c
 
 crypto_onetimeauth_poly1305.o: crypto_onetimeauth_poly1305.c \
@@ -74,7 +71,7 @@ crypto_scalarmult_curve25519.o: crypto_scalarmult_curve25519.c \
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c crypto_scalarmult_curve25519.c
 
 crypto_secretbox_xsalsa20poly1305.o: crypto_secretbox_xsalsa20poly1305.c \
- crypto_onetimeauth_poly1305.h crypto_stream_xsalsa20.h cleanup.h \
+ crypto_onetimeauth_poly1305.h crypto_stream_xsalsa20.h \
  crypto_secretbox_xsalsa20poly1305.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c crypto_secretbox_xsalsa20poly1305.c
 
@@ -83,7 +80,7 @@ crypto_stream_salsa20.o: crypto_stream_salsa20.c salsa.h \
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c crypto_stream_salsa20.c
 
 crypto_stream_xsalsa20.o: crypto_stream_xsalsa20.c crypto_core_hsalsa20.h \
- crypto_stream_salsa20.h cleanup.h crypto_stream_xsalsa20.h
+ crypto_stream_salsa20.h crypto_stream_xsalsa20.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c crypto_stream_xsalsa20.c
 
 crypto_verify_16.o: crypto_verify_16.c verify.h crypto_verify_16.h
@@ -355,7 +352,6 @@ OBJECTS+=buffer_write.o
 OBJECTS+=byte.o
 OBJECTS+=cache.o
 OBJECTS+=case.o
-OBJECTS+=cleanup.o
 OBJECTS+=crypto_auth_siphash24.o
 OBJECTS+=crypto_box_curve25519xsalsa20poly1305.o
 OBJECTS+=crypto_core_hsalsa20.o
