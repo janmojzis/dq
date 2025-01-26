@@ -8,7 +8,7 @@
 #define crypto_int8 int8_t
 #define crypto_int8_unsigned uint8_t
 
-#define crypto_int8_optblocker tinyssh_int8_optblocker
+#define crypto_int8_optblocker dq_int8_optblocker
 extern volatile crypto_int8 crypto_int8_optblocker;
 
 __attribute__((unused))

@@ -8,7 +8,7 @@
 #define crypto_int32 int32_t
 #define crypto_int32_unsigned uint32_t
 
-#define crypto_int32_optblocker tinyssh_int32_optblocker
+#define crypto_int32_optblocker dq_int32_optblocker
 extern volatile crypto_int32 crypto_int32_optblocker;
 
 __attribute__((unused))

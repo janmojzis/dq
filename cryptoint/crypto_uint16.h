@@ -8,7 +8,7 @@
 #define crypto_uint16 uint16_t
 #define crypto_uint16_signed int16_t
 
-#define crypto_uint16_signed_optblocker tinyssh_uint16_signed_optblocker
+#define crypto_uint16_signed_optblocker dq_uint16_signed_optblocker
 extern volatile crypto_uint16_signed crypto_uint16_signed_optblocker;
 
 __attribute__((unused))

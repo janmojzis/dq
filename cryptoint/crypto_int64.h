@@ -8,7 +8,7 @@
 #define crypto_int64 int64_t
 #define crypto_int64_unsigned uint64_t
 
-#define crypto_int64_optblocker tinyssh_int64_optblocker
+#define crypto_int64_optblocker dq_int64_optblocker
 extern volatile crypto_int64 crypto_int64_optblocker;
 
 __attribute__((unused))
