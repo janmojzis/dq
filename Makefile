@@ -65,11 +65,13 @@ crypto_core_hsalsa20.o: crypto_core_hsalsa20.c salsa.h \
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c crypto_core_hsalsa20.c
 
 crypto_onetimeauth_poly1305.o: crypto_onetimeauth_poly1305.c \
- crypto_onetimeauth_poly1305.h
+ cryptoint/crypto_int16.h cryptoint/crypto_uint32.h \
+ cryptoint/crypto_uint64.h crypto_onetimeauth_poly1305.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c crypto_onetimeauth_poly1305.c
 
 crypto_scalarmult_curve25519.o: crypto_scalarmult_curve25519.c \
- crypto_scalarmult_curve25519.h haslib25519.h
+ crypto_scalarmult_curve25519.h haslib25519.h cryptoint/crypto_uint8.h \
+ cryptoint/crypto_uint32.h cryptoint/crypto_uint64.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c crypto_scalarmult_curve25519.c
 
 crypto_secretbox_xsalsa20poly1305.o: crypto_secretbox_xsalsa20poly1305.c \
