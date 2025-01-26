@@ -2,8 +2,7 @@
 - based on crypto_auth/siphash24/little2 from supercop-20140622
 */
 
-#include "uint64_pack.h"
-#include "uint64_unpack.h"
+#include "crypto_uint64.h"
 #include "siphash.h"
 
 #define ROTATE(x,b) x = (x << b) | (x >> (64 - b))
@@ -26,8 +25,8 @@ int siphash(unsigned char *out, const unsigned char *in, unsigned long long inle
     unsigned char block[8];
     long long i;
 
-    v0 = v2 = uint64_unpack(k + 0);
-    v1 = v3 = uint64_unpack(k + 8);
+    v0 = v2 = crypto_uint64_load(k + 0);
+    v1 = v3 = crypto_uint64_load(k + 8);
 
     v0 ^= 0x736f6d6570736575;
     v1 ^= 0x646f72616e646f6d;
@@ -35,7 +34,7 @@ int siphash(unsigned char *out, const unsigned char *in, unsigned long long inle
     v3 ^= 0x7465646279746573;
 
     while (inlen >= 8) {
-        crypto_uint64 mi = uint64_unpack(in);
+        crypto_uint64 mi = crypto_uint64_load(in);
         in += 8;
         v3 ^= mi;
         for (i = 0; i < rounds; ++i) ROUND
@@ -46,7 +45,7 @@ int siphash(unsigned char *out, const unsigned char *in, unsigned long long inle
     for (i = 0; i < 7;     ++i) block[i] = 0;
     for (i = 0; i < inlen; ++i) block[i] = in[i];
     block[7] = lastblock;
-    lastblock = uint64_unpack(block);
+    lastblock = crypto_uint64_load(block);
 
     v3 ^= lastblock;
     for (i = 0; i < rounds; ++i) ROUND
@@ -55,6 +54,6 @@ int siphash(unsigned char *out, const unsigned char *in, unsigned long long inle
     v2 ^= 0xff;
     for (i = 0; i < finalrounds; ++i) ROUND
 
-    uint64_pack(out, (v0 ^ v1) ^ (v2 ^ v3));
+    crypto_uint64_store(out, (v0 ^ v1) ^ (v2 ^ v3));
     return 0;
 }

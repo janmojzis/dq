@@ -4,8 +4,7 @@
 #include <stdio.h>
 #include "alloc.h"
 #include "byte.h"
-#include "uint64_pack.h"
-#include "uint64_unpack.h"
+#include "crypto_uint64.h"
 #include "crypto_uint32.h"
 #include "seconds.h"
 #include "die.h"
@@ -131,7 +130,7 @@ unsigned char *cache_get(const unsigned char *key, long long keylen, long long *
                 byte_copy(expirestr, 8, x + pos + 12);
                 *flags = expirestr[7];
                 expirestr[7] = 0;
-                xttl = uint64_unpack(expirestr) - seconds();
+                xttl = crypto_uint64_load(expirestr) - seconds();
                 if (xttl <= 0) return 0;
                 if (xttl > 604800) xttl = 604800;
                 *ttl = xttl;
@@ -196,7 +195,7 @@ void cache_set(const unsigned char *key, long long keylen, const unsigned char *
     set4(writer,pos ^ keyhash);
     set4(writer + 4, keylen);
     set4(writer + 8, datalen);
-    uint64_pack(x + writer + 12, seconds() + ttl);
+    crypto_uint64_store(x + writer + 12, seconds() + ttl);
     x[writer + 12 + 7] = flags;
     byte_copy(x + writer + 20, keylen, key);
     byte_copy(x + writer + 20 + keylen, datalen, data);
@@ -323,7 +322,7 @@ int cache_load(void) {
         byte_copy(expirestr, 8, p + pos + 8);
         flags = expirestr[7];
         expirestr[7] = 0;
-        expire = uint64_unpack(expirestr) - now;
+        expire = crypto_uint64_load(expirestr) - now;
         pos += 16;
         if (pos + keylen + datalen > len) break; /* missing data */
         if (expire > 0) {

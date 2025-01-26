@@ -8,8 +8,7 @@ Public domain.
 #include <sys/time.h>
 #include <sys/resource.h>
 #include "e.h"
-#include "uint64_pack.h"
-#include "uint64_unpack.h"
+#include "crypto_uint64.h"
 #include "byte.h"
 #include "purge.h"
 #include "alloc.h"
@@ -116,7 +115,7 @@ void *alloc(long long nn) {
 
     allocated += n;
     byte_zero(x, n);
-    uint64_pack(x, n);
+    crypto_uint64_store(x, n);
     x += ALLOC_ALIGNMENT;
     if (!ptr_add(x)) goto nomem;
     return (void *)x;
@@ -137,7 +136,7 @@ void alloc_free(void *xv) {
 
     if (!ptr_remove(x)) return;
     x -= ALLOC_ALIGNMENT;
-    n = uint64_unpack(x);
+    n = crypto_uint64_load(x);
     allocated -= n;
 
     purge(x, n);

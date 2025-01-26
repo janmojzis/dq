@@ -15,8 +15,7 @@ BINARIES+=dqcache-start
 
 all: $(BINARIES)
 
-alloc.o: alloc.c e.h uint64_pack.h cryptoint/crypto_uint64.h \
- uint64_unpack.h byte.h purge.h alloc.h
+alloc.o: alloc.c e.h cryptoint/crypto_uint64.h byte.h purge.h alloc.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c alloc.c
 
 base32decode.o: base32decode.c base32decode.h
@@ -40,8 +39,8 @@ buffer_write.o: buffer_write.c writeall.h buffer.h
 byte.o: byte.c byte.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c byte.c
 
-cache.o: cache.c alloc.h byte.h uint64_pack.h cryptoint/crypto_uint64.h \
- uint64_unpack.h cryptoint/crypto_uint32.h seconds.h die.h randombytes.h \
+cache.o: cache.c alloc.h byte.h cryptoint/crypto_uint64.h \
+ cryptoint/crypto_uint32.h seconds.h die.h randombytes.h \
  haslibrandombytes.h buffer.h open.h dns.h stralloc.h \
  crypto_auth_siphash24.h e.h cache.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c cache.c
@@ -283,8 +282,7 @@ salsa.o: salsa.c cryptoint/crypto_uint64.h cryptoint/crypto_uint32.h \
 seconds.o: seconds.c seconds.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c seconds.c
 
-siphash.o: siphash.c uint64_pack.h cryptoint/crypto_uint64.h \
- uint64_unpack.h siphash.h
+siphash.o: siphash.c cryptoint/crypto_uint64.h siphash.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c siphash.c
 
 stralloc.o: stralloc.c alloc.h e.h stralloc.h
@@ -314,13 +312,6 @@ uint32_optblocker.o: uint32_optblocker.c cryptoint/crypto_uint32.h
 
 uint64_optblocker.o: uint64_optblocker.c cryptoint/crypto_uint64.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c uint64_optblocker.c
-
-uint64_pack.o: uint64_pack.c uint64_pack.h cryptoint/crypto_uint64.h
-	$(CC) $(CFLAGS) $(CPPFLAGS) -c uint64_pack.c
-
-uint64_unpack.o: uint64_unpack.c uint64_unpack.h \
- cryptoint/crypto_uint64.h
-	$(CC) $(CFLAGS) $(CPPFLAGS) -c uint64_unpack.c
 
 uint8_optblocker.o: uint8_optblocker.c cryptoint/crypto_uint8.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c uint8_optblocker.c
@@ -440,8 +431,6 @@ OBJECTS+=typeparse.o
 OBJECTS+=uint16_optblocker.o
 OBJECTS+=uint32_optblocker.o
 OBJECTS+=uint64_optblocker.o
-OBJECTS+=uint64_pack.o
-OBJECTS+=uint64_unpack.o
 OBJECTS+=uint8_optblocker.o
 OBJECTS+=verify.o
 OBJECTS+=warn.o
