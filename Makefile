@@ -458,7 +458,7 @@ haslibrandombytes.h: tryfeature.sh haslibrandombytes.c libs
 	cat haslibrandombytes.h
 
 libs: trylibs.sh
-	env CC="$(CC)" ./trylibs.sh -lsocket -lnsl -lrandombytes -l25519 >libs
+	env CC="$(CC)" ./trylibs.sh -lsocket -lnsl -lrandombytes -l25519 >libs 2>libs.log
 	cat libs
 
 install: dq dqcache dqcache-makekey dqcache-start
