@@ -236,6 +236,9 @@ printrecord.o: printrecord.c cryptoint/crypto_uint16.h \
  iptostr.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c printrecord.c
 
+purge.o: purge.c purge.h
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c purge.c
+
 query.o: query.c e.h roots.h log.h cryptoint/crypto_uint64.h case.h \
  cache.h byte.h dns.h stralloc.h cryptoint/crypto_uint32.h \
  cryptoint/crypto_uint16.h alloc.h response.h query.h strtoip.h iptostr.h \
@@ -399,6 +402,7 @@ OBJECTS+=portparse.o
 OBJECTS+=porttostr.o
 OBJECTS+=printpacket.o
 OBJECTS+=printrecord.o
+OBJECTS+=purge.o
 OBJECTS+=query.o
 OBJECTS+=randombytes.o
 OBJECTS+=randommod.o
