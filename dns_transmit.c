@@ -4,8 +4,7 @@
 #include "xsocket.h"
 #include "e.h"
 #include "byte.h"
-#include "uint16_pack_big.h"
-#include "uint16_unpack_big.h"
+#include "crypto_uint16.h"
 #include "randombytes.h"
 #include "randommod.h"
 #include "case.h"
@@ -47,7 +46,7 @@ static void regularquery(struct dns_transmit *d) {
     len = dns_domain_length(d->name) + d->paddinglen;
     d->querylen = len + 18;
 
-    uint16_pack_big(d->query, d->querylen - 2);
+    crypto_uint16_store_bigendian(d->query, d->querylen - 2);
     randombytes(d->id, 2);
     basequery(d, d->query + 2);
     d->name = d->query + 14;
@@ -74,7 +73,7 @@ static void streamlinedquery(struct dns_transmit *d) {
     basequery(d, d->query + 38 + 32);
     crypto_box_curve25519xsalsa20poly1305_afternm(d->query + 38, d->query + 38, len + 48, nonce, DNS_KEYPTR(d));
 
-    uint16_pack_big(d->query, d->querylen - 2);
+    crypto_uint16_store_bigendian(d->query, d->querylen - 2);
     byte_copy(d->query + 2, 8, magicq);
     byte_copy(d->query + 10, 32, d->pk);
     byte_copy(d->query + 42, 12, nonce);
@@ -106,7 +105,7 @@ static void txtquery(struct dns_transmit *d) {
     byte_copyr(d->query + d->querylen - len - 32, len + 32, d->query + 16);
     byte_copy(d->query + d->querylen - len - 44, 12, nonce);
 
-    uint16_pack_big(d->query, d->querylen - 2);
+    crypto_uint16_store_bigendian(d->query, d->querylen - 2);
     randombytes(d->query + 2, 2);
     byte_copy(d->query + 4, 10, "\0\0\0\1\0\0\0\0\0\0");
     dns_base32_encodebytes(d->query + 14,d->query + d->querylen - len - 44, len + 44);
@@ -165,7 +164,7 @@ static int getquery(const struct dns_transmit *d, unsigned char *buf, long long 
 
     pos = dns_packet_copy(buf, len, pos, out, 16); if (!pos) return 1;
     if (!byte_isequal(out, 14, "\0\20\0\1\300\14\0\20\0\1\0\0\0\0")) return 1;
-    datalen = uint16_unpack_big(out + 14);
+    datalen = crypto_uint16_load_bigendian(out + 14);
     if (datalen > len - pos) return 1;
 
     j = 4;
@@ -271,7 +270,7 @@ static int randombind(struct dns_transmit *d) {
     if (d->s1type == XSOCKET_V6) pos = 16;
 
     for (j = 0;j < 10;++j) {
-        uint16_pack_big(port, randommod(64510) + 1025);
+        crypto_uint16_store_bigendian(port, randommod(64510) + 1025);
         if (xsocket_bind(d->s1 - 1, d->s1type, d->localip + pos, port, d->scope_id) == 0) return 0;
     }
     byte_zero(port, 2);
@@ -449,7 +448,7 @@ int dns_transmit_startext(struct dns_transmit *d, const unsigned char servers[25
     d->suffix = suffix;
 
     if (!port) {
-        uint16_pack_big(d->port, 53);
+        crypto_uint16_store_bigendian(d->port, 53);
     }
     else {
         byte_copy(d->port, 2, port);

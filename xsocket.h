@@ -1,7 +1,7 @@
 #ifndef _XSOCKET_H____
 #define _XSOCKET_H____
 
-#include "hasipv6.h"
+#define HASIPV6 1
 
 #define XSOCKET_V4 4
 #define XSOCKET_V6 6

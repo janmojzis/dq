@@ -3,13 +3,15 @@
 (
   (
     echo "CC?=cc"
-    echo "CFLAGS+=-O3 -fno-strict-overflow -fwrapv -Wno-parentheses -Wundef -Wunused-value -Wmissing-prototypes -Wmissing-declarations -Wwrite-strings -Wdeclaration-after-statement -Wshadow -Wno-unused-function -Wno-overlength-strings -Wno-long-long -Wall -pedantic"
+    echo "CFLAGS+=-O3 -fno-strict-overflow -fwrapv -Wno-parentheses -Wundef -Wunused-value -Wmissing-prototypes -Wmissing-declarations -Wwrite-strings -Wdeclaration-after-statement -Wshadow -Wno-unused-function -Wno-overlength-strings -Wno-long-long -Wall -pedantic -Icryptoint"
     echo "LDFLAGS?="
+    echo "CPPFLAGS?="
     echo "DESTDIR?="
     echo 
 
+    # binaries
     i=0
-    for file in `ls *.c`; do
+    for file in `ls -1 *.c | grep -v '^has'`; do
       if grep '^int main(' "${file}" >/dev/null; then
         x=`echo "${file}" | sed 's/\.c$//'`
         if [ $i -eq 0 ]; then
@@ -25,15 +27,21 @@
     echo "all: \$(BINARIES)"
     echo 
 
-    touch haslibrandombytes.h haslib25519.h
-    for file in `ls *.c`; do
+    for file in `ls -1 has*.c`; do
+      hfile=`echo ${file} | sed 's/\.c/.h/'`
+      touch "${hfile}"
+    done
+    for file in `ls -1 *.c | grep -v '^has'`; do
       (
-        gcc -MM "${file}"
+        gcc -Icryptoint -MM "${file}"
         echo "	\$(CC) \$(CFLAGS) \$(CPPFLAGS) -c ${file}"
         echo
       )
     done
-    rm -f haslibrandombytes.h haslib25519.h
+    for file in `ls -1 has*.c`; do
+      hfile=`echo ${file} | sed 's/\.c/.h/'`
+      rm -f "${hfile}"
+    done
 
     i=0
     for file in `ls *.c`; do
@@ -49,30 +57,29 @@
     done
     echo
 
-    for file in `ls *.c`; do
+    for file in `ls *.c | grep -v '^has'`; do
       if grep '^int main(' "${file}" >/dev/null; then
         x=`echo "${file}" | sed 's/\.c$//'`
-        echo "${x}: ${x}.o \$(OBJECTS) librandombytes.lib lib25519.lib"
-        echo "	\$(CC) \$(CFLAGS) \$(CPPFLAGS) -o ${x} ${x}.o \$(OBJECTS) \$(LDFLAGS) \`cat librandombytes.lib\` \`cat lib25519.lib\`"
+        echo "${x}: ${x}.o \$(OBJECTS) libs"
+        echo "	\$(CC) \$(CFLAGS) \$(CPPFLAGS) -o ${x} ${x}.o \$(OBJECTS) \$(LDFLAGS) \`cat libs\`"
         echo 
       fi
     done
     echo
 
-    # try librandombytes
-    echo "haslibrandombytes.h: trylibrandombytes.sh"
-    echo "	env CC=\$(CC) ./trylibrandombytes.sh && echo '#define HASLIBRANDOMBYTES 1' > haslibrandombytes.h || true > haslibrandombytes.h"
-    echo
-    echo "librandombytes.lib: trylibrandombytes.sh"
-    echo "	env CC=\$(CC) ./trylibrandombytes.sh && echo '-lrandombytes' > librandombytes.lib || true > librandombytes.lib"
-    echo
+    for cfile in `ls -1 has*.c`; do
+      hfile=`echo ${cfile} | sed 's/\.c/.h/'`
+      lfile=`echo ${cfile} | sed 's/\.c/.log/'`
+      touch "${hfile}"
+      echo "${hfile}: tryfeature.sh ${cfile} libs"
+      echo "	env CC=\"\$(CC)\" CFLAGS=\"\$(CFLAGS)\" LDFLAGS=\"\$(LDFLAGS) \`cat libs\`\" ./tryfeature.sh ${cfile} >${hfile} 2>${lfile}"
+      echo "	cat ${hfile}"
+      echo
+    done
 
-    # try lib25519
-    echo "haslib25519.h: trylib25519.sh"
-    echo "	env CC=\$(CC) ./trylib25519.sh && echo '#define HASLIB25519 1' > haslib25519.h || true > haslib25519.h"
-    echo
-    echo "lib25519.lib: trylib25519.sh"
-    echo "	env CC=\$(CC) ./trylib25519.sh && echo '-l25519' > lib25519.lib || true > lib25519.lib"
+    echo "libs: trylibs.sh"
+    echo "	env CC=\"\$(CC)\" ./trylibs.sh -lsocket -lnsl -lrandombytes -l25519 >libs"
+    echo "	cat libs"
     echo
 
     echo "install: dq dqcache dqcache-makekey dqcache-start"
@@ -83,7 +90,7 @@
     echo
 
     echo "clean:"
-    echo "	rm -f *.o *.out \$(BINARIES) haslibrandombytes.h librandombytes.lib haslib25519.h lib25519.lib"
+    echo "	rm -f *.log has*.h \$(OBJECTS) \$(BINARIES) libs"
     echo 
 
   ) > Makefile

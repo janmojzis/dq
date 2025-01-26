@@ -1,14 +1,15 @@
 /*
-20180104
-Jan Mojzis
-Public domain.
+20241110
 */
 
 #include "crypto_scalarmult_curve25519.h"
 
 #ifndef HASLIB25519
+#include "crypto_uint8.h"
+#include "crypto_uint32.h"
+#include "crypto_uint64.h"
 
-typedef unsigned long fe[8];
+typedef crypto_uint32 fe[8];
 
 /*
 o = x
@@ -40,7 +41,7 @@ static void fe_1(fe o) {
 /*
 if (b) swap(f, g)
 */
-static void fe_cswap(fe f, fe g, unsigned long b) {
+static void fe_cswap(fe f, fe g, crypto_uint32 b) {
 
     long long i;
     fe t;
@@ -52,47 +53,35 @@ static void fe_cswap(fe f, fe g, unsigned long b) {
     for (i = 0; i < 8; ++i) g[i] ^= t[i];
 }
 
-static unsigned long uint32_unpack(const unsigned char *x) {
-
-    unsigned long y = 0;
-    long long i;
-    for (i = 3; i >= 0; --i) y = (y << 8) | x[i];
-    return y;
-}
-
 static void fe_frombytes(fe out, const unsigned char *in) {
 
     long long i;
 
     /* unpack from little-endian format */
-    for (i = 0; i < 8; ++i) out[i] = uint32_unpack(in + 4 * i);
+    for (i = 0; i < 8; ++i) out[i] = crypto_uint32_load(in + 4 * i);
     out[7] &= 0x7fffffff;
-}
-
-static void uint32_pack(unsigned char *y, unsigned long x) {
-
-    long long i;
-    for (i = 0; i < 4; ++i) { y[i] = x; x >>= 8; }
 }
 
 /* select r if r < p, or r + -p if r >= p */
 static void fe_squeeze(fe r) {
 
-    unsigned long long pb = 0, b;
+    crypto_uint64 pb = 0, b;
     long long i;
     fe t;
-    const unsigned long long p[8] = {
+    const crypto_uint64 p[8] = {
         0xffffffedULL,  0xffffffffULL,  0xffffffffULL,  0xffffffffULL,  
         0xffffffffULL,  0xffffffffULL,  0xffffffffULL,  0x7fffffffULL,  
     };
 
     for (i = 0; i < 8; ++i) {
         pb += p[i];
-        b = (unsigned long long)r[i] - pb; b >>= (sizeof(unsigned long long) * 8) - 1;
-        t[i] = (unsigned long long)r[i] - pb + (b << 32);
+        b = (crypto_uint64)r[i] - pb;
+        b = crypto_uint64_topbit_01(b);
+        t[i] = (crypto_uint64)r[i] - pb + (b << 32);
         pb = b;
     }
-    b = - pb; b >>= (sizeof(unsigned long long) * 8) - 1;
+    b = -pb;
+    b = crypto_uint64_topbit_01(b);
     b -= 1;
     for (i = 0; i < 8; ++i) r[i] ^= b & (r[i] ^ t[i]);
 }
@@ -104,19 +93,19 @@ static void fe_tobytes(unsigned char *out, const fe in) {
 
     fe_copy(r, in);
     fe_squeeze(r);
-    for (i = 0; i < 8; ++i) uint32_pack(out + 4 * i, r[i]);
+    for (i = 0; i < 8; ++i) crypto_uint32_store(out + 4 * i, r[i]);
 }
 
 /*
 o = (x * c) % p
 */
-static void fe_mulc(fe o, const fe x, const unsigned long long c) {
+static void fe_mulc(fe o, const fe x, const crypto_uint64 c) {
 
-    unsigned long long u = 0;
+    crypto_uint64 u = 0;
     long long i;
 
-    for (i = 0; i < 7; ++i) { u += (unsigned long long)x[i] * c; o[i] = u & 0xffffffff; u >>= 32; }
-    u += (unsigned long long)x[i] * c; o[i] = u & 0x7fffffff; u >>= 31;
+    for (i = 0; i < 7; ++i) { u += (crypto_uint64)x[i] * c; o[i] = u & 0xffffffff; u >>= 32; }
+    u += (crypto_uint64)x[i] * c; o[i] = u & 0x7fffffff; u >>= 31;
     u *= 19ULL;
     for (i = 0; i < 8; ++i) { u += o[i]; o[i] = u & 0xffffffff; u >>= 32; }
 }
@@ -126,7 +115,7 @@ o = (a * b) % p
 */
 static void fe_mul(fe o, const fe a, const fe b) {
 
-    unsigned long long u, t[16];
+    crypto_uint64 u, t[16];
     long long i;
 
     for (i = 0; i < 16; ++i) t[i] = 0;
@@ -134,22 +123,22 @@ static void fe_mul(fe o, const fe a, const fe b) {
 /*
     Unrolled version of:
     for (i = 0; i < 8; ++i) for (j = 0; j < 8; ++j) {
-        u = (unsigned long long)a[i] * (unsigned long long)b[j];
+        u = (crypto_uint64)a[i] * (crypto_uint64)b[j];
         t[i + j    ] += u & 0xffffffff;
         t[i + j + 1] += u >> 32;
     }
 */
-#define M(i, j) u = (unsigned long long)a[i] * (unsigned long long)b[j]; \
+#define M(i, j) u = (crypto_uint64)a[i] * (crypto_uint64)b[j]; \
                  t[i + j    ] += u & 0xffffffff; \
                  t[i + j + 1] += u >> 32;
-    M(0, 0); M(0, 1); M(0, 2); M(0, 3); M(0, 4); M(0, 5); M(0, 6); M(0, 7); 
-    M(1, 0); M(1, 1); M(1, 2); M(1, 3); M(1, 4); M(1, 5); M(1, 6); M(1, 7); 
-    M(2, 0); M(2, 1); M(2, 2); M(2, 3); M(2, 4); M(2, 5); M(2, 6); M(2, 7); 
-    M(3, 0); M(3, 1); M(3, 2); M(3, 3); M(3, 4); M(3, 5); M(3, 6); M(3, 7); 
-    M(4, 0); M(4, 1); M(4, 2); M(4, 3); M(4, 4); M(4, 5); M(4, 6); M(4, 7); 
-    M(5, 0); M(5, 1); M(5, 2); M(5, 3); M(5, 4); M(5, 5); M(5, 6); M(5, 7); 
-    M(6, 0); M(6, 1); M(6, 2); M(6, 3); M(6, 4); M(6, 5); M(6, 6); M(6, 7); 
-    M(7, 0); M(7, 1); M(7, 2); M(7, 3); M(7, 4); M(7, 5); M(7, 6); M(7, 7); 
+    M(0, 0); M(0, 1); M(0, 2); M(0, 3); M(0, 4); M(0, 5); M(0, 6); M(0, 7);
+    M(1, 0); M(1, 1); M(1, 2); M(1, 3); M(1, 4); M(1, 5); M(1, 6); M(1, 7);
+    M(2, 0); M(2, 1); M(2, 2); M(2, 3); M(2, 4); M(2, 5); M(2, 6); M(2, 7);
+    M(3, 0); M(3, 1); M(3, 2); M(3, 3); M(3, 4); M(3, 5); M(3, 6); M(3, 7);
+    M(4, 0); M(4, 1); M(4, 2); M(4, 3); M(4, 4); M(4, 5); M(4, 6); M(4, 7);
+    M(5, 0); M(5, 1); M(5, 2); M(5, 3); M(5, 4); M(5, 5); M(5, 6); M(5, 7);
+    M(6, 0); M(6, 1); M(6, 2); M(6, 3); M(6, 4); M(6, 5); M(6, 6); M(6, 7);
+    M(7, 0); M(7, 1); M(7, 2); M(7, 3); M(7, 4); M(7, 5); M(7, 6); M(7, 7);
 #undef M
 
     u = 0;
@@ -164,7 +153,7 @@ o = (x ^ 2) % p
 */
 static void fe_sq(fe o, const fe a) {
 
-    unsigned long long u, t[16];
+    crypto_uint64 u, t[16];
     long long i;
 
     for (i = 0; i < 16; ++i) t[i] = 0;
@@ -172,32 +161,31 @@ static void fe_sq(fe o, const fe a) {
 /*
     Unrolled version of: 
     for (i = 0; i < 8; ++i) for (j = i + 1; j < 8; ++j) {
-        u = (unsigned long long)a[i] * (unsigned long long)a[j];
+        u = (crypto_uint64)a[i] * (crypto_uint64)a[j];
         t[i + j    ] += 2 * (u & 0xffffffff);
         t[i + j + 1] += 2 * (u >> 32);
     }
     for (i = 0; i < 8; ++i) {
-        u = (unsigned long long)a[i] * (unsigned long long)a[i];
+        u = (crypto_uint64)a[i] * (crypto_uint64)a[i];
         t[2 * i    ] += u & 0xffffffff;
         t[2 * i + 1] += u >> 32;
     }
 */
-#define M(i, j) u = (unsigned long long)a[i] * (unsigned long long)a[j]; \
+#define M(i, j) u = (crypto_uint64)a[i] * (crypto_uint64)a[j]; \
                  t[i + j    ] += (u & 0x00000000ffffffff) <<  1; \
                  t[i + j + 1] += (u & 0xffffffff00000000) >> 31;
-     M(0, 1); M(0, 2); M(0, 3); M(0, 4); M(0, 5); M(0, 6); M(0, 7); 
-     M(1, 2); M(1, 3); M(1, 4); M(1, 5); M(1, 6); M(1, 7); 
-     M(2, 3); M(2, 4); M(2, 5); M(2, 6); M(2, 7); 
-     M(3, 4); M(3, 5); M(3, 6); M(3, 7); 
-     M(4, 5); M(4, 6); M(4, 7); 
-     M(5, 6); M(5, 7); 
-     M(6, 7); 
-     
+     M(0, 1); M(0, 2); M(0, 3); M(0, 4); M(0, 5); M(0, 6); M(0, 7);
+     M(1, 2); M(1, 3); M(1, 4); M(1, 5); M(1, 6); M(1, 7);
+     M(2, 3); M(2, 4); M(2, 5); M(2, 6); M(2, 7);
+     M(3, 4); M(3, 5); M(3, 6); M(3, 7);
+     M(4, 5); M(4, 6); M(4, 7);
+     M(5, 6); M(5, 7);
+     M(6, 7);
 #undef M
-#define S(i)    u = (unsigned long long)a[i] * (unsigned long long)a[i]; \
+#define S(i)    u = (crypto_uint64)a[i] * (crypto_uint64)a[i]; \
                  t[2 * i    ] +=     (u & 0xffffffff); \
                  t[2 * i + 1] +=     (u >> 32)
-     S(0); S(1); S(2); S(3); S(4); S(5); S(6); S(7); 
+     S(0); S(1); S(2); S(3); S(4); S(5); S(6); S(7);
 #undef S
 
     u = 0;
@@ -212,11 +200,11 @@ o = (x + y) % p
 */
 static void fe_add(fe o, const fe x, const fe y) {
 
-    unsigned long long u = 0;
+    crypto_uint64 u = 0;
     long long i;
 
-    for (i = 0; i < 7; ++i) { u += (unsigned long long)x[i] + (unsigned long long)y[i]; o[i] = u & 0xffffffff; u >>= 32; }
-    u += (unsigned long long)x[i] + (unsigned long long)y[i]; o[i] = u & 0x7fffffff; u >>= 31;
+    for (i = 0; i < 7; ++i) { u += (crypto_uint64)x[i] + (crypto_uint64)y[i]; o[i] = u & 0xffffffff; u >>= 32; }
+    u += (crypto_uint64)x[i] + (crypto_uint64)y[i]; o[i] = u & 0x7fffffff; u >>= 31;
     u *= 19ULL;
     for (i = 0; i < 8; ++i) { u += o[i]; o[i] = u & 0xffffffff; u >>= 32; }
 }
@@ -227,14 +215,14 @@ o = (x - y) % p
 static void fe_sub(fe o, const fe x, const fe y) {
 
     long long i;
-    unsigned long long u = 0;
-    const unsigned long long p4[8] = {
+    crypto_uint64 u = 0;
+    const crypto_uint64 p4[8] = {
         0x3ffffffb4ULL,  0x3fffffffcULL,  0x3fffffffcULL,  0x3fffffffcULL,  
         0x3fffffffcULL,  0x3fffffffcULL,  0x3fffffffcULL,  0x1fffffffcULL,  
     };
 
-    for (i = 0; i < 7; ++i) { u += p4[i] - (unsigned long long)y[i] + (unsigned long long)x[i]; o[i] = u & 0xffffffff; u >>= 32; }
-    u += p4[i] - (unsigned long long)y[i] + (unsigned long long)x[i]; o[i] = u & 0x7fffffff; u >>= 31;
+    for (i = 0; i < 7; ++i) { u += p4[i] - (crypto_uint64)y[i] + (crypto_uint64)x[i]; o[i] = u & 0xffffffff; u >>= 32; }
+    u += p4[i] - (crypto_uint64)y[i] + (crypto_uint64)x[i]; o[i] = u & 0x7fffffff; u >>= 31;
     u *= 19ULL;
     for (i = 0; i < 8; ++i) { u += o[i]; o[i] = u & 0xffffffff; u >>= 32; }
 }
@@ -276,8 +264,7 @@ int crypto_scalarmult_curve25519_tinynacl(unsigned char *q, const unsigned char 
     unsigned char e[32];
     fe x1, x2, z2, x3, z3, tmp0, tmp1;
     long long i, pos;
-    unsigned int d = 0;
-    unsigned long swap, b;
+    crypto_uint32 swap, b;
 
     for (i = 0; i < 32; ++i) e[i] = n[i];
     e[0] &= 248;
@@ -291,8 +278,7 @@ int crypto_scalarmult_curve25519_tinynacl(unsigned char *q, const unsigned char 
 
     swap = 0;
     for (pos = 254; pos >= 0; --pos) {
-        b = e[pos / 8] >> (pos & 7);
-        b &= 1;
+        b = crypto_uint8_bitmod_01(e[pos / 8], pos);
         swap ^= b;
         fe_cswap(x2, x3, swap);
         fe_cswap(z2, z3, swap);
@@ -325,8 +311,7 @@ int crypto_scalarmult_curve25519_tinynacl(unsigned char *q, const unsigned char 
     fe_mul(x2, x2, z2);
     fe_tobytes(q, x2);
 
-    for (i = 0; i < 32; ++i) d |= q[i];
-    return -(1 & ((d - 1) >> 8));
+    return 0;
 }
 
 static const unsigned char basepoint[32] = {9};

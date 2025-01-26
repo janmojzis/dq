@@ -1,5 +1,5 @@
 #include "strtonum.h"
-#include "uint16_pack_big.h"
+#include "crypto_uint16.h"
 #include "case.h"
 #include "dns.h"
 #include "byte.h"
@@ -12,7 +12,7 @@ int typeparse(unsigned char *type, const char *s) {
     if (!s) return 0;
 
     if (strtonum(&l, s) && l > 0 && l <= 65535) {
-        uint16_pack_big(type, l);
+        crypto_uint16_store_bigendian(type, l);
     }
     else if (case_equals(s, "a")) byte_copy(type, 2, DNS_T_A);
     else if (case_equals(s, "ns")) byte_copy(type, 2, DNS_T_NS);

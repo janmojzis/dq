@@ -4,7 +4,7 @@
 #include "porttostr.h"
 #include "numtostr.h"
 #include "e.h"
-#include "uint16_unpack_big.h"
+#include "crypto_uint16.h"
 #include "byte.h"
 #include "dns.h"
 
@@ -61,7 +61,7 @@ static const unsigned char *qtypetostr(const unsigned char *qtype) {
     if (byte_isequal(qtype, 2, DNS_T_PTR)) return (unsigned char *)"PTR";
     if (byte_isequal(qtype, 2, DNS_T_CNAME)) return (unsigned char *)"CNAME";
 
-    u16 = uint16_unpack_big(qtype);
+    u16 = crypto_uint16_load_bigendian(qtype);
     return (const unsigned char *)numtostr(0, u16);
 
 }

@@ -21,8 +21,7 @@
 #include "alloc.h"
 #include "milliseconds.h"
 #include "blocking.h"
-#include "uint16_pack_big.h"
-#include "uint16_unpack_big.h"
+#include "crypto_uint16.h"
 #include "portparse.h"
 #include "droproot.h"
 #include "okclient.h"
@@ -136,7 +135,7 @@ static void u_new(void) {
     len = xsocket_recv(udp53, mytypeincoming, buf, sizeof buf, x->ip, x->port, &x->scope_id);
     if (len == -1) return;
     if (len >= sizeof buf) return;
-    port = uint16_unpack_big(x->port);
+    port = crypto_uint16_load_bigendian(x->port);
     if (port < 1024) if (port != 53) return;
 
     if (!flagokclient && !okclient(x->ip)) { log_queryreject(x->ip, x->port, 0, 0, 0, "IP address not allowed"); return; }
@@ -219,7 +218,7 @@ static void t_respond(long long j) {
     t_free(j);
     t[j].buf = alloc(response_len + 2);
     if (!t[j].buf) { t_close(j); return; }
-    uint16_pack_big(t[j].buf, response_len);
+    crypto_uint16_store_bigendian(t[j].buf, response_len);
     byte_copy(t[j].buf + 2, response_len, response);
     t[j].pos = 0;
     t[j].state = -1;
@@ -320,7 +319,7 @@ static void t_new(void) {
 
     x->tcp = xsocket_accept(tcp53, mytypeincoming, x->ip, x->port, &x->scope_id);
     if (x->tcp == -1) return;
-    port = uint16_unpack_big(x->port);
+    port = crypto_uint16_load_bigendian(x->port);
     if (port < 1024) if (port != 53) { close(x->tcp); return; }
     if (!flagokclient && !okclient(x->ip)) { log_queryreject(x->ip, x->port, 0, 0, 0, "IP address not allowed"); close(x->tcp); return; }
     blocking_disable(x->tcp);

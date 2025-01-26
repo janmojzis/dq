@@ -1,6 +1,6 @@
 #include "buffer.h"
-#include "uint32_unpack_big.h"
-#include "uint16_unpack_big.h"
+#include "crypto_uint32.h"
+#include "crypto_uint16.h"
 #include "e.h"
 #include "byte.h"
 #include "iptostr.h"
@@ -64,7 +64,7 @@ static void dctype(unsigned char x) {
 
 static void logid(const unsigned char id[2]) {
 #if 1
-    string(numtostr(0, uint16_unpack_big(id)));
+    string(numtostr(0, crypto_uint16_load_bigendian(id)));
 #else
     hex(id[0]);
     hex(id[1]);
@@ -75,7 +75,7 @@ static void logtype(const unsigned char type[2]) {
 
     crypto_uint16 u;
 
-    u = uint16_unpack_big(type);
+    u = crypto_uint16_load_bigendian(type);
     number(u);
 }
 
@@ -119,7 +119,7 @@ void log_dnscurvekey(const unsigned char *key) {
 void log_query(crypto_uint64 *qnum, const unsigned char client[16], unsigned char port[2], const unsigned char id[2], const unsigned char *q, const unsigned char qtype[2]) {
 
     string("query "); number(*qnum); space();
-    ip(client); string(":"); string(numtostr(0, uint16_unpack_big(port)));
+    ip(client); string(":"); string(numtostr(0, crypto_uint16_load_bigendian(port)));
     string(":"); logid(id); space();
     logtype(qtype); space(); name(q);
     line();
@@ -129,7 +129,7 @@ void log_query(crypto_uint64 *qnum, const unsigned char client[16], unsigned cha
 void log_queryreject(const unsigned char *client, unsigned char *port, const unsigned char *id, const unsigned char *q, const unsigned char *qtype, const char *x) {
 
     string("reject ");
-    ip(client); string(":"); string(numtostr(0, uint16_unpack_big(port)));
+    ip(client); string(":"); string(numtostr(0, crypto_uint16_load_bigendian(port)));
     string(":");
 
     if (id) {
@@ -346,7 +346,7 @@ void log_rrmx(const unsigned char *server,const unsigned char *q,const unsigned 
 
   string("rr "); dctype(flagkey); ip(server); space(); number(ttl);
   string(" mx "); name(q); space();
-  u = uint16_unpack_big(pref);
+  u = crypto_uint16_load_bigendian(pref);
   number(u); space(); name(mx);
   line();
 }
@@ -360,7 +360,7 @@ void log_rrsoa(const unsigned char *server,const unsigned char *q,const unsigned
   string(" soa "); name(q); space();
   name(n1); space(); name(n2);
   for (i = 0;i < 20;i += 4) {
-    u = uint32_unpack_big(misc + i);
+    u = crypto_uint32_load_bigendian(misc + i);
     space(); number(u);
   }
   line();

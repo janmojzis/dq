@@ -10,7 +10,6 @@ Public domain.
 #include <sys/param.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
-#include "hasipv6.h"
 #include "blocking.h"
 #include "e.h"
 #include "xsocket.h"

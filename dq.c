@@ -17,8 +17,7 @@
 #include "writeall.h"
 #include "milliseconds.h"
 #include "str.h"
-#include "uint16_pack_big.h"
-#include "uint16_unpack_big.h"
+#include "crypto_uint16.h"
 #include "portparse.h"
 #include "base32decode.h"
 #include "hexdecode.h"
@@ -273,7 +272,7 @@ int main(int argc, char **argv) {
     }
 
     if (!stralloc_copys(&g.out, "")) oops();
-    u16 = uint16_unpack_big(g.qtype);
+    u16 = crypto_uint16_load_bigendian(g.qtype);
     if (!stralloc_catnum(&g.out, u16)) oops();
     if (!stralloc_cats(&g.out, " ")) oops();
     if (!dns_domain_todot_cat(&g.out, g.q)) oops();
