@@ -314,16 +314,9 @@ uint32_pack_big.o: uint32_pack_big.c uint32_pack_big.h \
  cryptoint/crypto_uint32.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c uint32_pack_big.c
 
-uint32_pack.o: uint32_pack.c uint32_pack.h cryptoint/crypto_uint32.h
-	$(CC) $(CFLAGS) $(CPPFLAGS) -c uint32_pack.c
-
 uint32_unpack_big.o: uint32_unpack_big.c uint32_unpack_big.h \
  cryptoint/crypto_uint32.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c uint32_unpack_big.c
-
-uint32_unpack.o: uint32_unpack.c uint32_unpack.h \
- cryptoint/crypto_uint32.h
-	$(CC) $(CFLAGS) $(CPPFLAGS) -c uint32_unpack.c
 
 uint64_optblocker.o: uint64_optblocker.c cryptoint/crypto_uint64.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c uint64_optblocker.c
@@ -451,9 +444,7 @@ OBJECTS+=uint16_pack_big.o
 OBJECTS+=uint16_unpack_big.o
 OBJECTS+=uint32_optblocker.o
 OBJECTS+=uint32_pack_big.o
-OBJECTS+=uint32_pack.o
 OBJECTS+=uint32_unpack_big.o
-OBJECTS+=uint32_unpack.o
 OBJECTS+=uint64_optblocker.o
 OBJECTS+=uint64_pack.o
 OBJECTS+=uint64_unpack.o
