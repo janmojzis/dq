@@ -2,7 +2,11 @@ CC?=cc
 CFLAGS+=-O3 -fno-strict-overflow -fwrapv -Wno-parentheses -Wundef -Wunused-value -Wmissing-prototypes -Wmissing-declarations -Wwrite-strings -Wdeclaration-after-statement -Wshadow -Wno-unused-function -Wno-overlength-strings -Wno-long-long -Wall -pedantic -Icryptoint
 LDFLAGS?=
 CPPFLAGS?=
+
 DESTDIR?=
+PREFIX?=/usr/local
+
+INSTALL?=install
 
 BINARIES=dq
 BINARIES+=dqcache
@@ -462,10 +466,18 @@ libs: trylibs.sh
 	cat libs
 
 install: dq dqcache dqcache-makekey dqcache-start
-	install -D -m 0755 dq $(DESTDIR)/usr/bin/dq
-	install -D -m 0755 dqcache $(DESTDIR)/usr/sbin/dqcache
-	install -D -m 0755 dqcache-makekey $(DESTDIR)/usr/sbin/dqcache-makekey
-	install -D -m 0755 dqcache-start $(DESTDIR)/usr/sbin/dqcache-start
+	mkdir -p $(DESTDIR)$(PREFIX)/bin
+	mkdir -p $(DESTDIR)$(PREFIX)/sbin
+	mkdir -p $(DESTDIR)$(PREFIX)/share/man/man1
+	mkdir -p $(DESTDIR)$(PREFIX)/share/man/man8
+	$(INSTALL) -m 0755 dq $(DESTDIR)$(PREFIX)/bin/dq
+	$(INSTALL) -m 0755 dqcache $(DESTDIR)$(PREFIX)/sbin/dqcache
+	$(INSTALL) -m 0755 dqcache-makekey $(DESTDIR)$(PREFIX)/sbin/dqcache-makekey
+	$(INSTALL) -m 0755 dqcache-start $(DESTDIR)$(PREFIX)/sbin/dqcache-start
+	$(INSTALL) -m 0644 man/dq.1 $(DESTDIR)$(PREFIX)/share/man/man1/dq.1
+	$(INSTALL) -m 0644 man/dqcache.8 $(DESTDIR)$(PREFIX)/share/man/man8/dqcache.8
+	$(INSTALL) -m 0644 man/dqcache-makekey.8 $(DESTDIR)$(PREFIX)/share/man/man8/dqcache-makekey.8
+	$(INSTALL) -m 0644 man/dqcache-start.8 $(DESTDIR)$(PREFIX)/share/man/man8/dqcache-start.8
 
 clean:
 	rm -f *.log has*.h $(OBJECTS) $(BINARIES) libs

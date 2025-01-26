@@ -6,7 +6,11 @@
     echo "CFLAGS+=-O3 -fno-strict-overflow -fwrapv -Wno-parentheses -Wundef -Wunused-value -Wmissing-prototypes -Wmissing-declarations -Wwrite-strings -Wdeclaration-after-statement -Wshadow -Wno-unused-function -Wno-overlength-strings -Wno-long-long -Wall -pedantic -Icryptoint"
     echo "LDFLAGS?="
     echo "CPPFLAGS?="
+		echo
     echo "DESTDIR?="
+    echo "PREFIX?=/usr/local"
+    echo
+    echo "INSTALL?=install"
     echo 
 
     # binaries
@@ -83,10 +87,18 @@
     echo
 
     echo "install: dq dqcache dqcache-makekey dqcache-start"
-    echo "	install -D -m 0755 dq \$(DESTDIR)/usr/bin/dq"
-    echo "	install -D -m 0755 dqcache \$(DESTDIR)/usr/sbin/dqcache"
-    echo "	install -D -m 0755 dqcache-makekey \$(DESTDIR)/usr/sbin/dqcache-makekey"
-    echo "	install -D -m 0755 dqcache-start \$(DESTDIR)/usr/sbin/dqcache-start"
+    echo "	mkdir -p \$(DESTDIR)\$(PREFIX)/bin"
+    echo "	mkdir -p \$(DESTDIR)\$(PREFIX)/sbin"
+    echo "	mkdir -p \$(DESTDIR)\$(PREFIX)/share/man/man1"
+    echo "	mkdir -p \$(DESTDIR)\$(PREFIX)/share/man/man8"
+    echo "	\$(INSTALL) -m 0755 dq \$(DESTDIR)\$(PREFIX)/bin/dq"
+    echo "	\$(INSTALL) -m 0755 dqcache \$(DESTDIR)\$(PREFIX)/sbin/dqcache"
+    echo "	\$(INSTALL) -m 0755 dqcache-makekey \$(DESTDIR)\$(PREFIX)/sbin/dqcache-makekey"
+    echo "	\$(INSTALL) -m 0755 dqcache-start \$(DESTDIR)\$(PREFIX)/sbin/dqcache-start"
+    echo "	\$(INSTALL) -m 0644 man/dq.1 \$(DESTDIR)\$(PREFIX)/share/man/man1/dq.1"
+    echo "	\$(INSTALL) -m 0644 man/dqcache.8 \$(DESTDIR)\$(PREFIX)/share/man/man8/dqcache.8"
+    echo "	\$(INSTALL) -m 0644 man/dqcache-makekey.8 \$(DESTDIR)\$(PREFIX)/share/man/man8/dqcache-makekey.8"
+    echo "	\$(INSTALL) -m 0644 man/dqcache-start.8 \$(DESTDIR)\$(PREFIX)/share/man/man8/dqcache-start.8"
     echo
 
     echo "clean:"
