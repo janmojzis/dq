@@ -3,7 +3,7 @@
 (
   (
     echo "CC?=cc"
-    echo "CFLAGS+=-O3 -fno-strict-overflow -fwrapv -Wno-parentheses -Wundef -Wunused-value -Wmissing-prototypes -Wmissing-declarations -Wwrite-strings -Wdeclaration-after-statement -Wshadow -Wno-unused-function -Wno-overlength-strings -Wno-long-long -Wall -pedantic"
+    echo "CFLAGS+=-O3 -fno-strict-overflow -fwrapv -Wno-parentheses -Wundef -Wunused-value -Wmissing-prototypes -Wmissing-declarations -Wwrite-strings -Wdeclaration-after-statement -Wshadow -Wno-unused-function -Wno-overlength-strings -Wno-long-long -Wall -pedantic -Icryptoint"
     echo "LDFLAGS?="
     echo "CPPFLAGS?="
     echo "DESTDIR?="
@@ -33,7 +33,7 @@
     done
     for file in `ls -1 *.c | grep -v '^has'`; do
       (
-        gcc -MM "${file}"
+        gcc -Icryptoint -MM "${file}"
         echo "	\$(CC) \$(CFLAGS) \$(CPPFLAGS) -c ${file}"
         echo
       )
