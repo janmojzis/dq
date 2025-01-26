@@ -1,13 +1,13 @@
 /*
 version 20130522
+20250136 - use cryptoint
 Jan Mojzis
 Public domain.
 */
 
 #include "nanoseconds.h"
 #include "randombytes.h"
-#include "uint32_pack.h"
-#include "uint32_unpack.h"
+#include "crypto_uint32.h"
 #include "crypto_uint64.h"
 #include "byte.h"
 #include "purge.h"
@@ -65,18 +65,19 @@ static void dns_nonce_encrypt(unsigned char *out, crypto_uint64 in, const unsign
 
     v0 = in; in >>= 32;
     v1 = in;
-    k0 = uint32_unpack(k + 0);
-    k1 = uint32_unpack(k + 4);
-    k2 = uint32_unpack(k + 8);
-    k3 = uint32_unpack(k + 12);
+    k0 = crypto_uint32_load(k + 0);
+    k1 = crypto_uint32_load(k + 4);
+    k2 = crypto_uint32_load(k + 8);
+    k3 = crypto_uint32_load(k + 12);
+
 
     for (i = 0; i < 32; i++) {
         sum += delta;
         v0 += ((v1<<4) + k0) ^ (v1 + sum) ^ ((v1>>5) + k1);
         v1 += ((v0<<4) + k2) ^ (v0 + sum) ^ ((v0>>5) + k3);  
     } 
-    uint32_pack(out + 0, v0);
-    uint32_pack(out + 4, v1);
+    crypto_uint32_store(out + 0, v0);
+    crypto_uint32_store(out + 4, v1);
 }
 
 /*

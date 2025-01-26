@@ -6,8 +6,7 @@
 #include "byte.h"
 #include "uint64_pack.h"
 #include "uint64_unpack.h"
-#include "uint32_pack.h"
-#include "uint32_unpack.h"
+#include "crypto_uint32.h"
 #include "seconds.h"
 #include "die.h"
 #include "randombytes.h"
@@ -65,7 +64,7 @@ static void cache_impossible(void) {
 
 static void set4(crypto_uint32 pos, crypto_uint32 u) {
     if (pos > size - 4) cache_impossible();
-    uint32_pack(x + pos, u);
+    crypto_uint32_store(x + pos, u);
 }
 
 static crypto_uint32 get4(crypto_uint32 pos) {
@@ -73,7 +72,7 @@ static crypto_uint32 get4(crypto_uint32 pos) {
     crypto_uint32 result;
 
     if (pos > size - 4) cache_impossible();
-    result = uint32_unpack(x + pos);
+    result = crypto_uint32_load(x + pos);
     return result;
 }
 
@@ -99,7 +98,7 @@ static crypto_uint32 hash(const unsigned char *key, crypto_uint32 keylen) {
 
     crypto_auth_siphash24(a, key, keylen, hashkey);
 
-    return (uint32_unpack(a) & (hsize - 4));
+    return (crypto_uint32_load(a) & (hsize - 4));
 }
 #endif
 
@@ -319,8 +318,8 @@ int cache_load(void) {
     pos = 0;
     nb = 0;
     while (pos + 16 <= len) {
-        keylen = uint32_unpack(p + pos);
-        datalen = uint32_unpack(p + pos + 4);
+        keylen = crypto_uint32_load(p + pos);
+        datalen = crypto_uint32_load(p + pos + 4);
         byte_copy(expirestr, 8, p + pos + 8);
         flags = expirestr[7];
         expirestr[7] = 0;

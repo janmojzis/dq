@@ -37,9 +37,9 @@ byte.o: byte.c byte.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c byte.c
 
 cache.o: cache.c alloc.h byte.h uint64_pack.h cryptoint/crypto_uint64.h \
- uint64_unpack.h uint32_pack.h cryptoint/crypto_uint32.h uint32_unpack.h \
- seconds.h die.h randombytes.h haslibrandombytes.h buffer.h open.h dns.h \
- stralloc.h crypto_auth_siphash24.h e.h cache.h
+ uint64_unpack.h cryptoint/crypto_uint32.h seconds.h die.h randombytes.h \
+ haslibrandombytes.h buffer.h open.h dns.h stralloc.h \
+ crypto_auth_siphash24.h e.h cache.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c cache.c
 
 case.o: case.c case.h
@@ -125,8 +125,8 @@ dns_keys.o: dns_keys.c crypto_stream_salsa20.h dns.h stralloc.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c dns_keys.c
 
 dns_nonce.o: dns_nonce.c nanoseconds.h randombytes.h haslibrandombytes.h \
- uint32_pack.h cryptoint/crypto_uint32.h uint32_unpack.h \
- cryptoint/crypto_uint64.h byte.h purge.h dns.h stralloc.h
+ cryptoint/crypto_uint32.h cryptoint/crypto_uint64.h byte.h purge.h dns.h \
+ stralloc.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c dns_nonce.c
 
 dns_packet.o: dns_packet.c e.h byte.h dns.h stralloc.h
