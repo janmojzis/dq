@@ -111,8 +111,8 @@ dns_dtda.o: dns_dtda.c stralloc.h dns.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c dns_dtda.c
 
 dns_ip.o: dns_ip.c alloc.h byte.h cryptoint/crypto_uint16.h \
- uint16_unpack_big.h base32decode.h hexdecode.h case.h str.h stralloc.h \
- strtoip.h milliseconds.h dns.h
+ base32decode.h hexdecode.h case.h str.h stralloc.h strtoip.h \
+ milliseconds.h dns.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c dns_ip.c
 
 dns_ipq.o: dns_ipq.c stralloc.h case.h byte.h str.h dns.h
@@ -147,29 +147,27 @@ dns_sortip.o: dns_sortip.c randommod.h byte.h dns.h stralloc.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c dns_sortip.c
 
 dns_transmit.o: dns_transmit.c alloc.h milliseconds.h xsocket.h e.h \
- byte.h uint16_pack_big.h cryptoint/crypto_uint16.h uint16_unpack_big.h \
- randombytes.h haslibrandombytes.h randommod.h case.h str.h dns.h \
- stralloc.h crypto_box_curve25519xsalsa20poly1305.h
+ byte.h cryptoint/crypto_uint16.h randombytes.h haslibrandombytes.h \
+ randommod.h case.h str.h dns.h stralloc.h \
+ crypto_box_curve25519xsalsa20poly1305.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c dns_transmit.c
 
 dns_verbosity.o: dns_verbosity.c stralloc.h writeall.h iptostr.h \
- porttostr.h numtostr.h e.h uint16_unpack_big.h cryptoint/crypto_uint16.h \
- byte.h dns.h
+ porttostr.h numtostr.h e.h cryptoint/crypto_uint16.h byte.h dns.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c dns_verbosity.c
 
 dq.o: dq.c dns.h stralloc.h strtonum.h case.h die.h e.h randombytes.h \
  haslibrandombytes.h byte.h printpacket.h writeall.h milliseconds.h str.h \
- uint16_pack_big.h cryptoint/crypto_uint16.h uint16_unpack_big.h \
- portparse.h base32decode.h hexdecode.h strtoip.h keyparse.h typeparse.h \
- purge.h crypto_box_curve25519xsalsa20poly1305.h
+ cryptoint/crypto_uint16.h portparse.h base32decode.h hexdecode.h \
+ strtoip.h keyparse.h typeparse.h purge.h \
+ crypto_box_curve25519xsalsa20poly1305.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c dq.c
 
 dqcache.o: dqcache.c env.h byte.h xsocket.h strtoip.h randombytes.h \
  haslibrandombytes.h cryptoint/crypto_uint64.h query.h dns.h stralloc.h \
  cryptoint/crypto_uint32.h die.h warn.h e.h numtostr.h strtonum.h cache.h \
  response.h log.h roots.h hexparse.h alloc.h milliseconds.h blocking.h \
- uint16_pack_big.h cryptoint/crypto_uint16.h uint16_unpack_big.h \
- portparse.h droproot.h okclient.h purge.h
+ cryptoint/crypto_uint16.h portparse.h droproot.h okclient.h purge.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c dqcache.c
 
 dqcache-makekey.o: dqcache-makekey.c randombytes.h haslibrandombytes.h \
@@ -200,9 +198,8 @@ iptostr.o: iptostr.c byte.h iptostr.h
 keyparse.o: keyparse.c hexdecode.h base32decode.h byte.h str.h keyparse.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c keyparse.c
 
-log.o: log.c buffer.h uint32_unpack_big.h cryptoint/crypto_uint32.h \
- uint16_unpack_big.h cryptoint/crypto_uint16.h e.h byte.h iptostr.h \
- numtostr.h log.h cryptoint/crypto_uint64.h
+log.o: log.c buffer.h cryptoint/crypto_uint32.h cryptoint/crypto_uint16.h \
+ e.h byte.h iptostr.h numtostr.h log.h cryptoint/crypto_uint64.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c log.c
 
 milliseconds.o: milliseconds.c milliseconds.h
@@ -233,21 +230,19 @@ portparse.o: portparse.c portparse.h
 porttostr.o: porttostr.c cryptoint/crypto_uint16.h porttostr.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c porttostr.c
 
-printpacket.o: printpacket.c uint16_unpack_big.h \
- cryptoint/crypto_uint16.h e.h byte.h dns.h stralloc.h printrecord.h \
- printpacket.h
+printpacket.o: printpacket.c cryptoint/crypto_uint16.h e.h byte.h dns.h \
+ stralloc.h printrecord.h printpacket.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c printpacket.c
 
-printrecord.o: printrecord.c uint16_unpack_big.h \
- cryptoint/crypto_uint16.h uint32_unpack_big.h cryptoint/crypto_uint32.h \
- e.h byte.h dns.h stralloc.h printrecord.h iptostr.h
+printrecord.o: printrecord.c cryptoint/crypto_uint16.h \
+ cryptoint/crypto_uint32.h e.h byte.h dns.h stralloc.h printrecord.h \
+ iptostr.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c printrecord.c
 
 query.o: query.c e.h roots.h log.h cryptoint/crypto_uint64.h case.h \
- cache.h byte.h dns.h stralloc.h uint32_unpack_big.h \
- cryptoint/crypto_uint32.h uint16_unpack_big.h cryptoint/crypto_uint16.h \
- alloc.h response.h query.h strtoip.h iptostr.h xsocket.h \
- crypto_scalarmult_curve25519.h haslib25519.h \
+ cache.h byte.h dns.h stralloc.h cryptoint/crypto_uint32.h \
+ cryptoint/crypto_uint16.h alloc.h response.h query.h strtoip.h iptostr.h \
+ xsocket.h crypto_scalarmult_curve25519.h haslib25519.h \
  crypto_box_curve25519xsalsa20poly1305.h purge.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c query.c
 
@@ -257,9 +252,8 @@ randombytes.o: randombytes.c randombytes.h haslibrandombytes.h
 randommod.o: randommod.c randombytes.h haslibrandombytes.h randommod.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c randommod.c
 
-response.o: response.c dns.h stralloc.h byte.h uint16_pack_big.h \
- cryptoint/crypto_uint16.h uint32_pack_big.h cryptoint/crypto_uint32.h \
- response.h
+response.o: response.c dns.h stralloc.h byte.h cryptoint/crypto_uint16.h \
+ cryptoint/crypto_uint32.h response.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c response.c
 
 roots.o: roots.c open.h e.h str.h byte.h direntry.h strtoip.h dns.h \
@@ -292,31 +286,15 @@ strtomultiip.o: strtomultiip.c byte.h str.h strtoip.h strtomultiip.h
 strtonum.o: strtonum.c e.h strtonum.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c strtonum.c
 
-typeparse.o: typeparse.c strtonum.h uint16_pack_big.h \
- cryptoint/crypto_uint16.h case.h dns.h stralloc.h byte.h typeparse.h
+typeparse.o: typeparse.c strtonum.h cryptoint/crypto_uint16.h case.h \
+ dns.h stralloc.h byte.h typeparse.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c typeparse.c
 
 uint16_optblocker.o: uint16_optblocker.c cryptoint/crypto_uint16.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c uint16_optblocker.c
 
-uint16_pack_big.o: uint16_pack_big.c uint16_pack_big.h \
- cryptoint/crypto_uint16.h
-	$(CC) $(CFLAGS) $(CPPFLAGS) -c uint16_pack_big.c
-
-uint16_unpack_big.o: uint16_unpack_big.c uint16_unpack_big.h \
- cryptoint/crypto_uint16.h
-	$(CC) $(CFLAGS) $(CPPFLAGS) -c uint16_unpack_big.c
-
 uint32_optblocker.o: uint32_optblocker.c cryptoint/crypto_uint32.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c uint32_optblocker.c
-
-uint32_pack_big.o: uint32_pack_big.c uint32_pack_big.h \
- cryptoint/crypto_uint32.h
-	$(CC) $(CFLAGS) $(CPPFLAGS) -c uint32_pack_big.c
-
-uint32_unpack_big.o: uint32_unpack_big.c uint32_unpack_big.h \
- cryptoint/crypto_uint32.h
-	$(CC) $(CFLAGS) $(CPPFLAGS) -c uint32_unpack_big.c
 
 uint64_optblocker.o: uint64_optblocker.c cryptoint/crypto_uint64.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c uint64_optblocker.c
@@ -440,11 +418,7 @@ OBJECTS+=strtomultiip.o
 OBJECTS+=strtonum.o
 OBJECTS+=typeparse.o
 OBJECTS+=uint16_optblocker.o
-OBJECTS+=uint16_pack_big.o
-OBJECTS+=uint16_unpack_big.o
 OBJECTS+=uint32_optblocker.o
-OBJECTS+=uint32_pack_big.o
-OBJECTS+=uint32_unpack_big.o
 OBJECTS+=uint64_optblocker.o
 OBJECTS+=uint64_pack.o
 OBJECTS+=uint64_unpack.o

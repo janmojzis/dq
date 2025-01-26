@@ -1,7 +1,6 @@
 #include "alloc.h"
 #include "byte.h"
 #include "crypto_uint16.h"
-#include "uint16_unpack_big.h"
 #include "base32decode.h"
 #include "hexdecode.h"
 #include "case.h"
@@ -88,8 +87,8 @@ static int ip_packet(struct dns_data *r, unsigned char *buf, long long len) {
 
     /* header */
     pos = dns_packet_copy(buf, len, 0, data, 12); if (!pos) return -1;
-    numanswers = uint16_unpack_big(data + 6);
-    numauthority = uint16_unpack_big(data + 8);
+    numanswers = crypto_uint16_load_bigendian(data + 6);
+    numauthority = crypto_uint16_load_bigendian(data + 8);
     pos = dns_packet_getname_static(buf, len, pos, d); if (!pos) return -1;
     pos += 4;
     if (dns_dnscurvekey_parse(r, d) == -1) return -1;
@@ -98,7 +97,7 @@ static int ip_packet(struct dns_data *r, unsigned char *buf, long long len) {
     while (numanswers--) {
         pos = dns_packet_skipname(buf, len, pos); if (!pos) return -1;
         pos = dns_packet_copy(buf, len, pos, data, 10); if (!pos) return -1;
-        datalen = uint16_unpack_big(data + 8);
+        datalen = crypto_uint16_load_bigendian(data + 8);
         newpos = pos + datalen;
 
         /* CNAME answers */
@@ -133,7 +132,7 @@ static int ip_packet(struct dns_data *r, unsigned char *buf, long long len) {
     while (numauthority--) {
         pos = dns_packet_skipname(buf, len, pos); if (!pos) return -1;
         pos = dns_packet_copy(buf, len, pos, data, 10); if (!pos) return -1;
-        datalen = uint16_unpack_big(data + 8);
+        datalen = crypto_uint16_load_bigendian(data + 8);
         newpos = pos + datalen;
 
         /* NS authority */

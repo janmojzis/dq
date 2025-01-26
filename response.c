@@ -1,7 +1,7 @@
 #include "dns.h"
 #include "byte.h"
-#include "uint16_pack_big.h"
-#include "uint32_pack_big.h"
+#include "crypto_uint16.h"
+#include "crypto_uint32.h"
 #include "response.h"
 
 unsigned char response[65535];
@@ -33,7 +33,7 @@ int response_addname(const unsigned char *d) {
     while (*d) {
         for (i = 0; i < name_num; ++i)
             if (dns_domain_equal(d, name[i])) {
-                uint16_pack_big(buf, 49152 + name_ptr[i]);
+                crypto_uint16_store_bigendian(buf, 49152 + name_ptr[i]);
                 return response_addbytes(buf, 2);
             }
         if ((dlen <= 255) && (response_len < 16384))
@@ -78,7 +78,7 @@ int response_rstart(const unsigned char *d, const unsigned char type[2], crypto_
     if (!response_addbytes(type, 2)) return 0;
     if (!response_addbytes(DNS_C_IN, 2)) return 0;
     if (flaghidettl) ttl = 0;
-    uint32_pack_big(ttlstr, ttl);
+    crypto_uint32_store_bigendian(ttlstr, ttl);
     if (!response_addbytes(ttlstr, 4)) return 0;
     if (!response_addbytes((unsigned char *)"\0\0", 2)) return 0;
     dpos = response_len;
@@ -86,7 +86,7 @@ int response_rstart(const unsigned char *d, const unsigned char type[2], crypto_
 }
 
 void response_rfinish(int x) {
-    uint16_pack_big(response + dpos - 2, response_len - dpos);
+    crypto_uint16_store_bigendian(response + dpos - 2, response_len - dpos);
     if (!++response[x + 1]) ++response[x];
 }
 

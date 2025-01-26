@@ -1,5 +1,5 @@
-#include "uint16_unpack_big.h"
-#include "uint32_unpack_big.h"
+#include "crypto_uint16.h"
+#include "crypto_uint32.h"
 #include "e.h"
 #include "byte.h"
 #include "dns.h"
@@ -22,7 +22,7 @@ long long printrecord_cat(stralloc *out,const unsigned char *buf,long long  len,
 
   pos = dns_packet_getname(buf,len,pos,&d); if (!pos) return 0;
   pos = dns_packet_copy(buf,len,pos,misc,10); if (!pos) return 0;
-  datalen = uint16_unpack_big(misc + 8);
+  datalen = crypto_uint16_load_bigendian(misc + 8);
   newpos = pos + datalen;
 
   if (q) {
@@ -34,7 +34,7 @@ long long printrecord_cat(stralloc *out,const unsigned char *buf,long long  len,
 
   if (!dns_domain_todot_cat(out,d)) return 0;
   if (!stralloc_cats(out," ")) return 0;
-  u32 = uint32_unpack_big(misc + 4);
+  u32 = crypto_uint32_load_bigendian(misc + 4);
   if (!stralloc_catnum(out,u32)) return 0;
 
   if (!byte_isequal(misc + 2,2,DNS_C_IN)) {
@@ -55,7 +55,7 @@ long long printrecord_cat(stralloc *out,const unsigned char *buf,long long  len,
     if (!stralloc_cats(out," MX ")) return 0;
     pos = dns_packet_copy(buf,len,pos,misc,2); if (!pos) return 0;
     pos = dns_packet_getname(buf,len,pos,&d); if (!pos) return 0;
-    u16 = uint16_unpack_big(misc);
+    u16 = crypto_uint16_load_bigendian(misc);
     if (!stralloc_catnum(out,u16)) return 0;
     if (!stralloc_cats(out," ")) return 0;
     if (!dns_domain_todot_cat(out,d)) return 0;
@@ -70,7 +70,7 @@ long long printrecord_cat(stralloc *out,const unsigned char *buf,long long  len,
     pos = dns_packet_copy(buf,len,pos,misc,20); if (!pos) return 0;
     for (i = 0;i < 5;++i) {
       if (!stralloc_cats(out," ")) return 0;
-      u32 = uint32_unpack_big(misc + 4 * i);
+      u32 = crypto_uint32_load_bigendian(misc + 4 * i);
       if (!stralloc_catnum(out,u32)) return 0;
     }
   }
@@ -107,13 +107,13 @@ long long printrecord_cat(stralloc *out,const unsigned char *buf,long long  len,
   else if (byte_isequal(misc,2,DNS_T_SRV)) {
     if (!stralloc_cats(out," SRV ")) return 0;
     pos = dns_packet_copy(buf,len,pos,misc,6); if (!pos) return 0;
-    u16 = uint16_unpack_big(misc);
+    u16 = crypto_uint16_load_bigendian(misc);
     if (!stralloc_catnum(out,u16)) return 0;
     if (!stralloc_cats(out," ")) return 0;
-    u16 = uint16_unpack_big(misc + 2);
+    u16 = crypto_uint16_load_bigendian(misc + 2);
     if (!stralloc_catnum(out,u16)) return 0;
     if (!stralloc_cats(out," ")) return 0;
-    u16 = uint16_unpack_big(misc + 4);
+    u16 = crypto_uint16_load_bigendian(misc + 4);
     if (!stralloc_catnum(out,u16)) return 0;
     if (!stralloc_cats(out," ")) return 0;
     pos = dns_packet_getname(buf,len,pos,&d); if (!pos) return 0;
@@ -131,7 +131,7 @@ long long printrecord_cat(stralloc *out,const unsigned char *buf,long long  len,
   }
   else {
     if (!stralloc_cats(out," ")) return 0;
-    u16 = uint16_unpack_big(misc);
+    u16 = crypto_uint16_load_bigendian(misc);
     if (!stralloc_catnum(out,u16)) return 0;
     if (!stralloc_cats(out," ")) return 0;
     while (datalen--) {

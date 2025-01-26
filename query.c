@@ -5,8 +5,8 @@
 #include "cache.h"
 #include "byte.h"
 #include "dns.h"
-#include "uint32_unpack_big.h"
-#include "uint16_unpack_big.h"
+#include "crypto_uint32.h"
+#include "crypto_uint16.h"
 #include "alloc.h"
 #include "response.h"
 #include "query.h"
@@ -154,7 +154,7 @@ static long long ttlget(unsigned char buf[4])
 {
   crypto_uint32 ttl;
 
-  ttl=uint32_unpack_big(buf);
+  ttl=crypto_uint32_load_bigendian(buf);
   if (ttl < minttl) ttl = minttl;
   if (ttl > 1000000000) return 0;
   if (ttl > 604800) return 604800;
@@ -676,7 +676,7 @@ static int doit(struct query *z,int state)
 	log_cachedanswer(d,dtype);
 	if (!rqa(z)) goto DIE;
 	while (cachedlen >= 2) {
-	  datalen = uint16_unpack_big(cached);
+	  datalen = crypto_uint16_load_bigendian(cached);
 	  cached += 2;
 	  cachedlen -= 2;
 	  if (datalen > cachedlen) goto DIE;
@@ -806,9 +806,9 @@ static int doit(struct query *z,int state)
   pos += 4;
   posanswers = pos;
 
-  numanswers = uint16_unpack_big(header + 6);
-  numauthority = uint16_unpack_big(header + 8);
-  numglue = uint16_unpack_big(header + 10);
+  numanswers = crypto_uint16_load_bigendian(header + 6);
+  numauthority = crypto_uint16_load_bigendian(header + 8);
+  numglue = crypto_uint16_load_bigendian(header + 10);
 
   rcode = header[3] & 15;
   if (rcode && (rcode != 3)) goto DIE; /* impossible; see irrelevant() */
@@ -838,7 +838,7 @@ static int doit(struct query *z,int state)
         }
       }
   
-    datalen=uint16_unpack_big(header + 8);
+    datalen=crypto_uint16_load_bigendian(header + 8);
     pos += datalen;
   }
   posauthority = pos;
@@ -858,7 +858,7 @@ static int doit(struct query *z,int state)
       if (!dns_domain_copy(&referral,t1)) goto DIE;
     }
 
-    datalen=uint16_unpack_big(header + 8);
+    datalen=crypto_uint16_load_bigendian(header + 8);
     pos += datalen;
   }
   /* posglue = pos; */
@@ -883,7 +883,7 @@ static int doit(struct query *z,int state)
     records[j] = pos;
     pos = dns_packet_getname(buf,len,pos,&t1); if (!pos) goto DIE;
     pos = dns_packet_copy(buf,len,pos,header,10); if (!pos) goto DIE;
-    datalen=uint16_unpack_big(header + 8);
+    datalen=crypto_uint16_load_bigendian(header + 8);
     pos += datalen;
   }
 
@@ -1024,7 +1024,7 @@ static int doit(struct query *z,int state)
       while (i < j) {
         pos = dns_packet_skipname(buf,len,records[i]); if (!pos) goto DIE;
         pos = dns_packet_copy(buf,len,pos,header,10); if (!pos) goto DIE;
-        if (uint16_unpack_big(header + 8) == 16) {
+        if (crypto_uint16_load_bigendian(header + 8) == 16) {
           pos = dns_packet_copy(buf,len,pos,header,16); if (!pos) goto DIE;
           save_data(header,16);
           log_rraaaa(whichserver,t1,header,ttl,whichkey[0]);
@@ -1038,7 +1038,7 @@ static int doit(struct query *z,int state)
       while (i < j) {
         pos = dns_packet_skipname(buf,len,records[i]); if (!pos) goto DIE;
         pos = dns_packet_copy(buf,len,pos,header,10); if (!pos) goto DIE;
-        datalen=uint16_unpack_big(header + 8);
+        datalen=crypto_uint16_load_bigendian(header + 8);
         if (datalen > len - pos) goto DIE;
         save_data(header + 8,2);
         save_data(buf + pos,datalen);
@@ -1105,7 +1105,7 @@ static int doit(struct query *z,int state)
       for (j = 0;j < numanswers;++j) {
         pos = dns_packet_getname(buf,len,pos,&t1); if (!pos) goto DIE;
         pos = dns_packet_copy(buf,len,pos,header,10); if (!pos) goto DIE;
-        datalen=uint16_unpack_big(header + 8);
+        datalen=crypto_uint16_load_bigendian(header + 8);
         if (dns_domain_equal(t1,d)) {
           if (typematch(header,DNS_T_A))
             if (byte_isequal(header + 2,2,DNS_C_IN)) /* should always be true */
@@ -1134,7 +1134,7 @@ static int doit(struct query *z,int state)
       pos = dns_packet_getname(buf,len,pos,&t1); if (!pos) goto DIE;
       pos = dns_packet_copy(buf,len,pos,header,10); if (!pos) goto DIE;
       ttl = ttlget(header + 4);
-      datalen=uint16_unpack_big(header + 8);
+      datalen=crypto_uint16_load_bigendian(header + 8);
       if (dns_domain_equal(t1,d))
         if (byte_isequal(header + 2,2,DNS_C_IN)) /* should always be true */
           if (typematch(header,dtype)) {
@@ -1173,7 +1173,7 @@ static int doit(struct query *z,int state)
       pos = dns_packet_getname(buf,len,pos,&t1); if (!pos) goto DIE;
       pos = dns_packet_copy(buf,len,pos,header,10); if (!pos) goto DIE;
       ttl = ttlget(header + 4);
-      datalen = uint16_unpack_big(header + 8);
+      datalen = crypto_uint16_load_bigendian(header + 8);
       if (dns_domain_equal(t1,d))
         if (byte_isequal(header + 2,2,DNS_C_IN)) /* should always be true */
           if (typematch(header,DNS_T_NS)) {
@@ -1215,7 +1215,7 @@ static int doit(struct query *z,int state)
   for (j = 0;j < numauthority;++j) {
     pos = dns_packet_getname(buf,len,pos,&t1); if (!pos) goto DIE;
     pos = dns_packet_copy(buf,len,pos,header,10); if (!pos) goto DIE;
-    datalen = uint16_unpack_big(header + 8);
+    datalen = crypto_uint16_load_bigendian(header + 8);
     if (dns_domain_equal(referral,t1)) /* should always be true */
       if (typematch(header,DNS_T_NS)) /* should always be true */
         if (byte_isequal(header + 2,2,DNS_C_IN)) /* should always be true */

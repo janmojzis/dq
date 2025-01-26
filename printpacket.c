@@ -1,4 +1,4 @@
-#include "uint16_unpack_big.h"
+#include "crypto_uint16.h"
 #include "e.h"
 #include "byte.h"
 #include "dns.h"
@@ -22,10 +22,10 @@ int printpacket_cat(stralloc *out, unsigned char *buf, long long len)
 
   pos = dns_packet_copy(buf,len,0,data,12); if (!pos) return 0;
 
-  xnumqueries = uint16_unpack_big(data + 4);
-  numanswers = uint16_unpack_big(data + 6);
-  numauthority = uint16_unpack_big(data + 8);
-  numglue = uint16_unpack_big(data + 10);
+  xnumqueries = crypto_uint16_load_bigendian(data + 4);
+  numanswers = crypto_uint16_load_bigendian(data + 6);
+  numauthority = crypto_uint16_load_bigendian(data + 8);
+  numglue = crypto_uint16_load_bigendian(data + 10);
 
   NUM(len)
   X(" bytes, ")
@@ -66,7 +66,7 @@ int printpacket_cat(stralloc *out, unsigned char *buf, long long len)
       X("weird class")
     }
     else {
-      type = uint16_unpack_big(data);
+      type = crypto_uint16_load_bigendian(data);
       NUM(type)
       X(" ")
       if (!dns_domain_todot_cat(out,d)) return 0;
