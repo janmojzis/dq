@@ -1,14 +1,12 @@
 /*
 20140727
+20250136 - use cryptoint
 Jan Mojzis
 Public domain.
 */
 
 #include "crypto_uint64.h"
 #include "crypto_uint32.h"
-#include "uint32_pack.h"
-#include "uint32_unpack.h"
-#include "cleanup.h"
 #include "salsa.h"
 
 #define ROTATE(x, c) ((x) << (c)) | ((x) >> (32 - (c)))
@@ -50,15 +48,14 @@ void salsa_core(unsigned char *out, crypto_uint32 *n, const crypto_uint32 *k, co
             x[6 + i] -= n[i];
         }
         for (i = 0; i < 4; ++i) {
-            uint32_pack(out      + 4 * i, x[5 * i]);
-            uint32_pack(out + 16 + 4 * i, x[6 + i]);
+            crypto_uint32_store(out      + 4 * i, x[5 * i]);
+            crypto_uint32_store(out + 16 + 4 * i, x[6 + i]);
         }
     }
     else {
-        for (i = 0; i < 16; ++i) uint32_pack(out + 4 * i, x[i] + y[i]);
+        for (i = 0; i < 16; ++i) crypto_uint32_store(out + 4 * i, x[i] + y[i]);
     }
 
-    cleanup(x); cleanup(y); cleanup(t); cleanup(w);
 }
 
 int salsa_stream_xor(unsigned char *c, const unsigned char *m, unsigned long long l, const unsigned char *nn, const unsigned char *kk, long long r) {
@@ -70,9 +67,9 @@ int salsa_stream_xor(unsigned char *c, const unsigned char *m, unsigned long lon
 
     if (!l) return 0;
 
-    for (i = 0; i < 8; ++i) k[i    ] = uint32_unpack(kk + 4 * i);
+    for (i = 0; i < 8; ++i) k[i    ] = crypto_uint32_load(kk + 4 * i);
     for (i = 0; i < 2; ++i) n[i + 2] = 0;
-    for (i = 0; i < 2; ++i) n[i    ] = uint32_unpack(nn + 4 * i);
+    for (i = 0; i < 2; ++i) n[i    ] = crypto_uint32_load(nn + 4 * i);
 
     while (l >= 64) {
         salsa_core(m ? x : c, n, k, sigma, 0, r);
@@ -93,6 +90,5 @@ int salsa_stream_xor(unsigned char *c, const unsigned char *m, unsigned long lon
         salsa_core(x, n, k, sigma, 0, r);
         for (i = 0; i < l; ++i) c[i] = (m ? m[i] : 0) ^ x[i];
     }
-    cleanup(x); cleanup(k); cleanup(n);
     return 0;
 }

@@ -60,8 +60,7 @@ crypto_box_curve25519xsalsa20poly1305.o: \
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c crypto_box_curve25519xsalsa20poly1305.c
 
 crypto_core_hsalsa20.o: crypto_core_hsalsa20.c salsa.h \
- cryptoint/crypto_uint32.h uint32_unpack.h cleanup.h \
- crypto_core_hsalsa20.h
+ cryptoint/crypto_uint32.h cleanup.h crypto_core_hsalsa20.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c crypto_core_hsalsa20.c
 
 crypto_onetimeauth_poly1305.o: crypto_onetimeauth_poly1305.c \
@@ -268,7 +267,7 @@ roots.o: roots.c open.h e.h str.h byte.h direntry.h strtoip.h dns.h \
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c roots.c
 
 salsa.o: salsa.c cryptoint/crypto_uint64.h cryptoint/crypto_uint32.h \
- uint32_pack.h uint32_unpack.h cleanup.h salsa.h
+ salsa.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c salsa.c
 
 seconds.o: seconds.c seconds.h
