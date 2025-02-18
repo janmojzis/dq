@@ -1,6 +1,6 @@
 #include "buffer.h"
 
-void buffer_init(buffer *s, long long (*op)(), int fd, char *buf, long long len) {
+void buffer_init(buffer *s, long long (*op)(int, char *, long long), int fd, char *buf, long long len) {
 
     s->x  = buf;
     s->fd = fd;

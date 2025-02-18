@@ -6,7 +6,7 @@ typedef struct buffer {
     long long p;
     long long n;
     int fd;
-    long long (*op)();
+    long long (*op)(int, char *, long long);
 } buffer;
 
 #define BUFFER_INIT(op, fd, buf, len) { (buf), 0, (len), (fd), (op) }
@@ -14,7 +14,7 @@ typedef struct buffer {
 #define BUFFER_OUTSIZE 8192
 #define BUFFER_ERRSIZE 256
 
-extern void buffer_init(buffer *, long long (*op)(), int, char *, long long);
+extern void buffer_init(buffer *, long long (*op)(int, char *, long long), int, char *, long long);
 
 extern int buffer_flush(buffer *);
 extern int buffer_putalign(buffer *, const char *, long long);
@@ -49,7 +49,7 @@ extern void buffer_seek(buffer *, long long);
 extern int buffer_copy(buffer *,buffer *);
 
 extern long long buffer_unixread(int, char *, long long);
-extern long long buffer_unixwrite(int, const char *, long long);
+extern long long buffer_unixwrite(int, char *, long long);
 
 #define buffer_PEEK(s) ( (s)->x + (s)->n )
 #define buffer_SEEK(s, len) ( ( (s)->p -= (len) ) , ( (s)->n += (len) ) )

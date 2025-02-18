@@ -3,14 +3,14 @@
 #include "byte.h"
 #include "buffer.h"
 
-static int allwrite(long long (*op)(int, const char *, long long), int fd, const char *buf, long long len) {
+static int allwrite(long long (*op)(int, char *, long long), int fd, const char *buf, long long len) {
 
     long long w;
 
     if (!buf || len < 0) { errno = EINVAL; return -1; }
 
     while (len > 0) {
-        w = op(fd, buf, len);
+        w = op(fd, (char *)buf, len);
         if (w == -1) {
             if (errno == EINTR) continue;
             if (errno == EAGAIN) continue;
