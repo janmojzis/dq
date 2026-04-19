@@ -39,7 +39,7 @@ int main(int argc, char **argv) {
     }
 
     if (chdir(root) == -1) die_6(111, FATAL, "unable to change directory to ", root, ": ", e_str(errno), "\n");
-    if (chown("dump", uid, gid) == -1) die_6(111, FATAL, "unable to change owner on ", root, "/dump: ", e_str(errno), "\n");
+    if (lchown("dump", uid, gid) == -1) die_6(111, FATAL, "unable to change owner on ", root, "/dump: ", e_str(errno), "\n");
 
     if (setenv("ROOT", root, 1) == -1)
         die_4(111, FATAL, "unable to set env. variable ROOT: ", e_str(errno), "\n");
