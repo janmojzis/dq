@@ -289,7 +289,7 @@ int cache_dump(void) {
 int cache_load(void) {
 
     unsigned char *p, *xx;
-    crypto_uint32 pos;
+    long long pos;
     long long len;
     crypto_uint32 keylen;
     crypto_uint32 datalen;
