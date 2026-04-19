@@ -293,7 +293,6 @@ int cache_load(void) {
     long long len;
     crypto_uint32 keylen;
     crypto_uint32 datalen;
-    int nb;
     struct stat st;
     int fd;
     int flags = 0;
@@ -315,7 +314,6 @@ int cache_load(void) {
 
     now = seconds();
     pos = 0;
-    nb = 0;
     while (pos + 16 <= len) {
         keylen = crypto_uint32_load(p + pos);
         datalen = crypto_uint32_load(p + pos + 4);
@@ -329,7 +327,6 @@ int cache_load(void) {
             cache_set(p + pos, keylen, p + pos + keylen, datalen, expire, flags);
         }
         pos += keylen + datalen;
-        nb++;
     }
     munmap(xx, st.st_size);
     close(fd);
