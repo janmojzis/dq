@@ -27,7 +27,7 @@ int base32decode(unsigned char *out, long long outlen, const unsigned char *in, 
 
     for (i = 0; i < inlen; ++i) {
         
-        if (in[j] & 0x80) return 0;
+        if (in[i] & 0x80) return 0;
         u = base32values[in[i]];
         if (u > 0x1f) return 0;
         v |= u << vbits;
