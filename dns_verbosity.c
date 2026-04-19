@@ -19,6 +19,7 @@ void dns_verbosity_setmessage(const char *x) {
 }
 
 static stralloc out = {0};
+static const char hexchars[] = "0123456789abcdef";
 
 void dns_verbosity_writehex(const char *message, const unsigned char *x, long long xlen) {
 
@@ -27,8 +28,8 @@ void dns_verbosity_writehex(const char *message, const unsigned char *x, long lo
     if (!stralloc_cats(&out, message)) return;
 
     while (xlen > 0) {
-        if (!stralloc_catb(&out, "0123456789abcdef" + ((*x >> 4) & 15), 1)) return;
-        if (!stralloc_catb(&out, "0123456789abcdef" + (*x & 15), 1)) return;
+        if (!stralloc_catb(&out, hexchars + ((*x >> 4) & 15), 1)) return;
+        if (!stralloc_catb(&out, hexchars + (*x & 15), 1)) return;
         ++x; --xlen;
     }
     if (!stralloc_cats(&out, "\n")) return;

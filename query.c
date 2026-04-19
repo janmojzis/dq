@@ -253,7 +253,7 @@ static int findkey(const unsigned char *dn,unsigned char key[32])
 {
   unsigned char c;
 
-  while (c = *dn++) {
+  while ((c = *dn++) != 0) {
     if (c == 54)
       if (!case_diffb(dn,3,"uz5"))
         if (base32_decode(key,dn + 3,51,1) == 32)
@@ -486,7 +486,7 @@ static int doit(struct query *z,int state)
 	log_cachedanswer(d,DNS_T_NS);
 	if (!rqa(z)) goto DIE;
 	pos = 0;
-	while (pos = dns_packet_getname(cached,cachedlen,pos,&t2)) {
+	while ((pos = dns_packet_getname(cached,cachedlen,pos,&t2)) != 0) {
 	  if (!response_rstart(d,DNS_T_NS,ttl)) goto DIE;
 	  if (!response_addname(t2)) goto DIE;
 	  response_rfinish(RESPONSE_ANSWER);
@@ -503,7 +503,7 @@ static int doit(struct query *z,int state)
 	log_cachedanswer(d,DNS_T_PTR);
 	if (!rqa(z)) goto DIE;
 	pos = 0;
-	while (pos = dns_packet_getname(cached,cachedlen,pos,&t2)) {
+	while ((pos = dns_packet_getname(cached,cachedlen,pos,&t2)) != 0) {
 	  if (!response_rstart(d,DNS_T_PTR,ttl)) goto DIE;
 	  if (!response_addname(t2)) goto DIE;
 	  response_rfinish(RESPONSE_ANSWER);
@@ -520,7 +520,7 @@ static int doit(struct query *z,int state)
 	log_cachedanswer(d,DNS_T_MX);
 	if (!rqa(z)) goto DIE;
 	pos = 0;
-	while (pos = dns_packet_copy(cached,cachedlen,pos,misc,2)) {
+	while ((pos = dns_packet_copy(cached,cachedlen,pos,misc,2)) != 0) {
 	  pos = dns_packet_getname(cached,cachedlen,pos,&t2);
 	  if (!pos) break;
 	  if (!response_rstart(d,DNS_T_MX,ttl)) goto DIE;
@@ -540,7 +540,7 @@ static int doit(struct query *z,int state)
         log_cachedanswer(d,DNS_T_SOA);
         if (!rqa(z)) goto DIE;
         pos = 0;
-        while (pos = dns_packet_copy(cached,cachedlen,pos,misc,20)) {
+        while ((pos = dns_packet_copy(cached,cachedlen,pos,misc,20)) != 0) {
           pos = dns_packet_getname(cached,cachedlen,pos,&t2);
           if (!pos) break;
           pos = dns_packet_getname(cached,cachedlen,pos,&t3);
@@ -610,7 +610,7 @@ static int doit(struct query *z,int state)
         cached = cache_get(key,dlen + 2,&cachedlen,&ttl,0);
         if (cached && (cachedlen || !byte_isequal(dtype,2,DNS_T_ANY))) {
           pos = 0;
-          while (pos = dns_packet_getname(cached,cachedlen,pos,&t2)) {
+          while ((pos = dns_packet_getname(cached,cachedlen,pos,&t2)) != 0) {
             if (!response_rstart(d,DNS_T_NS,ttl)) goto DIE;
             if (!response_addname(t2)) goto DIE;
             response_rfinish(RESPONSE_AUTHORITY);
@@ -659,7 +659,7 @@ static int doit(struct query *z,int state)
         cached = cache_get(key,dlen + 2,&cachedlen,&ttl,0);
         if (cached && (cachedlen || !byte_isequal(dtype,2,DNS_T_ANY))) {
           pos = 0;
-          while (pos = dns_packet_getname(cached,cachedlen,pos,&t2)) {
+          while ((pos = dns_packet_getname(cached,cachedlen,pos,&t2)) != 0) {
             if (!response_rstart(d,DNS_T_NS,ttl)) goto DIE;
             if (!response_addname(t2)) goto DIE;
             response_rfinish(RESPONSE_AUTHORITY);
@@ -718,7 +718,7 @@ static int doit(struct query *z,int state)
             dns_domain_free(&z->ns[z->level][j]);
           pos = 0;
           j = 0;
-          while (pos = dns_packet_getname(cached,cachedlen,pos,&t1)) {
+          while ((pos = dns_packet_getname(cached,cachedlen,pos,&t1)) != 0) {
 	    log_cachedns(d,t1);
             if (j < QUERY_MAXNS)
               if (!dns_domain_copy(&z->ns[z->level][j++],t1)) goto DIE;

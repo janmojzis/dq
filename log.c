@@ -10,6 +10,7 @@
 /* work around gcc 2.95.2 bug */
 #define number(x) ( (u64 = (x)), u64_print() )
 static crypto_uint64 u64;
+static const char hexchars[] = "0123456789abcdef";
 static void u64_print(void) {
     char buf[20];
     long long pos;
@@ -25,8 +26,8 @@ static void u64_print(void) {
 }
 
 static void hex(unsigned char c) {
-    buffer_put(buffer_2, "0123456789abcdef" + (c >> 4), 1);
-    buffer_put(buffer_2, "0123456789abcdef" + (c & 15), 1);
+    buffer_put(buffer_2, hexchars + (c >> 4), 1);
+    buffer_put(buffer_2, hexchars + (c & 15), 1);
 }
 
 static void string(const char *s) {
@@ -89,7 +90,7 @@ static void name(const unsigned char *q) {
         return;
     }
 
-    while(state = *q++) {
+    while ((state = *q++) != 0) {
         while (state) {
             ch = *q++;
             --state;

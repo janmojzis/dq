@@ -11,7 +11,7 @@ long long dns_domain_length(const unsigned char *dn) {
     unsigned char c;
 
      x = dn;
-     while (c = *x++) {
+     while ((c = *x++) != 0) {
          x += c;
      }
      return (x - dn);
