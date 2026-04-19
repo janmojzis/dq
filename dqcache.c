@@ -335,6 +335,8 @@ static struct pollfd io[3 + MAXUDP + MAXTCP];
 static struct pollfd *udp53io;
 static struct pollfd *tcp53io;
 
+static void handle_signals(void);
+
 static void doit(void) {
 
     long long j;
@@ -345,6 +347,8 @@ static void doit(void) {
     int r;
 
   for (;;) {
+    handle_signals();
+
     stamp = milliseconds();
     deadline = stamp + 120000;
 
@@ -442,21 +446,35 @@ static void die_fatal(const char *trouble, const char *fn) {
 
 static char *dnscurvetype = 0;
 
-static void reload(int sig) {
-    if (!roots_init(dnscurvetype)) die_fatal("unable to read servers", 0);
-}
-static void dump(int sig){
-    if (cache_dump() == -1) warn_4(WARNING, "unable to dump cache: ", e_str(errno), "\n");
-}
+static volatile sig_atomic_t flag_reload = 0;
+static volatile sig_atomic_t flag_dump   = 0;
+static volatile sig_atomic_t flag_clean  = 0;
+static volatile sig_atomic_t flag_exit   = 0;
 
-static void exitasap(int sig){
-    removesecrets();
-    dump(0);
-    die_0(0);
-}
+static void reload(int sig)   { flag_reload = 1; }
+static void dump(int sig)     { flag_dump   = 1; }
+static void clean(int sig)    { flag_clean  = 1; }
+static void exitasap(int sig) { flag_exit   = 1; }
 
-static void clean(int sig){
-    cache_clean();
+static void handle_signals(void) {
+    if (flag_reload) {
+        flag_reload = 0;
+        if (!roots_init(dnscurvetype)) die_fatal("unable to read servers", 0);
+    }
+    if (flag_dump) {
+        flag_dump = 0;
+        if (cache_dump() == -1) warn_4(WARNING, "unable to dump cache: ", e_str(errno), "\n");
+    }
+    if (flag_clean) {
+        flag_clean = 0;
+        cache_clean();
+    }
+    if (flag_exit) {
+        flag_exit = 0;
+        removesecrets();
+        if (cache_dump() == -1) warn_4(WARNING, "unable to dump cache: ", e_str(errno), "\n");
+        die_0(0);
+    }
 }
 
 
