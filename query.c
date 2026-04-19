@@ -389,7 +389,8 @@ static int doit(struct query *z,int state)
   errno = EIO;
   if (state == 1) goto HAVEPACKET;
   if (state == -1) {
-    cachegeneric2(DNS_T_AXFR, z->type, z->name[z->level], (unsigned char *)"", 0, 10, 0);
+    dtype = z->level ? (z->ipv6[z->level] ? DNS_T_AAAA : DNS_T_A) : z->type;
+    cachegeneric2(DNS_T_AXFR, dtype, z->name[z->level], (unsigned char *)"", 0, 10, 0);
     log_servfail(z->name[z->level]);
     goto SERVFAIL;
   }
