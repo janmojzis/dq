@@ -11,21 +11,24 @@ Public domain.
 int stralloc_readyplus(stralloc *r, long long len) {
 
     unsigned char *newdata;
+    long long newalloc;
     long long i;
 
     if (!r || len < 0) { errno = EINVAL; return 0; }
     if (len == 0) return 1;
 
     if (r->len + len + 1 > r->alloc) {
-        while (r->len + len + 1 > r->alloc)
-            r->alloc = 2 * r->alloc + 1;
-        newdata = alloc(r->alloc);
+        newalloc = r->alloc;
+        while (r->len + len + 1 > newalloc)
+            newalloc = 2 * newalloc + 1;
+        newdata = alloc(newalloc);
         if (!newdata) return 0;
         if (r->s) {
             for (i = 0; i < r->len; ++i) newdata[i] = r->s[i];
             alloc_free(r->s);
         }
         r->s = newdata;
+        r->alloc = newalloc;
     }
     return 1;
 }
@@ -118,13 +121,18 @@ static int stralloc_catunum0(stralloc *sa, unsigned long long u, long long n) {
 
 int stralloc_catnum0(stralloc *sa, long long l, long long n) {
 
+    unsigned long long u;
+
     if (!sa) { errno = EINVAL; return 0; }
 
     if (l < 0) {
         if (!stralloc_append(sa,"-")) return 0;
-        l = -l;
+        u = -(unsigned long long)l;
     }
-    return stralloc_catunum0(sa, l, n);
+    else {
+        u = (unsigned long long)l;
+    }
+    return stralloc_catunum0(sa, u, n);
 }
 
 int stralloc_catnum(stralloc *r, long long num) {
