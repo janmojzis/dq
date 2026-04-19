@@ -63,17 +63,20 @@ static long long ptralloc = 0;
 static int ptr_add(void *x) {
 
     void **newptr;
+    long long newalloc;
 
     if (ptrlen + 1 > ptralloc) {
-        while (ptrlen + 1 > ptralloc)
-            ptralloc = 2 * ptralloc + 1;
-        newptr = (void **)malloc(ptralloc * sizeof(void *));
+        newalloc = ptralloc;
+        while (ptrlen + 1 > newalloc)
+            newalloc = 2 * newalloc + 1;
+        newptr = (void **)malloc(newalloc * sizeof(void *));
         if (!newptr) return 0;
         if (ptr) {
             byte_copy(newptr, ptrlen * sizeof(void *), ptr);
             free(ptr);
         }
         ptr = newptr;
+        ptralloc = newalloc;
     }
     if (!x) return 1;
     ptr[ptrlen++] = x;
@@ -117,7 +120,12 @@ void *alloc(long long nn) {
     byte_zero(x, n);
     crypto_uint64_store(x, n);
     x += ALLOC_ALIGNMENT;
-    if (!ptr_add(x)) goto nomem;
+    if (!ptr_add(x)) {
+        x -= ALLOC_ALIGNMENT;
+        allocated -= n;
+        free(x);
+        goto nomem;
+    }
     return (void *)x;
 
 nomem:
