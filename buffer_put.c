@@ -42,7 +42,6 @@ int buffer_putalign(buffer *s, const char *buf, long long len) {
 
     while (len > (n = s->n - s->p)) {
         byte_copy(s->x + s->p, n, buf); s->p += n; buf += n; len -= n;
-        s->p += n; buf += n; len -= n;
         if (buffer_flush(s) == -1) return -1;
     }
     /* now len <= s->n - s->p */
