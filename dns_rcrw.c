@@ -12,9 +12,9 @@ static int init(stralloc *rules)
 {
   char host[256];
   const char *x;
-  int i;
-  int j;
-  int k;
+  long long i;
+  long long j;
+  long long k;
   int flagds = 0;
 
   if (!stralloc_copys(rules,"")) return -1;
