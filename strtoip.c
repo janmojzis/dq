@@ -23,6 +23,7 @@ int strtoip4(unsigned char *ip, const char *x) {
         d = 0;
         for (j = 0; j < 3 && x[j] >= '0' && x[j] <= '9'; ++j) d = d * 10 + (x[j] - '0');
         if (j == 0) return 0;
+        if (d > 255) return 0;
         x += j;
         if (k >= 0 && k < 4) y[k] = d;
         if (k < 3) {
