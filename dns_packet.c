@@ -19,7 +19,10 @@ long long dns_packet_skipname(const unsigned char *buf, long long len, long long
     for (;;) {
         if (pos >= len) break;
         ch = buf[pos++];
-        if (ch >= 192) return pos + 1;
+        if (ch >= 192) {
+            if (pos >= len) break;
+            return pos + 1;
+        }
         if (ch >= 64) break;
         if (!ch) return pos;
         pos += ch;
