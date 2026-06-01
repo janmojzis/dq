@@ -876,6 +876,7 @@ static int doit(struct query *z,int state)
   if (records) { alloc_free(records); records = 0; }
 
   k = numanswers + numauthority + numglue;
+  if (k > len / 11) goto DIE; /* each RR has at least 11 bytes on the wire */
   records = (long long *) alloc(k * sizeof(long long));
   if (!records) goto DIE;
 
